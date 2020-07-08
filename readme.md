@@ -9,7 +9,7 @@ Dynamically generating theme variants since 2020 ✨
 **Install**
 
 ```sh
-  npm install --dev @mvllow/pinecone
+  npm install @mvllow/pinecone
 ```
 
 **Update package.json**
