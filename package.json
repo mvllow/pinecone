@@ -1,17 +1,25 @@
 {
-  "name": "pinecone",
+  "name": "@mvllow/pinecone",
   "version": "0.1.0",
   "description": "Dynamic theme generator",
   "author": "mvllow",
   "license": "MIT",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
+  "directories": {
+    "lib": "lib"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mvllow/pinecone.git"
+  },
+  "bugs": {
+    "url": "https://github.com/mvllow/pinecone/issues"
+  },
+  "homepage": "https://github.com/mvllow/pinecone#readme",
   "bin": {
     "pinecone": "lib/index.js"
   },
-  "files": [
-    "lib/**/*"
-  ],
   "keywords": [
     "vscode",
     "theme",
