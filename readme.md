@@ -98,3 +98,9 @@ This will generate all variants, for example:
 ## Contributing
 
 Pull requests are welcome and appreciated!
+
+To build from source, run:
+
+```sh
+npm run build
+```
