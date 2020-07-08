@@ -1,0 +1,32 @@
+{
+  "name": "pinecone",
+  "version": "0.1.0",
+  "description": "Dynamic theme generator",
+  "author": "mvllow",
+  "license": "MIT",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "bin": {
+    "pinecone": "lib/index.js"
+  },
+  "files": [
+    "lib/**/*"
+  ],
+  "keywords": [
+    "vscode",
+    "theme",
+    "generator"
+  ],
+  "prettier": {
+    "semi": false,
+    "singleQuote": true
+  },
+  "scripts": {
+    "build": "tsc"
+  },
+  "devDependencies": {
+    "@types/node": "^14.0.18",
+    "prettier": "^2.0.5",
+    "typescript": "^3.9.6"
+  }
+}
