@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 const fs = require('fs')
-const { parseObject } = require('./helpers')
+const { replaceJsonValues } = require('./helpers')
 
 const defaultConfig = require('./default.config.js')
 
@@ -25,9 +25,9 @@ config.themes.map((variant: any) => {
     let pattern = `${config.prefix}${key}`
 
     if (index == 0) {
-      newTheme = parseObject(theme, pattern, colors[key])
+      newTheme = replaceJsonValues(theme, pattern, colors[key])
     } else {
-      newTheme = parseObject(newTheme, pattern, colors[key])
+      newTheme = replaceJsonValues(newTheme, pattern, colors[key])
     }
   })
 

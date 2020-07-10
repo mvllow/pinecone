@@ -1,2 +1,1 @@
-declare const parseObject: (obj: any, searchFor: any, replaceWith: any) => {};
-export { parseObject };
+export declare const replaceJsonValues: (obj: any, searchFor: any, replaceWith: any) => {};
