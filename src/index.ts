@@ -15,27 +15,26 @@ try {
 }
 
 let themeFile = fs.readFileSync(config.input)
-let theme = JSON.parse(themeFile)
 
 config.themes.map((variant: any) => {
-  let { colors, name, slug, type } = variant
-  let newTheme: any = { name, type }
+  let newTheme: any = null
+  let theme = JSON.parse(themeFile)
 
-  Object.keys(colors).forEach((key, index) => {
-    let pattern = `${config.prefix}${key}`
+  Object.keys(variant.colors).forEach((key, index) => {
+    let pattern = `${config.prefix}${key}` // _pine
 
-    if (index == 0) {
-      newTheme = replaceJsonValues(theme, pattern, colors[key])
+    if (!newTheme) {
+      newTheme = replaceJsonValues(theme, pattern, variant.colors[key])
     } else {
-      newTheme = replaceJsonValues(newTheme, pattern, colors[key])
+      newTheme = replaceJsonValues(newTheme, pattern, variant.colors[key])
     }
   })
 
-  newTheme.name = name
-  newTheme.type = type
+  newTheme.name = variant.name
+  newTheme.type = variant.type
 
   fs.writeFileSync(
-    `${config.dir}/${slug}-color-theme.json`,
+    `${config.dir}/${variant.slug}-color-theme.json`,
     JSON.stringify(newTheme)
   )
 })

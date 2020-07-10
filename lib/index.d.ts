@@ -4,4 +4,3 @@ declare const replaceJsonValues: any;
 declare const defaultConfig: any;
 declare let config: any;
 declare let themeFile: any;
-declare let theme: any;
