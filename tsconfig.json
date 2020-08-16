@@ -1,12 +1,12 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "target": "esnext",
     "module": "commonjs",
     "declaration": true,
-    "outDir": "./lib",
+    "declarationDir": "lib/types",
+    "outDir": "lib",
     "strict": true,
-    "noImplicitAny": false
+    "esModuleInterop": true
   },
-  "include": ["src", "lib/default.config.js"],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "lib"]
 }
