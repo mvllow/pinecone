@@ -1,40 +1,42 @@
 {
   "name": "@mvllow/pinecone",
-  "version": "0.3.2",
-  "description": "Dynamic theme generator",
-  "author": "mvllow",
+  "version": "0.4.0-beta.1",
+  "description": "Dynamic vscode theme generator",
+  "author": "mvllow <mvllow@icloud.com>",
   "license": "MIT",
-  "main": "lib/index.js",
-  "types": "lib/index.d.ts",
-  "directories": {
-    "lib": "lib"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/mvllow/pinecone.git"
-  },
-  "bugs": {
-    "url": "https://github.com/mvllow/pinecone/issues"
-  },
+  "repository": "https://github.com/mvllow/pinecone.git",
+  "bugs": "https://github.com/mvllow/pinecone/issues",
   "homepage": "https://github.com/mvllow/pinecone#readme",
+  "main": "lib/index.js",
+  "types": "lib/types/index.d.ts",
+  "files": [
+    "lib"
+  ],
   "bin": {
     "pinecone": "lib/index.js"
   },
-  "keywords": [
-    "vscode",
-    "theme",
-    "generator"
-  ],
-  "prettier": {
-    "semi": false,
-    "singleQuote": true
-  },
   "scripts": {
-    "build": "tsc"
+    "type-check": "tsc --noEmit",
+    "type-check:watch": "npm run type-check -- --watch",
+    "prebuild": "rimraf lib",
+    "build": "npm run build:types && npm run build:js",
+    "build:types": "tsc --emitDeclarationOnly",
+    "build:js": "babel src --out-dir lib --extensions '.js,.ts' --copy-files",
+    "watch": "npm run build:types && npm run build:js -- --watch",
+    "prepare": "npm run build",
+    "publish:public": "npm publish --access public",
+    "publish:beta": "npm publish --tag beta"
   },
   "devDependencies": {
-    "@types/node": "^14.0.18",
+    "@babel/cli": "^7.10.5",
+    "@babel/core": "^7.11.1",
+    "@babel/node": "^7.10.5",
+    "@babel/preset-env": "^7.11.0",
+    "@babel/preset-typescript": "^7.10.4",
+    "babel-jest": "^26.3.0",
+    "jest": "^26.4.0",
     "prettier": "^2.0.5",
-    "typescript": "^3.9.6"
+    "rimraf": "^3.0.2",
+    "typescript": "^3.9.7"
   }
 }

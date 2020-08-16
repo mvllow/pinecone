@@ -1,6 +1,6 @@
 # Pinecone
 
-> Currently in alpha - API's may change
+> These docs are for 0.4.0 beta
 
 Dynamically generating theme variants since 2020 ✨
 
@@ -9,7 +9,7 @@ Dynamically generating theme variants since 2020 ✨
 **Install**
 
 ```sh
-  npm install @mvllow/pinecone
+  npm install @mvllow/pinecone@beta
 ```
 
 **Update package.json**
@@ -28,26 +28,26 @@ Dynamically generating theme variants since 2020 ✨
 // pinecone.config.js
 
 module.exports = {
-  input: './themes/theme.json',
-  dir: './themes',
-  prefix: '_',
+  // Using `color-theme` in the name enables vscode theme intellisense
+  in: './themes/color-theme.json',
+  out: './themes',
   themes: [
     {
-      name: 'My sorta cool theme',
-      slug: 'sorta-cool-filename',
+      name: 'Pinecone Dark',
+      slug: 'pinecone-dark',
       type: 'dark',
       colors: {
-        accent1: '#fa8072',
-        accent2: '#3eb489',
+        foreground: '#fff',
+        background: '#000',
       },
     },
     {
-      name: 'My less cool theme',
-      slug: 'less-cool-filename',
-      type: 'dark',
+      name: 'Pinecone Light',
+      slug: 'pinecone-light',
+      type: 'light',
       colors: {
-        accent1: '#ea4335',
-        accent2: '#4285f4',
+        foreground: '#000',
+        background: '#fff',
       },
     },
   ],
@@ -56,13 +56,13 @@ module.exports = {
 
 **Update base theme**
 
-With the above config, we would want our theme (input) to look something like this:
+With the above config, we would want our `color-theme.json` to look something like this:
 
 ```json
 {
   "colors": {
-    "something.foreground": "_accent1",
-    "something.background": "_accent2"
+    "editor.foreground": "_foreground",
+    "editor.background": "_background"
   }
 }
 ```
@@ -70,30 +70,10 @@ With the above config, we would want our theme (input) to look something like th
 **Run pinecone**
 
 ```sh
-npm run pinecone
+npm run generate
 ```
 
-This will generate all variants, for example:
-
-```json
-{
-  "name": "My sorta cool theme",
-  "type": "dark",
-  "colors": {
-    "accent1": "#fa8072",
-    "accent2": "#3eb489"
-  }
-}
-
-{
-  "name": "My less cool theme",
-  "type": "dark",
-  "colors": {
-    "accent1": "#ea4335",
-    "accent2": "#4285f4"
-  }
-}
-```
+That's it, enjoy your multiple variants ✨
 
 ## Contributing
 
