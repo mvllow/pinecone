@@ -23,7 +23,7 @@
     "build:types": "tsc --emitDeclarationOnly",
     "build:js": "babel src --out-dir lib --extensions '.js,.ts' --copy-files",
     "watch": "npm run build:types && npm run build:js -- --watch",
-    "prepublish": "npm run build",
+    "prepare": "npm run build",
     "publish:public": "npm publish --access public",
     "publish:beta": "npm publish --tag beta"
   },
