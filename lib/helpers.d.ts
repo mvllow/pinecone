@@ -1,1 +1,1 @@
-export declare const replaceJsonValues: (obj: any, searchFor: any, replaceWith: any) => {};
+export declare const replaceJsonValues: (obj: {}, searchFor: string, replaceWith: string) => {};

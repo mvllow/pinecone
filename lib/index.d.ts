@@ -1,6 +1,13 @@
 #!/usr/bin/env node
-declare const fs: any;
-declare const replaceJsonValues: any;
-declare const defaultConfig: any;
-declare let config: any;
-declare let themeFile: any;
+export interface Config {
+    input: string;
+    dir: string;
+    prefix: string;
+    themes: ThemeDetail[];
+}
+export interface ThemeDetail {
+    name: string;
+    slug: string;
+    type: 'dark' | 'light';
+    colors: {};
+}

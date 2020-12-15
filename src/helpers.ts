@@ -1,4 +1,8 @@
-export const replaceJsonValues = (obj, searchFor, replaceWith) => {
+export const replaceJsonValues = (
+  obj: {},
+  searchFor: string,
+  replaceWith: string
+) => {
   let result = {}
   let regex = new RegExp(searchFor, 'g')
 

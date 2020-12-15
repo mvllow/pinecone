@@ -30,6 +30,7 @@
     "singleQuote": true
   },
   "scripts": {
+    "dev": "tsc --watch",
     "build": "tsc"
   },
   "devDependencies": {
