@@ -40,8 +40,6 @@ export const parseThemes = (
       ...JSON.parse(workingTheme),
     }
 
-    console.log(options)
-
     if (options?.includeNonItalicVariants) {
       let nonItalicVariant = removeWordFromString(workingTheme, 'italic')
 
