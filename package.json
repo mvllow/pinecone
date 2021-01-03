@@ -21,7 +21,6 @@
   },
   "devDependencies": {
     "del-cli": "^3.0.1",
-    "jest": "^26.4.0",
     "prettier": "^2.0.5",
     "typescript": "^3.9.7"
   }
