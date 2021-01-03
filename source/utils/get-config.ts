@@ -25,7 +25,7 @@ export interface Config {
 
 export const getConfig = () => {
   const defaultConfig: Config = {
-    themeFile: './themes/_color-theme.json',
+    themeFile: './themes/_pinecone-color-theme.json',
     outputDir: './themes',
     varPrefix: '_',
     theme: {
