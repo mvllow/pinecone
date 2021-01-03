@@ -1,24 +1,28 @@
 {
   "name": "@mvllow/pinecone",
   "version": "0.4.0-beta.1",
-  "description": "Dynamic vscode theme generator",
-  "author": "mvllow <mvllow@icloud.com>",
+  "description": "Lovely VSCode theme builder",
   "license": "MIT",
-  "repository": "https://github.com/mvllow/pinecone.git",
-  "bugs": "https://github.com/mvllow/pinecone/issues",
-  "homepage": "https://github.com/mvllow/pinecone#readme",
-  "main": "dist/index.js",
-  "types": "dist/types/index.d.ts",
-  "files": [
-    "dist"
-  ],
+  "repository": "mvllow/pinecone",
   "bin": {
-    "pinecone": "dist/index.js"
+    "pinecone": "dist/index.js",
+    "pinecone-cli": "dist/index.js"
   },
   "scripts": {
     "clean": "del-cli dist",
     "build": "npm run clean && tsc"
   },
+  "files": [
+    "dist"
+  ],
+  "types": "dist/types/index.d.ts",
+  "keywords": [
+    "dynamic",
+    "vscode",
+    "themes",
+    "json",
+    "variables"
+  ],
   "devDependencies": {
     "del-cli": "^3.0.1",
     "prettier": "^2.0.5",
