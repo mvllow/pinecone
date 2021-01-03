@@ -29,8 +29,8 @@ test.serial('`pinecone init` generates default files', async (t) => {
   t.is(config.varPrefix, '_')
 })
 
-test('`pinecone` generates themes', (t) => {
-  t.notThrows(() => pinecone())
+test('`pinecone` generates themes', async (t) => {
+  await pinecone()
 
   let theme = require(`${process.cwd()}/themes/latte-color-theme.json`)
 
@@ -38,7 +38,7 @@ test('`pinecone` generates themes', (t) => {
 })
 
 test('`pinecone --include-non-italics` generates non-italic variants', async (t) => {
-  await pinecone('--include-non-italics')
+  await pinecone('', { includeNonItalicVariants: true })
 
   let theme = require(`${process.cwd()}/themes/latte-no-italics-color-theme.json`)
 

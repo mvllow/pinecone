@@ -32,7 +32,7 @@ const pinecone = async (command?: string, options?: Options) => {
 
   let parsedThemes = parseThemes(theme, { includeNonItalicVariants })
 
-  writeThemes(parsedThemes)
+  await writeThemes(parsedThemes)
 }
 
 export default pinecone
