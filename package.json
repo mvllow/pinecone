@@ -24,6 +24,9 @@
     "json",
     "variables"
   ],
+  "dependencies": {
+    "slugify": "^1.4.6"
+  },
   "devDependencies": {
     "@types/node": "^14.14.19",
     "del-cli": "^3.0.1",
