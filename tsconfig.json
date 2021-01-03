@@ -3,10 +3,10 @@
     "target": "esnext",
     "module": "commonjs",
     "declaration": true,
-    "declarationDir": "lib/types",
-    "outDir": "lib",
+    "declarationDir": "dist/types",
+    "outDir": "dist",
     "strict": true,
     "esModuleInterop": true
   },
-  "exclude": ["node_modules", "lib"]
+  "exclude": ["node_modules", "dist"]
 }

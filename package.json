@@ -7,21 +7,21 @@
   "repository": "https://github.com/mvllow/pinecone.git",
   "bugs": "https://github.com/mvllow/pinecone/issues",
   "homepage": "https://github.com/mvllow/pinecone#readme",
-  "main": "lib/index.js",
-  "types": "lib/types/index.d.ts",
+  "main": "dist/index.js",
+  "types": "dist/types/index.d.ts",
   "files": [
-    "lib"
+    "dist"
   ],
   "bin": {
-    "pinecone": "lib/index.js"
+    "pinecone": "dist/index.js"
   },
   "scripts": {
     "type-check": "tsc --noEmit",
     "type-check:watch": "npm run type-check -- --watch",
-    "prebuild": "rimraf lib",
+    "prebuild": "rimraf dist",
     "build": "npm run build:types && npm run build:js",
     "build:types": "tsc --emitDeclarationOnly",
-    "build:js": "babel src --out-dir lib --extensions '.js,.ts' --copy-files",
+    "build:js": "babel src --out-dir dist --extensions '.js,.ts' --copy-files",
     "watch": "npm run build:types && npm run build:js -- --watch",
     "prepare": "npm run build",
     "publish:public": "npm publish --access public",
