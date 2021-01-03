@@ -1,3 +1,5 @@
+import { log } from './log'
+
 export const replaceJsonValues = (
   body: string,
   searchFor: string,
@@ -10,7 +12,7 @@ export const replaceJsonValues = (
   try {
     result = body.replace(formattedSearch, formattedReplace)
   } catch (error) {
-    console.log(error)
+    log.error(error)
   }
   return result
 }

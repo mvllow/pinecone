@@ -1,4 +1,5 @@
 import { readFileSync } from 'fs'
+import { log } from './log'
 import { getConfig } from './get-config'
 
 export interface Theme {
@@ -27,7 +28,7 @@ export const getTheme = () => {
   try {
     theme = JSON.parse(readFileSync(config.themeFile).toString())
   } catch (error) {
-    console.log(error)
+    log.error(error)
   }
 
   return theme

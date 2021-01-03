@@ -1,3 +1,4 @@
+import { log } from './log'
 import { getConfig } from './get-config'
 import { Theme } from './get-theme'
 import { replaceJsonValues } from './replace-json-values'
@@ -25,7 +26,7 @@ export const parseThemes = ({ name, type, ...theme }: Theme) => {
       if (replaceWith) {
         workingTheme = replaceJsonValues(workingTheme, searchFor, replaceWith)
       } else {
-        console.log(`Bad format for \`${color}\``)
+        log.error(`Bad format for \`${color}\``)
       }
     })
 

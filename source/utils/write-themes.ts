@@ -1,5 +1,6 @@
 import { writeFileSync } from 'fs'
 import slugify from 'slugify'
+import { log } from './log'
 import { getConfig } from './get-config'
 
 // TODO: types
@@ -16,7 +17,7 @@ export const writeThemes = (themes: any) => {
       writeFileSync(`${config.outputDir}/${fileName}`, formatted)
       console.log(`Writing ${themes[variant].name} (${fileName})`)
     } catch (error) {
-      console.log(error)
+      log.error(error)
     }
   })
 }

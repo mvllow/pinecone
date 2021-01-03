@@ -1,3 +1,5 @@
+import { log } from './log'
+
 interface Theme {
   variants: {
     [key: string]: {
@@ -48,7 +50,7 @@ export const getConfig = () => {
 
     config = { ...defaultConfig, ...userConfig }
   } catch (error) {
-    console.log(error)
+    log.error(error)
   }
 
   return config
