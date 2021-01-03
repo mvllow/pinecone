@@ -1,5 +1,6 @@
 import { writeFileSync } from 'fs'
 import slugify from 'slugify'
+import prettier from 'prettier'
 import { log } from './log'
 import { getConfig } from './get-config'
 
@@ -12,10 +13,20 @@ export const writeThemes = (themes: any) => {
     let fileName = `${slug}-color-theme.json`
 
     try {
-      const formatted = JSON.stringify(themes[variant], null, 2)
+      // get prettier user options if available (uses cosmiconfig)
+      prettier.resolveConfig(process.cwd()).then((options) => {
+        const formatted = prettier.format(
+          // we use `null` to add new lines for prettier to then format
+          JSON.stringify(themes[variant], null, 2),
+          {
+            ...options,
+            parser: 'json',
+          }
+        )
 
-      writeFileSync(`${config.outputDir}/${fileName}`, formatted)
-      console.log(`Writing ${themes[variant].name} (${fileName})`)
+        writeFileSync(`${config.outputDir}/${fileName}`, formatted)
+        console.log(`Writing ${themes[variant].name} (${fileName})`)
+      })
     } catch (error) {
       log.error(error)
     }
