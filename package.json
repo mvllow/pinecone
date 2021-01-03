@@ -16,14 +16,8 @@
     "pinecone": "dist/index.js"
   },
   "scripts": {
-    "type-check": "tsc --noEmit",
-    "type-check:watch": "npm run type-check -- --watch",
-    "prebuild": "rimraf dist",
-    "build": "tsc",
-    "watch": "npm run build:types && npm run build:js -- --watch",
-    "prepare": "npm run build",
-    "publish:public": "npm publish --access public",
-    "publish:beta": "npm publish --tag beta"
+    "clean": "rimraf dist",
+    "build": "npm run clean && tsc"
   },
   "devDependencies": {
     "jest": "^26.4.0",
