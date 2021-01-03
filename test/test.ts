@@ -30,8 +30,11 @@ test.serial('`pinecone init` generates default files', async (t) => {
 })
 
 test('`pinecone` generates themes', (t) => {
-  // TODO: check generated themes
   t.notThrows(() => pinecone())
+
+  let theme = require(`${process.cwd()}/themes/latte-color-theme.json`)
+
+  t.is(theme.colors['editor.background'], '#faf8f6')
 })
 
 test('`pinecone --include-non-italics` generates non-italic variants', async (t) => {
