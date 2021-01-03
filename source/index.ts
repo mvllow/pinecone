@@ -1,12 +1,17 @@
 import chalk from 'chalk'
-import { AnyFlags, TypedFlags } from 'meow'
+import { TypedFlags } from 'meow'
 import { init } from './init'
+import { getConfig } from './utils/get-config'
 import { validateConfig } from './utils/validate-config'
 import { getTheme } from './utils/get-theme'
 import { parseThemes } from './utils/parse-themes'
 import { writeThemes } from './utils/write-themes'
 
-const pinecone = async (command?: string, options?: TypedFlags<AnyFlags>) => {
+// TODO: make type dynamic
+type Options = TypedFlags<{ includeNonItalicVariants: { type: 'boolean' } }> &
+  Record<string, unknown>
+
+const pinecone = async (command?: string, options?: Options) => {
   console.clear()
   console.log(chalk.green('🌲 Pinecone'))
 
@@ -14,9 +19,19 @@ const pinecone = async (command?: string, options?: TypedFlags<AnyFlags>) => {
     await init()
   }
 
+  let config = getConfig()
+
   validateConfig()
+
   let theme = getTheme()
-  let parsedThemes = parseThemes(theme)
+
+  let includeNonItalicVariants =
+    options?.includeNonItalicVariants ||
+    config.options?.includeNonItalicVariants ||
+    false
+
+  let parsedThemes = parseThemes(theme, { includeNonItalicVariants })
+
   writeThemes(parsedThemes)
 }
 

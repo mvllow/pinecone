@@ -1,7 +1,12 @@
-const config = {
+import { Config } from '../utils/get-config'
+
+const config: Config = {
   themeFile: './themes/_pinecone-color-theme.json',
   outputDir: './themes',
   varPrefix: '_',
+  options: {
+    includeNonItalicVariants: false,
+  },
   theme: {
     variants: {
       latte: {

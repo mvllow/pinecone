@@ -20,7 +20,12 @@ export interface Config {
   themeFile: string
   outputDir: string
   varPrefix: string
+  options?: Options
   theme: Theme
+}
+
+export interface Options {
+  includeNonItalicVariants: boolean
 }
 
 export const getConfig = () => {
@@ -28,6 +33,9 @@ export const getConfig = () => {
     themeFile: './themes/_pinecone-color-theme.json',
     outputDir: './themes',
     varPrefix: '_',
+    options: {
+      includeNonItalicVariants: false,
+    },
     theme: {
       variants: {
         dark: {

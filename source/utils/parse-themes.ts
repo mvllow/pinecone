@@ -1,9 +1,13 @@
 import { log } from './log'
-import { getConfig } from './get-config'
+import { getConfig, Options } from './get-config'
 import { Theme } from './get-theme'
 import { replaceJsonValues } from './replace-json-values'
+import { removeWordFromString } from './remove-word-from-string'
 
-export const parseThemes = ({ name, type, ...theme }: Theme) => {
+export const parseThemes = (
+  { name, type, ...theme }: Theme,
+  options?: Options
+) => {
   let stringifiedTheme = JSON.stringify(theme)
   let config = getConfig()
   let result: { [key: string]: Theme } = {}
@@ -34,6 +38,18 @@ export const parseThemes = ({ name, type, ...theme }: Theme) => {
       name: config.theme.variants[variant]?.name,
       type: config.theme.variants[variant]?.type,
       ...JSON.parse(workingTheme),
+    }
+
+    console.log(options)
+
+    if (options?.includeNonItalicVariants) {
+      let nonItalicVariant = removeWordFromString(workingTheme, 'italic')
+
+      result[`${variant}-no-italics`] = {
+        name: `${config.theme.variants[variant]?.name} (no italics)`,
+        type: config.theme.variants[variant]?.type,
+        ...JSON.parse(nonItalicVariant),
+      }
     }
   })
 

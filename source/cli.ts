@@ -3,10 +3,6 @@
 import meow from 'meow'
 import pinecone from '.'
 
-// TODO
-// - implement non-italic variants
-//   - need to add pinecone.config.js option as well
-
 const cli = meow(
   `
   Usage
@@ -16,16 +12,17 @@ const cli = meow(
       $ pinecone init
 
   Options
-    --no-italics  Include non-italic variants
+    --include-non-italics  Include non-italic variants
 
   Examples
     $ pinecone
     $ pinecone init
-    $ pinecone --no-italics
+    $ pinecone --include-non-italics
 `,
   {
     flags: {
-      noItalics: {
+      includeNonItalicVariants: {
+        alias: 'include-non-italics',
         type: 'boolean',
       },
     },

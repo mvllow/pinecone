@@ -12,6 +12,9 @@ test.before(() => {
 
   // suppress console during tests
   sinon.stub(console, 'log')
+
+  // ignore process.exit during tests
+  sinon.stub(process, 'exit')
 })
 
 test.serial('`pinecone init` generates default files', async (t) => {
@@ -31,4 +34,10 @@ test('`pinecone` generates themes', (t) => {
   t.notThrows(() => pinecone())
 })
 
-test.todo('`pinecone --no-italic` generates non-italic variants')
+test('`pinecone --include-non-italics` generates non-italic variants', async (t) => {
+  await pinecone('--include-non-italics')
+
+  let theme = require(`${process.cwd()}/themes/latte-no-italics-color-theme.json`)
+
+  t.notRegex(theme.tokenColors[0].settings.fontStyle, /italic/g)
+})
