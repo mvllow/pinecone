@@ -6,8 +6,6 @@ import pinecone from '.'
 // TODO
 // - implement non-italic variants
 //   - need to add pinecone.config.js option as well
-// - add init functionality
-//   - generate default pinecone.config.js and _color-theme.json
 
 const cli = meow(
   `

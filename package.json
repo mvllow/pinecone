@@ -10,7 +10,7 @@
   },
   "scripts": {
     "dev": "ts-node source/cli.ts",
-    "clean": "del-cli dist",
+    "clean": "del-cli dist themes pinecone.config.js",
     "build": "npm run clean && tsc && npm test",
     "test": "ava"
   },
