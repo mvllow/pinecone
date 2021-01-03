@@ -84,3 +84,7 @@ module.exports = {
   },
 }
 ```
+
+| Option                   | Description                                  | Default |
+| ------------------------ | -------------------------------------------- | ------- |
+| includeNonItalicVariants | Generate additional variants without italics | false   |
