@@ -5,11 +5,11 @@
   "license": "MIT",
   "repository": "mvllow/pinecone",
   "bin": {
-    "pinecone": "dist/index.js",
-    "pinecone-cli": "dist/index.js"
+    "pinecone": "dist/cli.js",
+    "pinecone-cli": "dist/cli.js"
   },
   "scripts": {
-    "dev": "ts-node source/index.ts",
+    "dev": "ts-node source/cli.ts",
     "clean": "del-cli dist",
     "build": "npm run clean && tsc"
   },
