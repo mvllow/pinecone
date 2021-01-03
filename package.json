@@ -25,6 +25,7 @@
     "variables"
   ],
   "dependencies": {
+    "chalk": "^4.1.0",
     "slugify": "^1.4.6"
   },
   "devDependencies": {
