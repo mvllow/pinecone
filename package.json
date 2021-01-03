@@ -21,7 +21,7 @@
     "prebuild": "rimraf dist",
     "build": "npm run build:types && npm run build:js",
     "build:types": "tsc --emitDeclarationOnly",
-    "build:js": "babel src --out-dir dist --extensions '.js,.ts' --copy-files",
+    "build:js": "babel source --out-dir dist --extensions '.js,.ts' --copy-files",
     "watch": "npm run build:types && npm run build:js -- --watch",
     "prepare": "npm run build",
     "publish:public": "npm publish --access public",
