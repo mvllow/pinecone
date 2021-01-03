@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import { readFileSync, writeFileSync } from 'fs'
-import replaceValues, { IData } from './util/replace-values'
+import replaceValues, { IData } from './utils/replace-values'
 import defaultConfig, { IDefaultConfig, IUserConfig } from './default.config'
 
 let prefix = '_'
