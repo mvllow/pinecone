@@ -44,13 +44,5 @@
   "prettier": {
     "semi": false,
     "singleQuote": true
-  },
-  "ava": {
-    "extensions": [
-      "ts"
-    ],
-    "require": [
-      "ts-node/register"
-    ]
   }
 }

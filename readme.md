@@ -1,7 +1,5 @@
 # Pinecone
 
-> These docs are for our pre 1.0.0 release
-
 Dynamically generating theme variants since 2020 ✨
 
 ## Usage
