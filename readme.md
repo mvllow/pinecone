@@ -11,6 +11,8 @@ $ npm install -g pinecone-cli
 ```
 
 ```
+$ pinecone --help
+
   Usage
     $ pinecone <options>
 
