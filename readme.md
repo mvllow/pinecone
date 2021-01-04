@@ -1,86 +1,90 @@
 # Pinecone
 
-> These docs are for 0.4.0 beta
+> These docs are for our pre 1.0.0 release
 
 Dynamically generating theme variants since 2020 ✨
 
-## Getting started
-
-**Install**
+## Usage
 
 ```sh
-  npm install @mvllow/pinecone@beta
+$ npm install -g pinecone-cli
 ```
 
-**Update package.json**
+```
+  Usage
+    $ pinecone <options>
 
-```json
-{
-  "scripts": {
-    "generate": "pinecone"
-  }
-}
+    Creating a new theme
+      $ pinecone init
+
+  Options
+    --include-non-italics  Include non-italic variants
+
+  Examples
+    $ pinecone
+    $ pinecone init
+    $ pinecone --include-non-italics
 ```
 
-**Configure pinecone**
+## Theme
 
-```js
-// pinecone.config.js
-
-module.exports = {
-  // Using `color-theme` in the name enables vscode theme intellisense
-  in: './themes/color-theme.json',
-  out: './themes',
-  themes: [
-    {
-      name: 'Pinecone Dark',
-      slug: 'pinecone-dark',
-      type: 'dark',
-      colors: {
-        foreground: '#fff',
-        background: '#000',
-      },
-    },
-    {
-      name: 'Pinecone Light',
-      slug: 'pinecone-light',
-      type: 'light',
-      colors: {
-        foreground: '#000',
-        background: '#fff',
-      },
-    },
-  ],
-}
-```
-
-**Update base theme**
-
-With the above config, we would want our `color-theme.json` to look something like this:
+**themes/\_pinecone-color-theme.json**
 
 ```json
 {
   "colors": {
-    "editor.foreground": "_foreground",
-    "editor.background": "_background"
-  }
+    "editor.background": "_bg",
+    "editor.foreground": "_fg",
+    "widget.shadow": "_transparent"
+  },
+  "tokenColors": [
+    {
+      "scope": ["comment"],
+      "settings": {
+        "foreground": "_fg",
+        "fontStyle": "italic"
+      }
+    }
+  ]
 }
 ```
 
-**Run pinecone**
+## Config
 
-```sh
-npm run generate
+**pinecone.config.js**
+
+```js
+module.exports = {
+  themeFile: './themes/_pinecone-color-theme.json',
+  outputDir: './themes',
+  varPrefix: '_',
+  options: {
+    includeNonItalicVariants: false,
+  },
+  variants: {
+    charcoal: {
+      name: 'Smokey Charcoal',
+      type: 'dark',
+    },
+    soap: {
+      name: 'Bubbly Soap',
+      type: 'light',
+    },
+  },
+  colors: {
+    transparent: '#0000',
+    bg: {
+      charcoal: '#000',
+      soap: '#fff',
+    },
+    fg: {
+      charcoal: '#fff',
+      soap: '#000',
+    },
+  },
+}
 ```
 
-That's it, enjoy your multiple variants ✨
-
-## Contributing
-
-Pull requests are welcome and appreciated!
-
-To build from source, run:
-
-```sh
-npm run build
-```
+| Option                   | Description                                  | Default |
+| ------------------------ | -------------------------------------------- | ------- |
+| includeNonItalicVariants | Generate additional variants without italics | false   |
