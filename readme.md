@@ -1,116 +1,90 @@
 # Pinecone
 
-Check out [our beta branch](https://github.com/mvllow/pinecone/tree/beta) to test the 1.0 version featuring:
-
-- New package name, `pinecone-cli`
-- Shared colours between variants
-- User-friendly API: less clutter, more creating
-- 9x faster builds seen on our own Rosé Pine theme (and more "[prettier](https://prettier.io)" than ever)
-- And of course, all new documentation
-
----
-
-> Note this documentation is being deprecated with the 1.0 release
-
 Dynamically generating theme variants since 2020 ✨
 
-## Getting started
-
-**Install**
+## Usage
 
 ```sh
-  npm install @mvllow/pinecone
+$ npm install -g pinecone-cli
 ```
 
-**Update package.json**
+```
+$ pinecone --help
+
+  Usage
+    $ pinecone <options>
+
+    Creating a new theme
+      $ pinecone init
+
+  Options
+    --include-non-italics  Include non-italic variants
+
+  Examples
+    $ pinecone
+    $ pinecone init
+    $ pinecone --include-non-italics
+```
+
+## Theme
+
+**themes/\_pinecone-color-theme.json**
 
 ```json
 {
-  "scripts": {
-    "generate": "pinecone"
-  }
+  "colors": {
+    "editor.background": "_bg",
+    "editor.foreground": "_fg",
+    "widget.shadow": "_transparent"
+  },
+  "tokenColors": [
+    {
+      "scope": ["comment"],
+      "settings": {
+        "foreground": "_fg",
+        "fontStyle": "italic"
+      }
+    }
+  ]
 }
 ```
 
-**Configure pinecone**
+## Config
+
+**pinecone.config.js**
 
 ```js
-// pinecone.config.js
-
 module.exports = {
-  input: './themes/theme.json',
-  dir: './themes',
-  prefix: '_',
-  themes: [
-    {
-      name: 'My sorta cool theme',
-      slug: 'sorta-cool-filename',
+  themeFile: './themes/_pinecone-color-theme.json',
+  outputDir: './themes',
+  varPrefix: '_',
+  options: {
+    includeNonItalicVariants: false,
+  },
+  variants: {
+    charcoal: {
+      name: 'Smokey Charcoal',
       type: 'dark',
-      colors: {
-        accent1: '#fa8072',
-        accent2: '#3eb489',
-      },
     },
-    {
-      name: 'My less cool theme',
-      slug: 'less-cool-filename',
-      type: 'dark',
-      colors: {
-        accent1: '#ea4335',
-        accent2: '#4285f4',
-      },
+    soap: {
+      name: 'Bubbly Soap',
+      type: 'light',
     },
-  ],
+  },
+  colors: {
+    transparent: '#0000',
+    bg: {
+      charcoal: '#000',
+      soap: '#fff',
+    },
+    fg: {
+      charcoal: '#fff',
+      soap: '#000',
+    },
+  },
 }
 ```
 
-**Update base theme**
-
-With the above config, we would want our theme (input) to look something like this:
-
-```json
-{
-  "colors": {
-    "something.foreground": "_accent1",
-    "something.background": "_accent2"
-  }
-}
-```
-
-**Run pinecone**
-
-```sh
-npm run pinecone
-```
-
-This will generate all variants, for example:
-
-```json
-{
-  "name": "My sorta cool theme",
-  "type": "dark",
-  "colors": {
-    "accent1": "#fa8072",
-    "accent2": "#3eb489"
-  }
-}
-
-{
-  "name": "My less cool theme",
-  "type": "dark",
-  "colors": {
-    "accent1": "#ea4335",
-    "accent2": "#4285f4"
-  }
-}
-```
-
-## Contributing
-
-Pull requests are welcome and appreciated!
-
-To build from source, run:
-
-```sh
-npm run build
-```
+| Option                   | Description                                  | Default |
+| ------------------------ | -------------------------------------------- | ------- |
+| includeNonItalicVariants | Generate additional variants without italics | false   |

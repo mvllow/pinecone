@@ -1,41 +1,48 @@
 {
-  "name": "@mvllow/pinecone",
-  "version": "0.3.2",
-  "description": "Dynamic theme generator",
-  "author": "mvllow",
+  "name": "pinecone-cli",
+  "version": "1.0.0-1",
+  "description": "Lovely VSCode theme builder",
   "license": "MIT",
-  "main": "lib/index.js",
-  "types": "lib/index.d.ts",
-  "directories": {
-    "lib": "lib"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/mvllow/pinecone.git"
-  },
-  "bugs": {
-    "url": "https://github.com/mvllow/pinecone/issues"
-  },
-  "homepage": "https://github.com/mvllow/pinecone#readme",
+  "repository": "mvllow/pinecone",
   "bin": {
-    "pinecone": "lib/index.js"
+    "pinecone": "dist/cli.js",
+    "pinecone-cli": "dist/cli.js"
   },
-  "keywords": [
-    "vscode",
-    "theme",
-    "generator"
+  "scripts": {
+    "dev": "ts-node source/cli.ts",
+    "clean": "del-cli dist themes pinecone.config.js",
+    "build": "npm run clean && tsc && npm test",
+    "test": "ava"
+  },
+  "files": [
+    "dist"
   ],
+  "types": "dist/types/index.d.ts",
+  "keywords": [
+    "dynamic",
+    "vscode",
+    "themes",
+    "json",
+    "variables"
+  ],
+  "dependencies": {
+    "chalk": "^4.1.0",
+    "meow": "^8.1.0",
+    "prettier": "^2.2.1",
+    "slugify": "^1.4.6"
+  },
+  "devDependencies": {
+    "@types/node": "^14.14.19",
+    "@types/prettier": "^2.1.6",
+    "@types/sinon": "^9.0.10",
+    "ava": "^3.15.0",
+    "del-cli": "^3.0.1",
+    "sinon": "^9.2.2",
+    "ts-node": "^9.1.1",
+    "typescript": "^4.1.3"
+  },
   "prettier": {
     "semi": false,
     "singleQuote": true
-  },
-  "scripts": {
-    "dev": "tsc --watch",
-    "build": "tsc"
-  },
-  "devDependencies": {
-    "@types/node": "^14.0.18",
-    "prettier": "^2.0.5",
-    "typescript": "^3.9.6"
   }
 }

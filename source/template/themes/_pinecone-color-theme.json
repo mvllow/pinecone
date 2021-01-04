@@ -1,0 +1,16 @@
+{
+  "colors": {
+    "editor.background": "_bg",
+    "editor.foreground": "_fg",
+    "widget.shadow": "_transparent"
+  },
+  "tokenColors": [
+    {
+      "scope": ["comment"],
+      "settings": {
+        "foreground": "_fg",
+        "fontStyle": "italic"
+      }
+    }
+  ]
+}

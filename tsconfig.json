@@ -1,12 +1,20 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "target": "esnext",
     "module": "commonjs",
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "lib": ["es2018"],
+    "outDir": "dist",
+    "rootDir": "source",
     "declaration": true,
-    "outDir": "./lib",
+    "declarationDir": "dist/types",
+    "types": ["node"],
     "strict": true,
-    "noImplicitAny": false
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "noUnusedLocals": true
   },
-  "include": ["src", "lib/default.config.js"],
-  "exclude": ["node_modules"]
+  "include": ["source"]
 }

@@ -1,2 +1,7 @@
+/node_modules/
+/dist/
+
+/themes/
+/pinecone.config.js
+
 .DS_Store
-node_modules
