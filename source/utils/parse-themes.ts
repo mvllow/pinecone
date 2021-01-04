@@ -19,13 +19,8 @@ export const parseThemes = (
       let searchFor = `${config.varPrefix}${color}`
 
       let currentColor = config.theme.colors[color]
-      let replaceWith
-
-      if (typeof currentColor === 'object') {
-        replaceWith = currentColor[variant] || ''
-      } else if (typeof currentColor === 'string') {
-        replaceWith = currentColor
-      }
+      let replaceWith =
+        typeof currentColor == 'string' ? currentColor : currentColor[variant]
 
       if (replaceWith) {
         workingTheme = replaceJsonValues(workingTheme, searchFor, replaceWith)
