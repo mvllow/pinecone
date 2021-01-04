@@ -1,6 +1,16 @@
 # Pinecone
 
-> Currently in alpha - API's may change
+Check out [our beta branch](https://github.com/mvllow/pinecone/tree/beta) to test the 1.0 version featuring:
+
+- New package name, `pinecone-cli`
+- Shared colours between variants
+- User-friendly API: less clutter, more creating
+- 9x faster builds seen on our own Rosé Pine theme (and more "[prettier](https://prettier.io)" than ever)
+- And of course, all new documentation
+
+---
+
+> Note this documentation is being deprecated with the 1.0 release
 
 Dynamically generating theme variants since 2020 ✨
 
