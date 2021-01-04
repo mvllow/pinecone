@@ -44,3 +44,5 @@ test('`pinecone --include-non-italics` generates non-italic variants', async (t)
 
   t.notRegex(theme.tokenColors[0].settings.fontStyle, /italic/g)
 })
+
+test.todo('invalid config')

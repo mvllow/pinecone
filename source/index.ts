@@ -21,18 +21,18 @@ const pinecone = async (command?: string, options?: Options) => {
 
   let config = getConfig()
 
-  validateConfig()
+  if (validateConfig()) {
+    let theme = getTheme()
 
-  let theme = getTheme()
+    let includeNonItalicVariants =
+      options?.includeNonItalicVariants ||
+      config.options?.includeNonItalicVariants ||
+      false
 
-  let includeNonItalicVariants =
-    options?.includeNonItalicVariants ||
-    config.options?.includeNonItalicVariants ||
-    false
+    let parsedThemes = parseThemes(theme, { includeNonItalicVariants })
 
-  let parsedThemes = parseThemes(theme, { includeNonItalicVariants })
-
-  await writeThemes(parsedThemes)
+    await writeThemes(parsedThemes)
+  }
 }
 
 export default pinecone
