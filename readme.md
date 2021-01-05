@@ -12,13 +12,13 @@ $ npm install -g pinecone-cli
 $ pinecone --help
 
   Usage
-    $ pinecone <options>
+    $ pinecone <command>
 
-    Creating a new theme
-      $ pinecone init
+  Commands
+    init                   Create new theme files
 
   Options
-    --include-non-italics  Include non-italic variants
+    --include-non-italics  Generate additional variants with no italics
 
   Examples
     $ pinecone
