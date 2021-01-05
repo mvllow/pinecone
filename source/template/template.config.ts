@@ -6,6 +6,7 @@ const config: Config = {
   varPrefix: '_',
   options: {
     includeNonItalicVariants: false,
+    writeMeta: false,
   },
   theme: {
     variants: {

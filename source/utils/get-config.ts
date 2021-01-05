@@ -26,6 +26,7 @@ export interface Config {
 
 export interface Options {
   includeNonItalicVariants: boolean
+  writeMeta: boolean
 }
 
 export const getConfig = () => {
@@ -35,6 +36,7 @@ export const getConfig = () => {
     varPrefix: '_',
     options: {
       includeNonItalicVariants: false,
+      writeMeta: false,
     },
     theme: {
       variants: {
