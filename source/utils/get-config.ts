@@ -25,8 +25,8 @@ export interface Config {
 }
 
 export interface Options {
-  includeNonItalicVariants: boolean
-  writeMeta: boolean
+  includeNonItalicVariants?: boolean
+  writeMeta?: boolean
 }
 
 export const getConfig = () => {
