@@ -13,16 +13,22 @@ const cli = meow(
 
   Options
     --include-non-italics  Generate additional variants with no italics
+    -m, --write-meta       Add contributed themes to \`package.json\`
 
   Examples
     $ pinecone
     $ pinecone init
     $ pinecone --include-non-italics
+    $ pinecone --write-meta
 `,
   {
     flags: {
       includeNonItalicVariants: {
         alias: 'include-non-italics',
+        type: 'boolean',
+      },
+      writeMeta: {
+        alias: 'm',
         type: 'boolean',
       },
     },

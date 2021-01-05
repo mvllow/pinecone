@@ -19,11 +19,13 @@ $ pinecone --help
 
   Options
     --include-non-italics  Generate additional variants with no italics
+    -m, --write-meta       Add contributed themes to `package.json`
 
   Examples
     $ pinecone
     $ pinecone init
     $ pinecone --include-non-italics
+    $ pinecone --write-meta
 ```
 
 ## Theme
@@ -60,6 +62,7 @@ module.exports = {
   varPrefix: '_',
   options: {
     includeNonItalicVariants: false,
+    writeMeta: false,
   },
   variants: {
     charcoal: {
@@ -88,3 +91,4 @@ module.exports = {
 | Option                   | Description                                  | Default |
 | ------------------------ | -------------------------------------------- | ------- |
 | includeNonItalicVariants | Generate additional variants without italics | false   |
+| writeMeta                | Add contributed themes to `package.json`     | false   |
