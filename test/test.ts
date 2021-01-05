@@ -47,7 +47,7 @@ test('`pinecone --include-non-italics` generates non-italic variants', async (t)
 
 test.todo('invalid config')
 
-test('`pinecone --write-meta` modifies package contents', async (t) => {
+test.skip('`pinecone --write-meta` modifies package contents', async (t) => {
   await pinecone('', { writeMeta: true })
 
   let packageJson = require(`${process.cwd()}/package.json`)
