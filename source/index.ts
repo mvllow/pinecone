@@ -1,21 +1,22 @@
 import chalk from 'chalk'
 import { TypedFlags } from 'meow'
 import { init } from './init'
-import { getConfig } from './utils/get-config'
 import { validateConfig } from './utils/validate-config'
-import { getTheme } from './utils/get-theme'
 import { parseThemes } from './utils/parse-themes'
-import { writeThemes } from './utils/write-themes'
-import { writeMeta } from './utils/write-meta'
+import { generateThemes } from './utils/generate-themes'
+import { getConfig, Options } from './utils/get-config'
+import { readJson } from './utils/read-json'
 
-// TODO: make type dynamic
-type Options = TypedFlags<{
-  includeNonItalicVariants: { type: 'boolean' }
-  writeMeta: { type: 'boolean' }
-}> &
+type OptionKeys = keyof Options
+
+type Flags = TypedFlags<
+  {
+    [K in OptionKeys]: { type: 'boolean' }
+  }
+> &
   Record<string, unknown>
 
-const pinecone = async (command?: string, options?: Partial<Options>) => {
+const pinecone = async (command?: string, flags?: Partial<Flags>) => {
   console.clear()
   console.log(chalk.green('🌲 Pinecone'))
 
@@ -23,23 +24,14 @@ const pinecone = async (command?: string, options?: Partial<Options>) => {
     await init()
   }
 
-  let config = getConfig()
+  let { themeFile, options } = getConfig()
+  options = { ...options, ...flags }
 
   if (validateConfig()) {
-    let theme = getTheme()
+    let theme = readJson(themeFile)
+    let parsedThemes = parseThemes(theme, options)
 
-    let includeNonItalicVariants =
-      options?.includeNonItalicVariants ||
-      config.options?.includeNonItalicVariants ||
-      false
-
-    let parsedThemes = parseThemes(theme, { includeNonItalicVariants })
-
-    await writeThemes(parsedThemes)
-
-    if (options?.writeMeta) {
-      await writeMeta()
-    }
+    await generateThemes(parsedThemes, options)
   }
 }
 

@@ -1,6 +1,21 @@
-import { log } from './log'
+import { log } from './pretty-log'
 
-interface Theme {
+export interface Config {
+  themeFile: string
+  outputDir: string
+  varPrefix: string
+  options?: Options
+  theme: Theme
+}
+
+export interface Options {
+  // TODO: deprecate one of the below options
+  includeNonItalicVariants?: boolean
+  includeNonItalics?: boolean
+  writeMeta?: boolean
+}
+
+export interface Theme {
   variants: {
     [key: string]: {
       name: string
@@ -14,19 +29,6 @@ interface Theme {
           [key: string]: string
         }
   }
-}
-
-export interface Config {
-  themeFile: string
-  outputDir: string
-  varPrefix: string
-  options?: Options
-  theme: Theme
-}
-
-export interface Options {
-  includeNonItalicVariants?: boolean
-  writeMeta?: boolean
 }
 
 export const getConfig = () => {

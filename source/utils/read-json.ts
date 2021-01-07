@@ -1,6 +1,6 @@
 import fs from 'fs'
 import path from 'path'
-import { log } from './log'
+import { log } from './pretty-log'
 
 /**
  * Read JSON

@@ -1,4 +1,4 @@
-import { log } from './log'
+import { log } from './pretty-log'
 import { Config, getConfig } from './get-config'
 
 interface DeprecatedConfig extends Config {
