@@ -27,7 +27,10 @@ export const init = async () => {
   )
   await writePrettyFile(
     configPath,
-    `module.exports = ${JSON.stringify(config, null, 2)}`,
+    `/**
+    * @type { import("./dist/types/utils/get-config").Config }
+    */
+    module.exports = ${JSON.stringify(config, null, 2)}`,
     'babel'
   )
 }
