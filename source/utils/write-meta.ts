@@ -2,7 +2,7 @@ import path from 'path'
 import slugify from 'slugify'
 import { getConfig } from './get-config'
 import { readJson } from './read-json'
-import { writeJson } from './write-json'
+import { writePrettyFile } from './write-pretty-file'
 
 interface VSTheme {
   label: string
@@ -34,5 +34,9 @@ export const writeMeta = async () => {
     themes
   )
 
-  writeJson('package.json', packageJson)
+  await writePrettyFile(
+    'package.json',
+    JSON.stringify(packageJson, null, 2),
+    'json-stringify'
+  )
 }

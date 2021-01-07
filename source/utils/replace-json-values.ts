@@ -1,4 +1,4 @@
-import { log } from './log'
+import { log } from './pretty-log'
 
 export const replaceJsonValues = (
   body: string,
