@@ -2,11 +2,10 @@ import fs from 'fs'
 import path from 'path'
 import { log } from './utils/pretty-log'
 import { writePrettyFile } from './utils/write-pretty-file'
-import { readJson } from './utils/read-json'
 import config from './template/template.config'
+import theme from './template/themes/_pinecone-color-theme.json'
 
 export const init = async () => {
-  let theme = readJson('source/template/themes/_pinecone-color-theme.json')
   let { themeFile } = config
   let themePath = path.normalize(themeFile)
   let configPath = path.normalize(`./pinecone.config.js`)
