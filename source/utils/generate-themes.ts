@@ -28,6 +28,6 @@ export const generateThemes = async (themes: Themes, options: Options) => {
   )
 
   if (options.writeMeta) {
-    await writeMeta()
+    await writeMeta(options)
   }
 }

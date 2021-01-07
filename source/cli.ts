@@ -22,6 +22,7 @@ const cli = meow(
     $ pinecone --write-meta
 `,
   {
+    booleanDefault: undefined,
     flags: {
       includeNonItalicVariants: {
         alias: 'include-non-italics',
