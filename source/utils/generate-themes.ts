@@ -2,7 +2,6 @@ import path from 'path'
 import slugify from 'slugify'
 import { getConfig, Options } from './get-config'
 import { Theme } from './parse-themes'
-import { writeMeta } from './write-meta'
 import { writePrettyFile } from './write-pretty-file'
 
 interface Themes {
@@ -11,6 +10,7 @@ interface Themes {
 
 export const generateThemes = async (themes: Themes, options: Options) => {
   let { outputDir } = getConfig()
+  let variants: any[] = []
 
   await Promise.all(
     Object.keys(themes).map(async (variant) => {
@@ -23,11 +23,18 @@ export const generateThemes = async (themes: Themes, options: Options) => {
         path.join(outputDir, `${slug}-color-theme.json`),
         JSON.stringify(themes[variant], null, 2)
       )
-      console.log(`Writing ${themes[variant].name}`)
+
+      if (!themes[variant].name?.includes('(no italics)')) {
+        if (options.includeNonItalics || options.includeNonItalicVariants) {
+          variants.push(
+            `${themes[variant].name} / ${themes[variant].name} (no italics)`
+          )
+        } else {
+          variants.push(themes[variant].name)
+        }
+      }
     })
   )
 
-  if (options.writeMeta) {
-    await writeMeta(options)
-  }
+  return variants
 }

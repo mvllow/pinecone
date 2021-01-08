@@ -1,5 +1,3 @@
-import { log } from './pretty-log'
-
 export interface Config {
   themeFile: string
   outputDir: string
@@ -58,11 +56,12 @@ export const getConfig = () => {
   let config = defaultConfig
 
   try {
+    delete require.cache[require.resolve(`${process.cwd()}/pinecone.config.js`)]
     let userConfig: Config = require(`${process.cwd()}/pinecone.config.js`)
 
     config = { ...defaultConfig, ...userConfig }
   } catch (error) {
-    log.error(error)
+    // noop
   }
 
   return config
