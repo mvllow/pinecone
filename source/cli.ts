@@ -6,10 +6,11 @@ import pinecone from '.'
 const cli = meow(
   `
   Usage
-    $ pinecone <command>
+    $ pinecone <command> [options]
 
   Commands
-    init                   Create new theme files
+    init   Create new theme files
+    watch  Rebuild themes when \`pinecone.config.js\` changes
 
   Options
     --include-non-italics  Generate additional variants with no italics
@@ -18,6 +19,7 @@ const cli = meow(
   Examples
     $ pinecone
     $ pinecone init
+    $ pinecone watch
     $ pinecone --include-non-italics
     $ pinecone --write-meta
 `,
