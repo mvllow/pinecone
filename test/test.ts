@@ -54,3 +54,5 @@ test.skip('`pinecone --write-meta` modifies package contents', async (t) => {
 
   t.is(packageJson.contributes.themes[0].label, 'Latte')
 })
+
+test.todo('`pinecone watch`')
