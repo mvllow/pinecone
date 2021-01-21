@@ -1,5 +1,7 @@
 # Pinecone
 
+> Used in the lovely [Rosé Pine](https://github.com/rose-pine/vscode) theme
+
 Dynamically generating theme variants since 2020 ✨
 
 ## Usage
