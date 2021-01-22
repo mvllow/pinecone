@@ -1,11 +1,6 @@
 type Color = string | { [key: string]: string }
 type Transparency = number
 
-function isHex(value: string) {
-	let result = parseInt(value, 16)
-	return result.toString(16) === value.toLowerCase()
-}
-
 /**
  * Convert decimal to two digit hex value
  */
@@ -34,10 +29,6 @@ export const alpha = (color: Color, transparency: Transparency) => {
 		return colors
 	} else {
 		let workingColor = color.replace('#', '')
-
-		if (!isHex(workingColor)) {
-			throw new Error('Found non-hex color')
-		}
 
 		if (workingColor.length === 3) {
 			workingColor = `#${workingColor.repeat(2)}`
