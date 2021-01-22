@@ -1,20 +1,20 @@
 {
-  "compilerOptions": {
-    "target": "ES2018",
-    "module": "commonjs",
-    "moduleResolution": "node",
-    "esModuleInterop": true,
-    "resolveJsonModule": true,
-    "lib": ["es2018"],
-    "outDir": "dist",
-    "rootDir": "source",
-    "declaration": true,
-    "declarationDir": "dist/types",
-    "types": ["node"],
-    "strict": true,
-    "noImplicitAny": true,
-    "strictNullChecks": true,
-    "noUnusedLocals": true
-  },
-  "include": ["source"]
+	"compilerOptions": {
+		"target": "ES2018",
+		"module": "commonjs",
+		"moduleResolution": "node",
+		"esModuleInterop": true,
+		"resolveJsonModule": true,
+		"lib": ["es2018"],
+		"outDir": "dist",
+		"rootDir": "source",
+		"declaration": true,
+		"declarationDir": "dist/types",
+		"types": ["node"],
+		"strict": true,
+		"noImplicitAny": true,
+		"strictNullChecks": true,
+		"noUnusedLocals": true
+	},
+	"include": ["source"]
 }

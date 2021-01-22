@@ -9,9 +9,9 @@ import { log } from './pretty-log'
  * @returns parsed JSON
  */
 export const readJson = (file: string) => {
-  try {
-    return JSON.parse(fs.readFileSync(path.join(process.cwd(), file), 'utf8'))
-  } catch (error) {
-    log.error(error)
-  }
+	try {
+		return JSON.parse(fs.readFileSync(path.join(process.cwd(), file), 'utf8'))
+	} catch (error) {
+		log.error(error)
+	}
 }
