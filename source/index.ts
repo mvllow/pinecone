@@ -9,6 +9,7 @@ import { getConfig, Options } from './utils/get-config'
 import { readJson } from './utils/read-json'
 import { writeMeta } from './utils/write-meta'
 import { cleanThemes } from './utils/clean-themes'
+import { alpha } from './utils/alpha'
 
 type OptionKeys = keyof Options
 
@@ -70,4 +71,5 @@ const pinecone = async (command?: string, flags?: Partial<Flags>) => {
 	}
 }
 
+export { alpha }
 export default pinecone

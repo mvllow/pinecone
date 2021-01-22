@@ -8,9 +8,4 @@ export const log = {
 		console.error(chalk.red('✕', message))
 		process.exit(1)
 	},
-	throw: (where: string, message: string, suggestion: string) => {
-		throw new Error(
-			`${chalk.red(where, ':', message)}\n\n       ${suggestion}\n\n`
-		)
-	},
 }

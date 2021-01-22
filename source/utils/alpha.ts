@@ -1,32 +1,54 @@
-import { log } from './pretty-log'
-
 type Color = string | { [key: string]: string }
 type Transparency = number
 
-function expandHex(color: string) {
-	color = color.replace('#', '')
-	color = `#${color}${color}`
-	return color
+function isHex(value: string) {
+	let result = parseInt(value, 16)
+	return result.toString(16) === value.toLowerCase()
+}
+
+/**
+ * Convert decimal to two digit hex value
+ */
+function convertDecimalToHex(decimal: number) {
+	let hex = Math.round(decimal * 255).toString(16)
+
+	if (hex.length === 1) {
+		hex = `0${hex}`
+	} else if (hex.length !== 2) {
+		hex = ''
+	}
+
+	return hex
 }
 
 export const alpha = (color: Color, transparency: Transparency) => {
-	//
 	if (typeof color === 'object') {
-		let newValue: any = {}
+		let colors: typeof color = {}
 		for (let key in color) {
-			newValue[key] = alpha(color[key], transparency)
+			if (typeof color[key] === 'object') {
+				throw new Error('Nested color objects are not allowed')
+			}
+
+			Object.assign(colors, { [key]: alpha(color[key], transparency) })
 		}
-		return newValue
+		return colors
 	} else {
-		if ((!color.includes('#') && color.length === 3) || color.length === 6) {
-			log.throw('alpha()', 'Expected valid hex code', 'Maybe try `#fa8072`')
+		let workingColor = color.replace('#', '')
+
+		if (!isHex(workingColor)) {
+			throw new Error('Found non-hex color')
 		}
-		if (color.length === 4) {
-			color = expandHex(color)
+
+		if (workingColor.length === 3) {
+			workingColor = `#${workingColor.repeat(2)}`
+		} else if (workingColor.length === 6) {
+			workingColor = `#${workingColor}`
+		} else {
+			throw new Error('Invalid hex color length')
 		}
-		let hex = Math.round(transparency * 255).toString(16)
-		let opacity = hex.length === 1 ? `0${hex}` : hex // eg. convert 5% from 0xd to 0x0d
-		if (opacity.length !== 2) opacity = ''
-		return color + opacity
+
+		let opacity = convertDecimalToHex(transparency)
+
+		return workingColor + opacity
 	}
 }
