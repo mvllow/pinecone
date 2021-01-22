@@ -38,20 +38,20 @@ $ pinecone --help
 
 ```json
 {
-  "colors": {
-    "editor.background": "_bg",
-    "editor.foreground": "_fg",
-    "widget.shadow": "_transparent"
-  },
-  "tokenColors": [
-    {
-      "scope": ["comment"],
-      "settings": {
-        "foreground": "_fg",
-        "fontStyle": "italic"
-      }
-    }
-  ]
+	"colors": {
+		"editor.background": "_bg",
+		"editor.foreground": "_fg",
+		"widget.shadow": "_transparent"
+	},
+	"tokenColors": [
+		{
+			"scope": ["comment"],
+			"settings": {
+				"foreground": "_fg",
+				"fontStyle": "italic"
+			}
+		}
+	]
 }
 ```
 
@@ -60,35 +60,37 @@ $ pinecone --help
 **pinecone.config.js**
 
 ```js
+const { alpha } = require('pinecone-cli')
+
 module.exports = {
-  themeFile: './themes/_pinecone-color-theme.json',
-  outputDir: './themes',
-  varPrefix: '_',
-  options: {
-    includeNonItalicVariants: false,
-    writeMeta: false,
-  },
-  variants: {
-    charcoal: {
-      name: 'Smokey Charcoal',
-      type: 'dark',
-    },
-    soap: {
-      name: 'Bubbly Soap',
-      type: 'light',
-    },
-  },
-  colors: {
-    transparent: '#0000',
-    bg: {
-      charcoal: '#000',
-      soap: '#fff',
-    },
-    fg: {
-      charcoal: '#fff',
-      soap: '#000',
-    },
-  },
+	themeFile: './themes/_pinecone-color-theme.json',
+	outputDir: './themes',
+	varPrefix: '_',
+	options: {
+		includeNonItalicVariants: false,
+		writeMeta: false,
+	},
+	variants: {
+		charcoal: {
+			name: 'Smokey Charcoal',
+			type: 'dark',
+		},
+		soap: {
+			name: 'Bubbly Soap',
+			type: 'light',
+		},
+	},
+	colors: {
+		transparent: '#0000',
+		bg: {
+			charcoal: '#000',
+			soap: '#fff',
+		},
+		fg: {
+			charcoal: '#fff',
+			soap: alpha('#000', 0.8),
+		},
+	},
 }
 ```
 
