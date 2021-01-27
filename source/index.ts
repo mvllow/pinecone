@@ -1,7 +1,7 @@
 import chalk from 'chalk'
 import { TypedFlags } from 'meow'
-import { init } from './init'
-import { watch } from './watch'
+import { init } from './commands/init'
+import { watch } from './commands/watch'
 import { validateConfig } from './utils/validate-config'
 import { parseThemes } from './utils/parse-themes'
 import { generateThemes } from './utils/generate-themes'
@@ -9,7 +9,7 @@ import { getConfig, Options } from './utils/get-config'
 import { readJson } from './utils/read-json'
 import { writeMeta } from './utils/write-meta'
 import { cleanThemes } from './utils/clean-themes'
-import { alpha } from './utils/alpha'
+import { alpha } from './lib/alpha'
 
 type OptionKeys = keyof Options
 

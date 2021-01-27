@@ -1,9 +1,9 @@
 import fs from 'fs'
 import path from 'path'
-import { log } from './utils/pretty-log'
-import { writePrettyFile } from './utils/write-pretty-file'
-import config from './template/template.config'
-import theme from './template/themes/_pinecone-color-theme.json'
+import { log } from '../utils/pretty-log'
+import { writePrettyFile } from '../utils/write-pretty-file'
+import config from '../template/template.config'
+import theme from '../template/themes/_pinecone-color-theme.json'
 
 export const init = async () => {
 	let { themeFile } = config
