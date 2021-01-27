@@ -3,6 +3,7 @@
   "version": "1.4.1",
   "description": "Lovely VSCode theme builder",
   "license": "MIT",
+  "main": "dist/index.js",
   "repository": "mvllow/pinecone",
   "bin": {
     "pinecone": "dist/cli.js",
