@@ -60,8 +60,7 @@ $ pinecone --help
 **pinecone.config.js**
 
 ```js
-// there is a known issue where require('pinecone-cli') results in an error
-const { alpha } = require('./node_modules/pinecone-cli/dist')
+const { alpha } = require('pinecone-cli')
 
 module.exports = {
 	themeFile: './themes/_pinecone-color-theme.json',
