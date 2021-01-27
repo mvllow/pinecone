@@ -10,7 +10,7 @@ const cli = meow(
 
 	Commands
 		init   Create new theme files
-		watch  Rebuild themes when \`pinecone.config.js\` changes
+    	watch  Rebuild themes when pinecone config or theme file changes
 
 	Options
 		--include-non-italics  Generate additional variants with no italics
