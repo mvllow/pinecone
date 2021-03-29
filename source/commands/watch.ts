@@ -12,8 +12,7 @@ export const watch = async () => {
 	nodeWatch([themePath, configPath], async () => {
 		await pinecone()
 			.then(() => {
-				console.log('👀 Waiting for changes...')
-				console.log()
+				console.log('👀 Waiting for changes...\n')
 			})
 			.catch((error) => {
 				log.error(error)
