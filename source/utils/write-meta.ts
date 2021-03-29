@@ -39,9 +39,5 @@ export const writeMeta = async (options: Options) => {
 	}
 	packageJson.contributes.themes = themes
 
-	await writePrettyFile(
-		'package.json',
-		JSON.stringify(packageJson, null, 2),
-		'json-stringify'
-	)
+	await writePrettyFile('package.json', JSON.stringify(packageJson, null, 2), 'json-stringify')
 }

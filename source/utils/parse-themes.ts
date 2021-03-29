@@ -22,10 +22,7 @@ export interface Theme {
 	[key: string]: unknown
 }
 
-export const parseThemes = (
-	{ name, type, ...baseTheme }: Theme,
-	options: Options
-) => {
+export const parseThemes = ({ name, type, ...baseTheme }: Theme, options: Options) => {
 	let stringifiedTheme = JSON.stringify(baseTheme)
 	let { theme, varPrefix } = getConfig()
 	let result: { [key: string]: Theme } = {}
@@ -37,8 +34,7 @@ export const parseThemes = (
 			let searchFor = `${varPrefix}${color}`
 
 			let currentColor = theme.colors[color]
-			let replaceWith =
-				typeof currentColor == 'string' ? currentColor : currentColor[variant]
+			let replaceWith = typeof currentColor == 'string' ? currentColor : currentColor[variant]
 
 			if (replaceWith) {
 				workingTheme = replaceJsonValues(workingTheme, searchFor, replaceWith)

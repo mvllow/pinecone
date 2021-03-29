@@ -9,9 +9,7 @@ export const validateConfig = () => {
 	let config: DeprecatedConfig = getConfig()
 
 	if (!config.themeFile?.includes('color-theme')) {
-		log.suggest(
-			'Include `color-theme` in your themeFile name to enable intellisense completions'
-		)
+		log.suggest('Include `color-theme` in your themeFile name to enable intellisense completions')
 	}
 
 	if (config.themes?.length) {

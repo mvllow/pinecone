@@ -28,11 +28,7 @@ const pinecone = async (command?: string, flags?: Partial<Flags>) => {
 	if (command === 'init') {
 		await init()
 		console.log('🌱 Init')
-		console.log(
-			`   ${chalk.grey('-')} Created config file: ${chalk.magenta(
-				'pinecone.config.js'
-			)}`
-		)
+		console.log(`   ${chalk.grey('-')} Created config file: ${chalk.magenta('pinecone.config.js')}`)
 		console.log(
 			`   ${chalk.grey('-')} Created base theme file: ${chalk.magenta(
 				'themes/_pinecone-color-theme-json'

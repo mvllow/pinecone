@@ -26,9 +26,7 @@ export const generateThemes = async (themes: Themes, options: Options) => {
 
 			if (!themes[variant].name?.includes('(no italics)')) {
 				if (options.includeNonItalics || options.includeNonItalicVariants) {
-					variants.push(
-						`${themes[variant].name} / ${themes[variant].name} (no italics)`
-					)
+					variants.push(`${themes[variant].name} / ${themes[variant].name} (no italics)`)
 				} else {
 					variants.push(themes[variant].name)
 				}

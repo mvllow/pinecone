@@ -1,10 +1,6 @@
 import { log } from './pretty-log'
 
-export const replaceJsonValues = (
-	body: string,
-	searchFor: string,
-	replaceWith: string
-) => {
+export const replaceJsonValues = (body: string, searchFor: string, replaceWith: string) => {
 	let formattedSearch = new RegExp('"' + searchFor + '"', 'g')
 	let formattedReplace = '"' + replaceWith + '"'
 	let result = ''

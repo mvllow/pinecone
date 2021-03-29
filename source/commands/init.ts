@@ -20,10 +20,7 @@ export const init = async () => {
 
 	fs.mkdirSync(path.dirname(themeFile), { recursive: true })
 
-	await writePrettyFile(
-		'themes/_pinecone-color-theme.json',
-		JSON.stringify(theme, null, 2)
-	)
+	await writePrettyFile('themes/_pinecone-color-theme.json', JSON.stringify(theme, null, 2))
 	await writePrettyFile(
 		configPath,
 		`/**
