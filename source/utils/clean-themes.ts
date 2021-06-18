@@ -18,7 +18,7 @@ export const cleanThemes = async () => {
 		let slug = slugify(name, { lower: true, strict: true })
 
 		safeList.push(`${slug}-color-theme.json`)
-		safeList.push(`${slug}-no-italic-color-theme.json`)
+		safeList.push(`${slug}-no-italics-color-theme.json`)
 	})
 
 	fs.readdir(outputDir, (error, files) => {
