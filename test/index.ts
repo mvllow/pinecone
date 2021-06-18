@@ -1,57 +1,70 @@
 import test from 'ava'
-import path from 'path'
 import chalk from 'chalk'
 import sinon from 'sinon'
-import pinecone from '../source'
-import templateConfig from '../source/template/template.config'
+import pinecone from '../source/index.js'
+import { readJson } from '../source/util/read-json.js'
 
 test.before(() => {
-	// enable chalk colors in AVA
+	// Enable chalk colors in AVA
 	// https://github.com/avajs/ava/issues/1124
 	chalk.level = 2
 
-	// suppress console during tests
+	// Suppress console during tests
 	sinon.stub(console, 'log')
 
-	// ignore process.exit during tests
+	// Ignore process.exit during tests
 	sinon.stub(process, 'exit')
 })
 
-test.serial('`pinecone init` generates default files', async (t) => {
-	await pinecone('init')
+test.serial('`pinecone` generates default files', async (t) => {
+	await pinecone()
 
-	let { themeFile } = templateConfig
+	let theme = JSON.parse(
+		`{
+		"colors": {
+			"editor.background": "$bg",
+			"editor.foreground": "$fg",
+			"widget.shadow": "$transparent"
+		},
+		"tokenColors": [
+			{
+				"scope": ["comment"],
+				"settings": {
+					"foreground": "$fg",
+					"fontStyle": "italic"
+				}
+			}
+		]
+	}`
+	)
+	let { default: config } = await import(`${process.cwd()}/pinecone.config.js`)
 
-	let theme = require(`${process.cwd()}/${path.normalize(themeFile)}`)
-	let config = require(`${process.cwd()}/pinecone.config.js`)
-
-	t.is(theme.colors['editor.background'], '_bg')
-	t.is(config.varPrefix, '_')
+	t.is(theme.colors['editor.background'], '$bg')
+	t.is(config.prefix, '$')
 })
 
 test('`pinecone` generates themes', async (t) => {
 	await pinecone()
 
-	let theme = require(`${process.cwd()}/themes/latte-color-theme.json`)
+	let theme = readJson(`./themes/latte-color-theme.json`)
 
 	t.is(theme.colors['editor.background'], '#faf8f6')
 })
 
-test('`pinecone --include-non-italics` generates non-italic variants', async (t) => {
+test('`pinecone --include-non-italic-variants` generates non-italic variants', async (t) => {
 	await pinecone('', { includeNonItalicVariants: true })
 
-	let theme = require(`${process.cwd()}/themes/latte-no-italics-color-theme.json`)
+	let theme = readJson(`./themes/latte-no-italics-color-theme.json`)
 
+	t.is(theme.name, 'Latte (no italics)')
 	t.notRegex(theme.tokenColors[0].settings.fontStyle, /italic/g)
 	t.is(theme.name, 'Latte (no italics)')
 })
 
-test.todo('invalid config')
+test.skip('`pinecone --update-contributes` modifies package contents', async (t) => {
+	await pinecone('', { updateContributes: true })
 
-test.skip('`pinecone --write-meta` modifies package contents', async (t) => {
-	await pinecone('', { writeMeta: true })
-
-	let packageJson = require(`${process.cwd()}/package.json`)
+	let packageJson = readJson(`./package.json`)
 
 	t.is(packageJson.contributes.themes[0].label, 'Latte')
 })
