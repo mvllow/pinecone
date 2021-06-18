@@ -1,15 +1,18 @@
 import path from 'path'
-import nodeWatch from 'node-watch'
-import { log } from '../utils/pretty-log'
-import { getConfig } from '../utils/get-config'
-import pinecone from '..'
+import chokidar from 'chokidar'
+import { log } from '../util/pretty-log.js'
+import { getConfig } from '../config.js'
+import pinecone from '../index.js'
 
-export const watch = async () => {
-	let config = getConfig()
-	let themePath = path.join(process.cwd(), config.themeFile)
+export async function watch() {
+	let config = await getConfig()
+	let themePath = path.join(process.cwd(), config.source)
 	let configPath = path.join(process.cwd(), 'pinecone.config.js')
 
-	nodeWatch([themePath, configPath], async () => {
+	const watcher = chokidar.watch([themePath, configPath])
+
+	watcher.on('change', async () => {
+		await import(`${process.cwd()}/pinecone.config.js`)
 		await pinecone()
 			.then(() => {
 				console.log('👀 Waiting for changes...\n')

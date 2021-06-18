@@ -1,53 +1,54 @@
-# Pinecone
+# pinecone
 
-> Used in the lovely [Rosé Pine](https://github.com/rose-pine/vscode) theme
+> Lovely VSCode theme builder
 
-Dynamically generating theme variants since 2020 ✨
+Create multiple theme variants from a single source _with variables_.
+
+## Install
+
+```sh
+npm install --global pinecone-cli
+```
 
 ## Usage
 
-```sh
-$ npm install -g pinecone-cli
-```
+> Pinecone will create any necessary files on first run
 
 ```
 $ pinecone --help
 
-  Usage
-    $ pinecone <command> [options]
+	Usage
+		$ pinecone <command> [options]
 
-  Commands
-    init   Create new theme files
-    watch  Rebuild themes when pinecone config or theme file changes
+	Commands
+		watch  Rebuild themes on change
+			   Watches pinecone.config.js and themes/*
 
-  Options
-    --include-non-italics  Generate additional variants with no italics
-    -m, --write-meta       Add contributed themes to `package.json`
+	Options
+		--include-non-italic-variants  Generate additional non-italic variants
+		--update-contributes           Add contributed themes to `package.json`
 
-  Examples
-    $ pinecone
-    $ pinecone init
-    $ pinecone watch
-    $ pinecone --include-non-italics
-    $ pinecone --write-meta
+	Examples
+		$ pinecone
+		$ pinecone watch --include-non-italic-variants --update-contributes
 ```
 
 ## Theme
 
-**themes/\_pinecone-color-theme.json**
+By default, pinecone looks for `./themes/_pinecone-color-theme.json`. This will look like any other VSCode theme file with the addition of variable values.
 
 ```json
 {
 	"colors": {
-		"editor.background": "_bg",
-		"editor.foreground": "_fg",
-		"widget.shadow": "_transparent"
+		"editor.background": "$bg",
+		"editor.foreground": "$fg",
+		"widget.shadow": "$transparent"
 	},
 	"tokenColors": [
 		{
 			"scope": ["comment"],
 			"settings": {
-				"foreground": "_fg",
+				"foreground": "$fg",
 				"fontStyle": "italic"
 			}
 		}
@@ -57,18 +58,19 @@ $ pinecone --help
 
 ## Config
 
-**pinecone.config.js**
+Your theme config and variables will live in `./pinecone.config.js`.
 
 ```js
-const { alpha } = require('pinecone-cli')
+import { alpha, defineConfig } from 'pinecone-cli'
 
-module.exports = {
-	themeFile: './themes/_pinecone-color-theme.json',
-	outputDir: './themes',
-	varPrefix: '_',
+// Pinecone defaults
+export default defineConfig({
+	source: './themes/_pinecone-color-theme.json',
+	output: './themes',
+	prefix: '$',
 	options: {
 		includeNonItalicVariants: false,
-		writeMeta: false,
+		updateContributes: false,
 	},
 	variants: {
 		charcoal: {
@@ -91,10 +93,9 @@ module.exports = {
 			soap: alpha('#000', 0.8),
 		},
 	},
-}
+})
 ```
 
-| Option                   | Description                                  | Default |
-| ------------------------ | -------------------------------------------- | ------- |
-| includeNonItalicVariants | Generate additional variants without italics | false   |
-| writeMeta                | Add contributed themes to `package.json`     | false   |
+## Made with pinecone
+
+- [Rosé Pine](https://github.com/rose-pine/vscode)

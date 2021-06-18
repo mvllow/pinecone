@@ -1,37 +1,32 @@
 #!/usr/bin/env node
-
 import meow from 'meow'
-import pinecone from '.'
+import pinecone from './index.js'
 
 const cli = meow(
 	`
-	Usage
-		$ pinecone <command> [options]
+    Usage
+        $ pinecone <command> [options]
 
-	Commands
-		init   Create new theme files
-    	watch  Rebuild themes when pinecone config or theme file changes
+    Commands
+        watch  Rebuild themes on change
+            Watches pinecone.config.js and themes/*
 
-	Options
-		--include-non-italics  Generate additional variants with no italics
-		-m, --write-meta       Add contributed themes to \`package.json\`
+    Options
+        --include-non-italic-variants  Generate additional non-italic variants
+        --update-contributes           Add contributed themes to \`package.json\`
 
-	Examples
-		$ pinecone
-		$ pinecone init
-		$ pinecone watch
-		$ pinecone --include-non-italics
-		$ pinecone --write-meta
-`,
+    Examples
+        $ pinecone
+        $ pinecone watch --include-non-italic-variants --update-contributes
+    `,
 	{
 		booleanDefault: undefined,
+		importMeta: import.meta,
 		flags: {
 			includeNonItalicVariants: {
-				alias: 'include-non-italics',
 				type: 'boolean',
 			},
-			writeMeta: {
-				alias: 'm',
+			updateContributes: {
 				type: 'boolean',
 			},
 		},
