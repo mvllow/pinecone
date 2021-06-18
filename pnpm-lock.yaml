@@ -7,6 +7,7 @@ specifiers:
   ava: ^3.15.0
   chalk: ^4.1.1
   del-cli: ^3.0.1
+  colorish: ^0.1.2
   meow: ^10.0.1
   node-watch: ^0.7.1
   prettier: ^2.3.1
@@ -17,6 +18,7 @@ specifiers:
 
 dependencies:
   chalk: 4.1.1
+  colorish: 0.1.2
   meow: 10.0.1
   node-watch: 0.7.1
   prettier: 2.3.1
