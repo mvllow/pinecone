@@ -56,10 +56,9 @@
 		"typescript": "^4.3.2"
 	},
 	"prettier": {
-		"printWidth": 100,
-		"useTabs": true,
 		"semi": false,
-		"singleQuote": true
+		"singleQuote": true,
+		"useTabs": true
 	},
 	"ava": {
 		"files": [
