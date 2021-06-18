@@ -9,7 +9,7 @@ import { getConfig, Options } from './utils/get-config'
 import { readJson } from './utils/read-json'
 import { writeMeta } from './utils/write-meta'
 import { cleanThemes } from './utils/clean-themes'
-import { alpha } from './lib/alpha'
+import alpha from 'colorish'
 
 type OptionKeys = keyof Options
 
