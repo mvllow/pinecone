@@ -43,6 +43,7 @@ test('`pinecone --include-non-italics` generates non-italic variants', async (t)
 	let theme = require(`${process.cwd()}/themes/latte-no-italics-color-theme.json`)
 
 	t.notRegex(theme.tokenColors[0].settings.fontStyle, /italic/g)
+	t.is(theme.name, 'Latte (no italics)')
 })
 
 test.todo('invalid config')
