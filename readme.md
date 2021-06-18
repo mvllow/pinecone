@@ -27,7 +27,7 @@ $ pinecone --help
 
 	Commands
 		watch  Rebuild themes on change
-			   Watches pinecone.config.js and themes/*
+		       Watches pinecone.config.js and themes/*
 
 	Options
 		--include-non-italic-variants  Generate additional non-italic variants
