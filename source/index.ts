@@ -1,18 +1,17 @@
+import type { TypedFlags } from 'meow'
+import type { Options } from './config.js'
+
 import chalk from 'chalk'
-import { TypedFlags } from 'meow'
-import { init } from './commands/init'
-import { watch } from './commands/watch'
-import { validateConfig } from './utils/validate-config'
-import { parseThemes } from './utils/parse-themes'
-import { generateThemes } from './utils/generate-themes'
-import { getConfig, Options } from './utils/get-config'
-import { readJson } from './utils/read-json'
-import { writeMeta } from './utils/write-meta'
-import { cleanThemes } from './utils/clean-themes'
 import alpha from 'colorish'
+import { watch } from './commands/watch.js'
+import { cleanThemes } from './util/clean-themes.js'
+import { parseThemes } from './util/parse-themes.js'
+import { generateThemes } from './util/generate-themes.js'
+import { readJson } from './util/read-json.js'
+import { updateContributes } from './util/update-contributes.js'
+import { getConfig, checkConfig, defineConfig } from './config.js'
 
 type OptionKeys = keyof Options
-
 type Flags = TypedFlags<
 	{
 		[K in OptionKeys]: { type: 'boolean' }
@@ -20,30 +19,18 @@ type Flags = TypedFlags<
 > &
 	Record<string, unknown>
 
-const pinecone = async (command?: string, flags?: Partial<Flags>) => {
+async function pinecone(command?: string, flags?: Partial<Flags>) {
 	console.clear()
-	console.log(chalk.green('🌲 Pinecone'))
-	console.log()
+	console.log(chalk.green('🌲 Pinecone\n'))
 
-	if (command === 'init') {
-		await init()
-		console.log('🌱 Init')
-		console.log(`   ${chalk.grey('-')} Created config file: ${chalk.magenta('pinecone.config.js')}`)
-		console.log(
-			`   ${chalk.grey('-')} Created base theme file: ${chalk.magenta(
-				'themes/_pinecone-color-theme-json'
-			)}`
-		)
-		console.log()
-	}
+	let config = await getConfig()
 
-	let { themeFile, options } = getConfig()
-	options = { ...options, ...flags }
+	let resolvedOptions = { ...config.options, ...flags }
 
-	if (validateConfig()) {
-		let template = await readJson(themeFile)
-		let parsedThemes = await parseThemes(template, options)
-		let generatedThemes = await generateThemes(parsedThemes, options)
+	if (checkConfig(config)) {
+		let template = await readJson(config.source)
+		let parsedThemes = await parseThemes(template, resolvedOptions)
+		let generatedThemes = await generateThemes(parsedThemes, resolvedOptions)
 
 		console.log(`🌿 Variants`)
 		generatedThemes.forEach((theme) => {
@@ -53,19 +40,17 @@ const pinecone = async (command?: string, flags?: Partial<Flags>) => {
 
 		cleanThemes()
 
-		if (options?.writeMeta) {
-			await writeMeta(options)
-			console.log(`📦 Added variants to package.json`)
-			console.log()
+		if (resolvedOptions?.updateContributes) {
+			await updateContributes(resolvedOptions)
+			console.log(`📦 Added variants to package.json\n`)
 		}
 
-		if (command == 'watch') {
-			console.log('👀 Waiting for changes...')
-			console.log()
+		if (command === 'watch') {
+			console.log('👀 Waiting for changes...\n')
 			await watch()
 		}
 	}
 }
 
-export { alpha }
+export { alpha, defineConfig }
 export default pinecone

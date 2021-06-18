@@ -1,7 +1,9 @@
-import { log } from './pretty-log'
-import { getConfig, Options } from './get-config'
-import { replaceJsonValues } from './replace-json-values'
-import { removeWordFromString } from './remove-word-from-string'
+import type { Options } from '../config.js'
+
+import { log } from './pretty-log.js'
+import { replaceJsonValues } from './replace-json-values.js'
+import { removeWordFromString } from './remove-word-from-string.js'
+import { getConfig } from '../config.js'
 
 export interface Theme {
 	name?: string
@@ -22,19 +24,23 @@ export interface Theme {
 	[key: string]: unknown
 }
 
-export const parseThemes = ({ name, type, ...baseTheme }: Theme, options: Options) => {
+export async function parseThemes(
+	{ name, type, ...baseTheme }: Theme,
+	options: Options
+) {
 	let stringifiedTheme = JSON.stringify(baseTheme)
-	let { theme, varPrefix } = getConfig()
+	let { prefix, theme } = await getConfig()
 	let result: { [key: string]: Theme } = {}
 
 	Object.keys(theme.variants).forEach((variant) => {
 		let workingTheme = stringifiedTheme
 
 		Object.keys(theme.colors).forEach((color) => {
-			let searchFor = `${varPrefix}${color}`
+			let searchFor = `${prefix}${color}`
 
 			let currentColor = theme.colors[color]
-			let replaceWith = typeof currentColor == 'string' ? currentColor : currentColor[variant]
+			let replaceWith =
+				typeof currentColor == 'string' ? currentColor : currentColor[variant]
 
 			if (replaceWith) {
 				workingTheme = replaceJsonValues(workingTheme, searchFor, replaceWith)
@@ -49,7 +55,7 @@ export const parseThemes = ({ name, type, ...baseTheme }: Theme, options: Option
 			...JSON.parse(workingTheme),
 		}
 
-		if (options.includeNonItalicVariants || options.includeNonItalics) {
+		if (options.includeNonItalicVariants) {
 			let nonItalicVariant = removeWordFromString(workingTheme, 'italic')
 
 			result[`${variant}-no-italics`] = {

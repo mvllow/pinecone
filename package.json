@@ -41,6 +41,7 @@
 		"chalk": "^4.1.1",
 		"chokidar": "^3.5.2",
 		"colorish": "^0.1.2",
+		"escape-string-regexp": "^5.0.0",
 		"meow": "^10.0.1",
 		"prettier": "^2.3.1",
 		"slugify": "^1.5.3"
@@ -50,7 +51,8 @@
 		"@types/prettier": "^2.3.0",
 		"@types/sinon": "^10.0.2",
 		"ava": "^3.15.0",
-		"del-cli": "^3.0.1",
+		"del-cli": "^4.0.0",
+		"np": "^7.5.0",
 		"sinon": "^11.1.1",
 		"ts-node": "^10.0.0",
 		"typescript": "^4.3.2"
