@@ -9,7 +9,6 @@ const cli = meow(
 		$ pinecone <command> [options]
 
 	Commands
-		init   Create new theme files
     	watch  Rebuild themes when pinecone config or theme file changes
 
 	Options
@@ -18,7 +17,6 @@ const cli = meow(
 
 	Examples
 		$ pinecone
-		$ pinecone init
 		$ pinecone watch
 		$ pinecone --include-non-italics
 		$ pinecone --write-meta
