@@ -110,6 +110,7 @@ export async function getConfig() {
 	}
 }
 
+// TODO: Expose this once we figure out how to import from 'pinecone-cli' without errors
 export function defineConfig(config: Partial<Config>): Partial<Config> {
 	return config
 }

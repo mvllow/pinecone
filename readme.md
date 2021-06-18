@@ -2,7 +2,7 @@
 
 > Lovely VSCode theme builder
 
-Note: These docs are for v2 beta. For v1 see [here](https://github.com/mvllow/pinecone/blob/486f85e17455d8bc0684994f4bbe90253c18f87d/readme.md)
+Note: These docs are for v2 beta (currently unstable). For v1 see [here](https://github.com/mvllow/pinecone/blob/486f85e17455d8bc0684994f4bbe90253c18f87d/readme.md)
 
 Create multiple theme variants from a single source _with variables_.
 
@@ -10,6 +10,9 @@ Create multiple theme variants from a single source _with variables_.
 
 ```sh
 npm install --global pinecone-cli@beta
+
+# Optionally install colorish
+npm install --save-dev colorish
 ```
 
 ## Usage
@@ -63,10 +66,10 @@ By default, pinecone looks for `./themes/_pinecone-color-theme.json`. This will 
 Your theme config and variables will live in `./pinecone.config.js`.
 
 ```js
-import { alpha, defineConfig } from 'pinecone-cli'
+import { alpha } from 'colorish'
 
 // Pinecone defaults
-export default defineConfig({
+export default {
 	source: './themes/_pinecone-color-theme.json',
 	output: './themes',
 	prefix: '$',
@@ -95,7 +98,7 @@ export default defineConfig({
 			soap: alpha('#000', 0.8),
 		},
 	},
-})
+}
 ```
 
 ## Made with pinecone

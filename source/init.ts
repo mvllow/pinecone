@@ -14,8 +14,7 @@ export async function init() {
 
 	await writePrettyFile(
 		configPath,
-		`// import { defineConfig } from 'pinecone-cli'
-    export default ${JSON.stringify(defaultConfig, null, 2)}`,
+		`export default ${JSON.stringify(defaultConfig, null, 2)}`,
 		'babel'
 	).then(() => {
 		console.log(

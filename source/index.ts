@@ -2,14 +2,13 @@ import type { TypedFlags } from 'meow'
 import type { Options } from './config.js'
 
 import chalk from 'chalk'
-import alpha from 'colorish'
 import { watch } from './commands/watch.js'
 import { cleanThemes } from './util/clean-themes.js'
 import { parseThemes } from './util/parse-themes.js'
 import { generateThemes } from './util/generate-themes.js'
 import { readJson } from './util/read-json.js'
 import { updateContributes } from './util/update-contributes.js'
-import { getConfig, checkConfig, defineConfig } from './config.js'
+import { getConfig, checkConfig } from './config.js'
 
 type OptionKeys = keyof Options
 type Flags = TypedFlags<
@@ -52,5 +51,5 @@ async function pinecone(command?: string, flags?: Partial<Flags>) {
 	}
 }
 
-export { alpha, defineConfig }
+// export { defineConfig }
 export default pinecone
