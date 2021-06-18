@@ -3,22 +3,33 @@
 	"version": "1.6.2",
 	"description": "Lovely VSCode theme builder",
 	"license": "MIT",
-	"main": "dist/index.js",
 	"repository": "mvllow/pinecone",
+	"funding": "https://github.com/mvllow/pinecone?sponsor=1",
+	"author": {
+		"name": "mvllow",
+		"email": "mvllow@icloud.com"
+	},
+	"type": "module",
+	"exports": "./dist/source/cli.js",
 	"bin": {
-		"pinecone": "dist/cli.js",
-		"pinecone-cli": "dist/cli.js"
+		"pinecone": "dist/source/cli.js",
+		"pinecone-cli": "dist/source/cli.js"
+	},
+	"engines": {
+		"node": ">=12"
 	},
 	"scripts": {
-		"dev": "ts-node source/cli.ts",
+		"dev": "node --loader ts-node/esm source/cli.ts",
 		"clean": "del-cli dist themes pinecone.config.js",
-		"build": "npm run clean && tsc && npm test",
-		"test": "ava"
+		"test": "ava",
+		"release": "np",
+		"build": "del-cli dist && tsc && npm test",
+		"prepare": "npm run build"
 	},
 	"files": [
-		"dist"
+		"dist/source"
 	],
-	"types": "dist/types/index.d.ts",
+	"types": "dist/source",
 	"keywords": [
 		"dynamic",
 		"vscode",
@@ -50,11 +61,17 @@
 		"singleQuote": true
 	},
 	"ava": {
-		"extensions": [
-			"ts"
+		"files": [
+			"test/*"
 		],
-		"require": [
-			"ts-node/register"
+		"extensions": {
+			"ts": "module"
+		},
+		"nonSemVerExperiments": {
+			"configurableModuleFormat": true
+		},
+		"nodeArguments": [
+			"--loader=ts-node/esm"
 		]
 	}
 }
