@@ -5,8 +5,20 @@ export interface Options {
 	/**
 	 * Generate additional variants with no italics
 	 * @default false
+	 * @deprecated Renamed to "includeNonItalicVariants"
+	 */
+	includeNonItalics?: boolean
+	/**
+	 * Generate additional variants with no italics
+	 * @default false
 	 */
 	includeNonItalicVariants?: boolean
+	/**
+	 * Update `package.json` to include contributed themes
+	 * @default false
+	 * @deprecated Renamed to "updateContributes"
+	 */
+	writeMeta?: boolean
 	/**
 	 * Update `package.json` to include contributed themes
 	 * @default false
@@ -134,32 +146,7 @@ export function defineConfig(config: Partial<Config>): Partial<Config> {
 	return config
 }
 
-interface DeprecatedConfig extends Config {
-	themeFile?: string
-	outputDir?: string
-	varPrefix?: string
-}
-
-export function checkConfig(config: DeprecatedConfig): boolean {
-	// Using v1 API
-	if (config.themeFile || config.outputDir || config.varPrefix) {
-		log.suggest('Some options have been renamed')
-
-		if (config.themeFile) {
-			log.suggest('`themeFile` is now `source`')
-		}
-
-		if (config.outputDir) {
-			log.suggest('`outputDir` is now `output`')
-		}
-
-		if (config.varPrefix) {
-			log.suggest('`varPrefix` is now `prefix`')
-		}
-
-		return false
-	}
-
+export function checkConfig(config: Config): boolean {
 	if (!config.source.includes('color-theme')) {
 		log.suggest(
 			'Include `color-theme` in your source name to enable intellisense'
