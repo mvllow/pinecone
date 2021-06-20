@@ -10,7 +10,7 @@
 		"email": "mvllow@icloud.com"
 	},
 	"type": "module",
-	"exports": "./dist/source/cli.js",
+	"exports": "./dist/source/index.js",
 	"bin": {
 		"pinecone": "dist/source/cli.js",
 		"pinecone-cli": "dist/source/cli.js"
