@@ -40,6 +40,7 @@
 	"dependencies": {
 		"chalk": "^4.1.1",
 		"chokidar": "^3.5.2",
+		"colorish": "^0.1.2",
 		"escape-string-regexp": "^5.0.0",
 		"meow": "^10.0.1",
 		"prettier": "^2.3.1",

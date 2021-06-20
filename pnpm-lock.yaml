@@ -7,6 +7,7 @@ specifiers:
   ava: ^3.15.0
   chalk: ^4.1.1
   chokidar: ^3.5.2
+  colorish: ^0.1.2
   del-cli: ^4.0.0
   escape-string-regexp: ^5.0.0
   meow: ^10.0.1
@@ -20,6 +21,7 @@ specifiers:
 dependencies:
   chalk: 4.1.1
   chokidar: 3.5.2
+  colorish: 0.1.2
   escape-string-regexp: 5.0.0
   meow: 10.0.1
   prettier: 2.3.1
@@ -717,6 +719,11 @@ packages:
 
   /color-name/1.1.4:
     resolution: {integrity: sha512-dOy+3AuW3a2wNbZHIuMZpTcgjGuLU/uBL/ubcZF9OXbDo8ff4O8yVp5Bf0efS8uEoYo5q4Fx7dY9OgQGXgAsQA==}
+
+  /colorish/0.1.2:
+    resolution: {integrity: sha512-i7pv5HgcjCJ+4W4Wy97/f63MdjQR8AGrvOxH0HN4jTDfd7BSd9aTBK6yOQp1fKubXluJbKnqf1qBpe1nwx5AhA==}
+    engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
+    dev: false
 
   /common-path-prefix/3.0.0:
     resolution: {integrity: sha512-QE33hToZseCH3jS0qN96O/bSh3kaw/h+Tq7ngyY9eWDUnTlTNUyqfqvCXioLe5Na5jFsL78ra/wuBU4iuEgd4w==}
