@@ -120,17 +120,15 @@ export const defaultConfig: Config = {
 	},
 }
 
-export async function getConfig() {
+export async function getConfig(invalidate = false) {
 	try {
-		// TODO: This no longer works with pure ESM
-		// https://github.com/nodejs/modules/issues/307
-		// delete require.cache[require.resolve(`${process.cwd()}/pinecone.config.js`)]
+		const cache = invalidate ? `?update=${new Date()}` : ''
 
+		// FIXME: This will cause memory leaks
+		// One of very few workarounds for invalidating cache using esm
 		const { default: userConfig }: { default: Partial<Config> } = await import(
-			`${process.cwd()}/pinecone.config.js`
-		).catch(() => {
-			// noop
-		})
+			`${process.cwd()}/pinecone.config.js${cache}`
+		)
 
 		return { ...defaultConfig, ...userConfig }
 	} catch (error) {
