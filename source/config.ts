@@ -1,3 +1,4 @@
+import fs from 'fs'
 import { init } from './init.js'
 import { log } from './util/pretty-log.js'
 
@@ -133,9 +134,12 @@ export async function getConfig() {
 
 		return { ...defaultConfig, ...userConfig }
 	} catch (error) {
-		log.suggest('No user config found, creating default files\n')
-
-		await init()
+		if (fs.existsSync(`${process.cwd()}/pinecone.config.js`)) {
+			log.error(`Something's not quite right in pinecone.config.js\n${error}`)
+		} else {
+			log.suggest('No user config found, creating default files\n')
+			await init()
+		}
 
 		return defaultConfig
 	}
