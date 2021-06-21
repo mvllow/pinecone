@@ -1,24 +1,35 @@
 {
 	"name": "pinecone-cli",
-	"version": "1.6.2",
+	"version": "2.0.2-1",
 	"description": "Lovely VSCode theme builder",
 	"license": "MIT",
-	"main": "dist/index.js",
 	"repository": "mvllow/pinecone",
+	"funding": "https://github.com/mvllow/pinecone?sponsor=1",
+	"author": {
+		"name": "mvllow",
+		"email": "mvllow@icloud.com"
+	},
+	"type": "module",
+	"exports": "./dist/source/index.js",
 	"bin": {
-		"pinecone": "dist/cli.js",
-		"pinecone-cli": "dist/cli.js"
+		"pinecone": "dist/source/cli.js",
+		"pinecone-cli": "dist/source/cli.js"
+	},
+	"engines": {
+		"node": ">=12"
 	},
 	"scripts": {
-		"dev": "ts-node source/cli.ts",
+		"dev": "node --loader ts-node/esm source/cli.ts",
 		"clean": "del-cli dist themes pinecone.config.js",
-		"build": "npm run clean && tsc && npm test",
-		"test": "ava"
+		"test": "ava",
+		"release": "np",
+		"build": "del-cli dist && tsc && npm test",
+		"prepare": "npm run build"
 	},
 	"files": [
-		"dist"
+		"dist/source"
 	],
-	"types": "dist/types/index.d.ts",
+	"types": "dist/source",
 	"keywords": [
 		"dynamic",
 		"vscode",
@@ -28,8 +39,10 @@
 	],
 	"dependencies": {
 		"chalk": "^4.1.1",
-		"meow": "^9.0.0",
-		"node-watch": "^0.7.1",
+		"chokidar": "^3.5.2",
+		"colorish": "^0.1.2",
+		"escape-string-regexp": "^5.0.0",
+		"meow": "^10.0.1",
 		"prettier": "^2.3.1",
 		"slugify": "^1.5.3"
 	},
@@ -38,23 +51,29 @@
 		"@types/prettier": "^2.3.0",
 		"@types/sinon": "^10.0.2",
 		"ava": "^3.15.0",
-		"del-cli": "^3.0.1",
+		"del-cli": "^4.0.0",
+		"np": "^7.5.0",
 		"sinon": "^11.1.1",
 		"ts-node": "^10.0.0",
 		"typescript": "^4.3.2"
 	},
 	"prettier": {
-		"printWidth": 100,
-		"useTabs": true,
 		"semi": false,
-		"singleQuote": true
+		"singleQuote": true,
+		"useTabs": true
 	},
 	"ava": {
-		"extensions": [
-			"ts"
+		"files": [
+			"test/*"
 		],
-		"require": [
-			"ts-node/register"
+		"extensions": {
+			"ts": "module"
+		},
+		"nonSemVerExperiments": {
+			"configurableModuleFormat": true
+		},
+		"nodeArguments": [
+			"--loader=ts-node/esm"
 		]
 	}
 }
