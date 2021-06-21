@@ -12,7 +12,6 @@ export async function watch() {
 	const watcher = chokidar.watch([themePath, configPath])
 
 	watcher.on('change', async () => {
-		await import(`${process.cwd()}/pinecone.config.js`)
 		await pinecone()
 			.then(() => {
 				console.log('👀 Waiting for changes...\n')
