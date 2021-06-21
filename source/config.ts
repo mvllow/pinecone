@@ -145,13 +145,3 @@ export async function getConfig() {
 export function defineConfig(config: Partial<Config>): Partial<Config> {
 	return config
 }
-
-export function checkConfig(config: Config): boolean {
-	if (!config.source.includes('color-theme')) {
-		log.suggest(
-			'Include `color-theme` in your source name to enable intellisense'
-		)
-	}
-
-	return true
-}

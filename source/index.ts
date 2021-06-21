@@ -9,7 +9,8 @@ import { parseThemes } from './util/parse-themes.js'
 import { generateThemes } from './util/generate-themes.js'
 import { readJson } from './util/read-json.js'
 import { updateContributes } from './util/update-contributes.js'
-import { getConfig, defineConfig, checkConfig } from './config.js'
+import { checkThemes } from './util/check-themes.js'
+import { getConfig, defineConfig } from './config.js'
 
 type OptionKeys = keyof Options
 type Flags = TypedFlags<
@@ -27,28 +28,27 @@ async function pinecone(command?: string, flags?: Partial<Flags>) {
 
 	let resolvedOptions = { ...config.options, ...flags }
 
-	if (checkConfig(config)) {
-		let template = await readJson(config.source)
-		let parsedThemes = await parseThemes(template, resolvedOptions)
-		let generatedThemes = await generateThemes(parsedThemes, resolvedOptions)
+	let template = await readJson(config.source)
+	let parsedThemes = await parseThemes(template, resolvedOptions)
+	let generatedThemes = await generateThemes(parsedThemes, resolvedOptions)
 
-		console.log(`🌿 Variants`)
-		generatedThemes.forEach((theme) => {
-			console.log(`   ${chalk.grey('-')} ${chalk.magenta(theme)}`)
-		})
-		console.log()
+	console.log(`🌿 Variants`)
+	generatedThemes.forEach((theme) => {
+		console.log(`   ${chalk.grey('-')} ${chalk.magenta(theme)}`)
+	})
+	console.log()
 
-		cleanThemes()
+	cleanThemes()
+	checkThemes(config)
 
-		if (resolvedOptions?.updateContributes) {
-			await updateContributes(resolvedOptions)
-			console.log(`📦 Added variants to package.json\n`)
-		}
+	if (resolvedOptions?.updateContributes) {
+		await updateContributes(resolvedOptions)
+		console.log(`📦 Added variants to package.json\n`)
+	}
 
-		if (command === 'watch') {
-			console.log('👀 Waiting for changes...\n')
-			await watch()
-		}
+	if (command === 'watch') {
+		console.log('👀 Waiting for changes...\n')
+		await watch()
 	}
 }
 
