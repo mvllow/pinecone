@@ -61,10 +61,10 @@ By default, pinecone looks for `./themes/_pinecone-color-theme.json`. This will 
 Your theme config and variables will live in `./pinecone.config.js`.
 
 ```js
-import { alpha } from 'colorish'
+import { alpha, defineConfig } from 'pinecone-cli'
 
 // Pinecone defaults
-export default {
+export default defineConfig({
 	source: './themes/_pinecone-color-theme.json',
 	output: './themes',
 	prefix: '$',
@@ -72,28 +72,36 @@ export default {
 		includeNonItalicVariants: false,
 		updateContributes: false,
 	},
-	variants: {
-		charcoal: {
-			name: 'Smokey Charcoal',
-			type: 'dark',
+	theme: {
+		variants: {
+			latte: {
+				name: 'Latte',
+				type: 'light',
+			},
+			cappuccino: {
+				name: 'Cappuccino',
+				type: 'light',
+			},
+			espresso: {
+				name: 'Espresso',
+				type: 'dark',
+			},
 		},
-		soap: {
-			name: 'Bubbly Soap',
-			type: 'light',
+		colors: {
+			transparent: '#0000', // Shorthand to set for all three variants
+			bg: {
+				latte: '#faf8f6',
+				cappuccino: '#c29d84',
+				espresso: '#36261b',
+			},
+			fg: {
+				latte: '#c29d84',
+				cappuccino: '#573d2b',
+				espresso: '#d5bbaa',
+			},
 		},
 	},
-	colors: {
-		transparent: '#0000',
-		bg: {
-			charcoal: '#000',
-			soap: '#fff',
-		},
-		fg: {
-			charcoal: '#fff',
-			soap: alpha('#000', 0.8),
-		},
-	},
-}
+})
 ```
 
 ## Made with pinecone
