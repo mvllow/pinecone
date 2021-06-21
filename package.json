@@ -1,6 +1,6 @@
 {
 	"name": "pinecone-cli",
-	"version": "2.0.1",
+	"version": "2.0.2-0",
 	"description": "Lovely VSCode theme builder",
 	"license": "MIT",
 	"repository": "mvllow/pinecone",
