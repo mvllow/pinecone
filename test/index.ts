@@ -16,7 +16,7 @@ test.before(() => {
 	sinon.stub(process, 'exit')
 })
 
-test.serial('`pinecone` generates default files', async (t) => {
+test.serial('generates default files', async (t) => {
 	await pinecone()
 
 	let theme = JSON.parse(
@@ -43,7 +43,7 @@ test.serial('`pinecone` generates default files', async (t) => {
 	t.is(config.prefix, '$')
 })
 
-test('`pinecone` generates themes', async (t) => {
+test('generates themes', async (t) => {
 	await pinecone()
 
 	let theme = readJson(`./themes/latte-color-theme.json`)
@@ -51,7 +51,9 @@ test('`pinecone` generates themes', async (t) => {
 	t.is(theme.colors['editor.background'], '#faf8f6')
 })
 
-test('`pinecone --include-non-italic-variants` generates non-italic variants', async (t) => {
+test.todo('checks themes')
+
+test('generates non-italic variants', async (t) => {
 	await pinecone('', { includeNonItalicVariants: true })
 
 	let theme = readJson(`./themes/latte-no-italics-color-theme.json`)
@@ -61,7 +63,7 @@ test('`pinecone --include-non-italic-variants` generates non-italic variants', a
 	t.is(theme.name, 'Latte (no italics)')
 })
 
-test.skip('`pinecone --update-contributes` modifies package contents', async (t) => {
+test.skip('updates contributes', async (t) => {
 	await pinecone('', { updateContributes: true })
 
 	let packageJson = readJson(`./package.json`)
