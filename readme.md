@@ -2,17 +2,12 @@
 
 > Lovely VSCode theme builder
 
-Note: These docs are for v2 beta (currently unstable). For v1 see [here](https://github.com/mvllow/pinecone/blob/486f85e17455d8bc0684994f4bbe90253c18f87d/readme.md)
-
 Create multiple theme variants from a single source _with variables_.
 
 ## Install
 
 ```sh
 npm install --global pinecone-cli@beta
-
-# Optionally install colorish
-npm install --save-dev colorish
 ```
 
 ## Usage
