@@ -7,7 +7,7 @@ Create multiple theme variants from a single source _with variables_.
 ## Install
 
 ```sh
-npm install --global pinecone-cli@beta
+npm install --global pinecone-cli
 ```
 
 ## Usage
