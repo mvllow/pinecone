@@ -31,7 +31,7 @@ export async function updateContributes(options: Options) {
 			themes.push({
 				label: `${name} (no italics)`,
 				uiTheme: type == 'light' ? 'vs' : 'vs-dark',
-				path: path.join(output, `${slug}-no-italics-color-theme.json`),
+				path: path.join(output, `./${slug}-no-italics-color-theme.json`),
 			})
 		}
 	})
