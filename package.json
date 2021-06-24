@@ -23,8 +23,7 @@
 		"clean": "del-cli dist themes pinecone.config.js",
 		"test": "ava",
 		"release": "np",
-		"build": "del-cli dist && tsc && npm test",
-		"prepare": "npm run build"
+		"build": "del-cli dist && tsc && npm test"
 	},
 	"files": [
 		"dist/source"
