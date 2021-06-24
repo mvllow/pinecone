@@ -8,22 +8,25 @@ const cli = meow(
         $ pinecone <command> [options]
 
     Commands
-		clean  Removes non-pinecone generated themes
         watch  Rebuild themes on change
-            Watches pinecone.config.js and themes/*
+               Watches pinecone.config.js and themes/*
 
     Options
+		--clean-unused-themes          Delete non-active pinecone themes
         --include-non-italic-variants  Generate additional non-italic variants
         --update-contributes           Add contributed themes to \`package.json\`
 
     Examples
         $ pinecone
-        $ pinecone watch --include-non-italic-variants --update-contributes
+        $ pinecone watch --clean-unused-themes --include-non-italic-variants --update-contributes
     `,
 	{
 		booleanDefault: undefined,
 		importMeta: import.meta,
 		flags: {
+			cleanUnusedThemes: {
+				type: 'boolean',
+			},
 			includeNonItalicVariants: {
 				type: 'boolean',
 			},

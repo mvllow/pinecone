@@ -4,6 +4,11 @@ import { log } from './util/pretty-log.js'
 
 export interface Options {
 	/**
+	 * Delete non-active pinecone themes
+	 * @default false
+	 */
+	cleanUnusedThemes?: boolean
+	/**
 	 * Generate additional variants with no italics
 	 * @default false
 	 * @deprecated Renamed to "includeNonItalicVariants"
@@ -86,6 +91,7 @@ export const defaultConfig: Config = {
 	output: './themes',
 	prefix: '$',
 	options: {
+		cleanUnusedThemes: false,
 		includeNonItalicVariants: false,
 		updateContributes: false,
 	},

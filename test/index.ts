@@ -51,6 +51,7 @@ test('generates themes', async (t) => {
 	t.is(theme.colors['editor.background'], '#faf8f6')
 })
 
+test.todo('cleans themes')
 test.todo('checks themes')
 
 test('generates non-italic variants', async (t) => {

@@ -38,7 +38,7 @@ async function pinecone(command?: string, flags?: Partial<Flags>) {
 	})
 	console.log()
 
-	if (command === 'clean') {
+	if (resolvedOptions?.cleanUnusedThemes) {
 		cleanThemes()
 	}
 
