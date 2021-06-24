@@ -38,7 +38,10 @@ async function pinecone(command?: string, flags?: Partial<Flags>) {
 	})
 	console.log()
 
-	cleanThemes()
+	if (command === 'clean') {
+		cleanThemes()
+	}
+
 	checkThemes(config)
 
 	if (resolvedOptions?.updateContributes) {

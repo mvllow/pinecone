@@ -21,6 +21,7 @@ $ pinecone --help
 		$ pinecone <command> [options]
 
 	Commands
+		clean  Removes non-pinecone generated themes
 		watch  Rebuild themes on change
 		       Watches pinecone.config.js and themes/*
 
