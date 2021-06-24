@@ -38,7 +38,9 @@ async function pinecone(command?: string, flags?: Partial<Flags>) {
 	})
 	console.log()
 
-	if (resolvedOptions?.cleanUnusedThemes) {
+	// TODO: Remove check for `clean` in v3
+	// This was released in v2.2.0 but replaced with an option instead of command in v2.3.0 (now undocumented)
+	if (resolvedOptions?.cleanUnusedThemes || command === 'clean') {
 		cleanThemes()
 	}
 
