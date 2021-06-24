@@ -54,6 +54,10 @@ test('generates themes', async (t) => {
 test.todo('cleans themes')
 test.todo('checks themes')
 
+// TODO: Mock functions and such so that real files are not being created etc.
+// Idealy this would allow us to pass a new config file with comments to test
+test.todo('removes comments from theme file')
+
 test('generates non-italic variants', async (t) => {
 	await pinecone('', { includeNonItalicVariants: true })
 
