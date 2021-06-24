@@ -4,13 +4,17 @@ import { log } from './pretty-log.js'
 
 /**
  * Read JSON
+ * JSON comments will be stripped before parsing
  *
  * @param file starts from root
  * @returns parsed JSON
  */
 export function readJson(file: string) {
 	try {
-		return JSON.parse(fs.readFileSync(path.join(process.cwd(), file), 'utf8'))
+		let contents = fs.readFileSync(path.join(process.cwd(), file), 'utf8')
+		contents = contents.replace(/\\"|"(?:\\"|[^"])*"|(\/\/.*|\/\*[\s\S]*?\*\/)/g, (m, g) => g ? "" : m);
+
+		return JSON.parse(contents)
 	} catch (error) {
 		log.error(error)
 	}
