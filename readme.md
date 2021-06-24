@@ -25,7 +25,7 @@ $ pinecone --help
                Watches pinecone.config.js and themes/*
 
     Options
-		--clean-unused-themes          Delete non-active pinecone themes
+	--clean-unused-themes          Delete non-active pinecone themes
         --include-non-italic-variants  Generate additional non-italic variants
         --update-contributes           Add contributed themes to \`package.json\`
 
