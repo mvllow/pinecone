@@ -17,21 +17,21 @@ npm install --global pinecone-cli
 ```
 $ pinecone --help
 
-    Usage
-        $ pinecone <command> [options]
+	Usage
+		$ pinecone <command> [options]
 
-    Commands
-        watch  Rebuild themes on change
-               Watches pinecone.config.js and themes/*
+	Commands
+		watch  Rebuild themes on change
+					 Watches pinecone.config.js and themes/*
 
-    Options
-	--clean-unused-themes          Delete non-active pinecone themes
-        --include-non-italic-variants  Generate additional non-italic variants
-        --update-contributes           Add contributed themes to \`package.json\`
+	Options
+		--clean-unused-themes          Delete non-active pinecone themes
+		--include-non-italic-variants  Generate additional non-italic variants
+		--update-contributes           Add contributed themes to \`package.json\`
 
-    Examples
-        $ pinecone
-        $ pinecone watch --clean-unused-themes --include-non-italic-variants --update-contributes
+	Examples
+		$ pinecone
+		$ pinecone watch --clean-unused-themes --include-non-italic-variants --update-contributes
 ```
 
 ## Theme
@@ -105,6 +105,18 @@ export default defineConfig({
 	},
 })
 ```
+
+## Experimental
+
+```js
+{
+	experimental: {
+		removeEmptyThemeValues: true
+	}
+}
+```
+
+By default, VSCode will consider empty values as `#ff0000`. Enabling `removeEmptyThemeValues` allows users to add empty rules for cleaner intellisense or organisation.
 
 ## Made with pinecone
 
