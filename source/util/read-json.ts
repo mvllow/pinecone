@@ -12,7 +12,12 @@ import { log } from './pretty-log.js'
 export function readJson(file: string) {
 	try {
 		let contents = fs.readFileSync(path.join(process.cwd(), file), 'utf8')
-		contents = contents.replace(/\\"|"(?:\\"|[^"])*"|(\/\/.*|\/\*[\s\S]*?\*\/)/g, (m, g) => g ? "" : m);
+
+		// Remove comment lines
+		contents = contents.replace(
+			/\\"|"(?:\\"|[^"])*"|(\/\/.*|\/\*[\s\S]*?\*\/)/g,
+			(m, g) => (g ? '' : m)
+		)
 
 		return JSON.parse(contents)
 	} catch (error) {
