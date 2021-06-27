@@ -49,10 +49,21 @@ export async function parseThemes(
 			}
 		})
 
+		let parsedWorkingTheme = JSON.parse(workingTheme)
+
+		if (options.experimental?.removeEmptyThemeValues) {
+			Object.keys(parsedWorkingTheme.colors).forEach((key) => {
+				if (parsedWorkingTheme.colors[key] === '') {
+					// Remove empty JSON values
+					delete parsedWorkingTheme.colors[key]
+				}
+			})
+		}
+
 		result[variant] = {
 			name: theme.variants[variant]?.name,
 			type: theme.variants[variant]?.type,
-			...JSON.parse(workingTheme),
+			...parsedWorkingTheme,
 		}
 
 		if (options.includeNonItalicVariants) {

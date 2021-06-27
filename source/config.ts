@@ -30,6 +30,16 @@ export interface Options {
 	 * @default false
 	 */
 	updateContributes?: boolean
+	/**
+	 * Experimental options that may alter the expected result of some values
+	 */
+	experimental?: {
+		/**
+		 * Update `package.json` to include contributed themes
+		 * @default false
+		 */
+		removeEmptyThemeValues?: boolean
+	}
 }
 
 export interface Config {
@@ -94,6 +104,9 @@ export const defaultConfig: Config = {
 		cleanUnusedThemes: false,
 		includeNonItalicVariants: false,
 		updateContributes: false,
+		experimental: {
+			removeEmptyThemeValues: false,
+		},
 	},
 	theme: {
 		variants: {

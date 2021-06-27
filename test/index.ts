@@ -22,6 +22,7 @@ test.serial('generates default files', async (t) => {
 	let theme = JSON.parse(
 		`{
 		"colors": {
+			"badge.background": "",
 			"editor.background": "$bg",
 			"editor.foreground": "$fg",
 			"widget.shadow": "$transparent"
@@ -57,6 +58,13 @@ test.todo('checks themes')
 // TODO: Mock functions and such so that real files are not being created etc.
 // Idealy this would allow us to pass a new config file with comments to test
 test.todo('removes comments from theme file')
+
+test('removes empty values', async (t) => {
+	await pinecone('', { experimental: { removeEmptyThemeValues: true } })
+
+	let theme = readJson(`./themes/latte-color-theme.json`)
+	t.is(theme.colors['badge.background'], undefined)
+})
 
 test('generates non-italic variants', async (t) => {
 	await pinecone('', { includeNonItalicVariants: true })
