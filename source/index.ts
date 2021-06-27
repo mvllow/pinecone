@@ -1,4 +1,3 @@
-import type { TypedFlags } from 'meow'
 import type { Options } from './config.js'
 
 import chalk from 'chalk'
@@ -12,15 +11,7 @@ import { updateContributes } from './util/update-contributes.js'
 import { checkThemes } from './util/check-themes.js'
 import { getConfig, defineConfig } from './config.js'
 
-type OptionKeys = keyof Options
-type Flags = TypedFlags<
-	{
-		[K in OptionKeys]: { type: 'boolean' }
-	}
-> &
-	Record<string, unknown>
-
-async function pinecone(command?: string, flags?: Partial<Flags>) {
+async function pinecone(command?: string, flags?: Partial<Options>) {
 	console.clear()
 	console.log(chalk.green('🌲 Pinecone\n'))
 
