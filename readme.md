@@ -27,7 +27,7 @@ $ pinecone --help
   Options
     --clean-unused-themes          Delete non-active pinecone themes
     --include-non-italic-variants  Generate additional non-italic variants
-    --update-contributes           Add contributed themes to \`package.json\`
+    --update-contributes           Add contributed themes to `package.json`
 
   Examples
     $ pinecone
@@ -40,20 +40,20 @@ By default, pinecone looks for `./themes/_pinecone-color-theme.json`. This will 
 
 ```json
 {
-	"colors": {
-		"editor.background": "$bg",
-		"editor.foreground": "$fg",
-		"widget.shadow": "$transparent"
-	},
-	"tokenColors": [
-		{
-			"scope": ["comment"],
-			"settings": {
-				"foreground": "$fg",
-				"fontStyle": "italic"
-			}
-		}
-	]
+  "colors": {
+    "editor.background": "$bg",
+    "editor.foreground": "$fg",
+    "widget.shadow": "$transparent"
+  },
+  "tokenColors": [
+    {
+      "scope": ["comment"],
+      "settings": {
+        "foreground": "$fg",
+        "fontStyle": "italic"
+      }
+    }
+  ]
 }
 ```
 
@@ -66,43 +66,43 @@ import { alpha, defineConfig } from 'pinecone-cli'
 
 // Pinecone defaults
 export default defineConfig({
-	source: './themes/_pinecone-color-theme.json',
-	output: './themes',
-	prefix: '$',
-	options: {
-		cleanUnusedThemes: false,
-		includeNonItalicVariants: false,
-		updateContributes: false,
-	},
-	theme: {
-		variants: {
-			latte: {
-				name: 'Latte',
-				type: 'light',
-			},
-			cappuccino: {
-				name: 'Cappuccino',
-				type: 'light',
-			},
-			espresso: {
-				name: 'Espresso',
-				type: 'dark',
-			},
-		},
-		colors: {
-			transparent: '#0000', // Shorthand to set for all three variants
-			bg: {
-				latte: '#faf8f6',
-				cappuccino: '#c29d84',
-				espresso: '#36261b',
-			},
-			fg: {
-				latte: '#c29d84',
-				cappuccino: '#573d2b',
-				espresso: '#d5bbaa',
-			},
-		},
-	},
+  source: './themes/_pinecone-color-theme.json',
+  output: './themes',
+  prefix: '$',
+  options: {
+    cleanUnusedThemes: false,
+    includeNonItalicVariants: false,
+    updateContributes: false,
+  },
+  theme: {
+    variants: {
+      latte: {
+        name: 'Latte',
+        type: 'light',
+      },
+      cappuccino: {
+        name: 'Cappuccino',
+        type: 'light',
+      },
+      espresso: {
+        name: 'Espresso',
+        type: 'dark',
+      },
+    },
+    colors: {
+      transparent: '#0000', // Shorthand to set for all three variants
+      bg: {
+        latte: '#faf8f6',
+        cappuccino: '#c29d84',
+        espresso: '#36261b',
+      },
+      fg: {
+        latte: '#c29d84',
+        cappuccino: '#573d2b',
+        espresso: '#d5bbaa',
+      },
+    },
+  },
 })
 ```
 
@@ -110,9 +110,9 @@ export default defineConfig({
 
 ```js
 {
-	experimental: {
-		removeEmptyThemeValues: true
-	}
+  experimental: {
+    removeEmptyThemeValues: true
+  }
 }
 ```
 

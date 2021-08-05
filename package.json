@@ -60,7 +60,15 @@
 	"prettier": {
 		"semi": false,
 		"singleQuote": true,
-		"useTabs": true
+		"useTabs": true,
+		"overrides": [
+			{
+				"files": "*.md",
+				"options": {
+					"useTabs": false
+				}
+			}
+		]
 	},
 	"ava": {
 		"files": [
