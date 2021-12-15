@@ -37,25 +37,25 @@
 		"variables"
 	],
 	"dependencies": {
-		"chalk": "^4.1.1",
+		"chalk": "^5.0.0",
 		"chokidar": "^3.5.2",
-		"colorish": "^0.1.2",
+		"colorish": "^0.2.1",
 		"escape-string-regexp": "^5.0.0",
-		"meow": "^10.0.1",
-		"prettier": "^2.3.1",
-		"slugify": "^1.5.3"
+		"meow": "^10.1.2",
+		"prettier": "^2.5.1",
+		"slugify": "^1.6.3"
 	},
 	"devDependencies": {
 		"@mvllow/tsconfig": "^0.1.0",
-		"@types/node": "^15.12.2",
-		"@types/prettier": "^2.3.0",
-		"@types/sinon": "^10.0.2",
+		"@types/node": "^16.11.13",
+		"@types/prettier": "^2.4.2",
+		"@types/sinon": "^10.0.6",
 		"ava": "^3.15.0",
-		"del-cli": "^4.0.0",
-		"np": "^7.5.0",
-		"sinon": "^11.1.1",
-		"ts-node": "^10.0.0",
-		"typescript": "^4.3.2"
+		"del-cli": "^4.0.1",
+		"np": "^7.6.0",
+		"sinon": "^12.0.1",
+		"ts-node": "^10.4.0",
+		"typescript": "^4.5.4"
 	},
 	"prettier": {
 		"semi": false,
