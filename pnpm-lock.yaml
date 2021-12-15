@@ -1,6 +1,7 @@
 lockfileVersion: 5.3
 
 specifiers:
+  '@mvllow/tsconfig': ^0.1.0
   '@types/node': ^15.12.2
   '@types/prettier': ^2.3.0
   '@types/sinon': ^10.0.2
@@ -28,6 +29,7 @@ dependencies:
   slugify: 1.5.3
 
 devDependencies:
+  '@mvllow/tsconfig': 0.1.0
   '@types/node': 15.12.2
   '@types/prettier': 2.3.0
   '@types/sinon': 10.0.2
@@ -63,6 +65,11 @@ packages:
     engines: {node: '>=6.12.3 <7 || >=8.9.4 <9 || >=10.0.0'}
     dependencies:
       arrify: 1.0.1
+    dev: true
+
+  /@mvllow/tsconfig/0.1.0:
+    resolution: {integrity: sha512-9Unm8O8/Gs5A5nC1HzrDaNUzbRGDcmTZF4AML6oTiZMAWizIKKn5RHAJo/0ZtT7LLu7VDaRnWqRbEOmcY2+4ZQ==}
+    engines: {node: '>=12'}
     dev: true
 
   /@nodelib/fs.scandir/2.1.5:

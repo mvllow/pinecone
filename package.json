@@ -10,10 +10,10 @@
 		"email": "mvllow@icloud.com"
 	},
 	"type": "module",
-	"exports": "./dist/source/index.js",
+	"exports": "./dist/index.js",
 	"bin": {
-		"pinecone": "dist/source/cli.js",
-		"pinecone-cli": "dist/source/cli.js"
+		"pinecone": "dist/cli.js",
+		"pinecone-cli": "dist/cli.js"
 	},
 	"engines": {
 		"node": ">=12"
@@ -26,9 +26,9 @@
 		"version": "npm run build"
 	},
 	"files": [
-		"dist/source"
+		"dist"
 	],
-	"types": "dist/source",
+	"types": "dist",
 	"keywords": [
 		"dynamic",
 		"vscode",
@@ -46,6 +46,7 @@
 		"slugify": "^1.5.3"
 	},
 	"devDependencies": {
+		"@mvllow/tsconfig": "^0.1.0",
 		"@types/node": "^15.12.2",
 		"@types/prettier": "^2.3.0",
 		"@types/sinon": "^10.0.2",
