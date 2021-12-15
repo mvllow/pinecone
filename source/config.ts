@@ -11,20 +11,8 @@ export interface Options {
 	/**
 	 * Generate additional variants with no italics
 	 * @default false
-	 * @deprecated Renamed to "includeNonItalicVariants"
-	 */
-	includeNonItalics?: boolean
-	/**
-	 * Generate additional variants with no italics
-	 * @default false
 	 */
 	includeNonItalicVariants?: boolean
-	/**
-	 * Update `package.json` to include contributed themes
-	 * @default false
-	 * @deprecated Renamed to "updateContributes"
-	 */
-	writeMeta?: boolean
 	/**
 	 * Update `package.json` to include contributed themes
 	 * @default false
@@ -47,32 +35,13 @@ export interface Config {
 	 * Theme file. It's recommended to append "-color-theme" to your source file
 	 * for VSCode intellisense.
 	 * @default './themes/_pinecone-color-theme.json'
-	 * @deprecated Renamed to "source"
-	 */
-	themeFile?: never
-	/**
-	 * Theme file. It's recommended to append "-color-theme" to your source file
-	 * for VSCode intellisense.
-	 * @default './themes/_pinecone-color-theme.json'
 	 */
 	source: string
 	/**
 	 * Output directory.
 	 * @default './themes'
-	 * @deprecated Renamed to "output"
-	 */
-	outputDir?: never
-	/**
-	 * Output directory.
-	 * @default './themes'
 	 */
 	output: string
-	/**
-	 * Variable prefix.
-	 * @default '$'
-	 * @deprecated Renamed to "prefix"
-	 */
-	varPrefix?: never
 	/**
 	 * Variable prefix.
 	 * @default '$'
