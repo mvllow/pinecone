@@ -4,7 +4,7 @@
 	"description": "Lovely VSCode theme builder",
 	"license": "MIT",
 	"repository": "mvllow/pinecone",
-	"funding": "https://github.com/mvllow/pinecone?sponsor=1",
+	"funding": "https://github.com/mvllow/sponsors/mvllow",
 	"author": {
 		"name": "mvllow",
 		"email": "mvllow@icloud.com"
@@ -19,11 +19,10 @@
 		"node": ">=12"
 	},
 	"scripts": {
-		"dev": "node --loader ts-node/esm source/cli.ts",
-		"clean": "del-cli dist themes pinecone.config.js",
+		"clean": "del-cli themes pinecone.config.js",
+		"build": "del-cli dist && tsc && npm test",
 		"test": "ava",
 		"release": "np",
-		"build": "del-cli dist && tsc && npm test",
 		"version": "npm run build"
 	},
 	"files": [
@@ -60,20 +59,9 @@
 	"prettier": {
 		"semi": false,
 		"singleQuote": true,
-		"useTabs": true,
-		"overrides": [
-			{
-				"files": "*.md",
-				"options": {
-					"useTabs": false
-				}
-			}
-		]
+		"useTabs": true
 	},
 	"ava": {
-		"files": [
-			"test/*"
-		],
 		"extensions": {
 			"ts": "module"
 		},
