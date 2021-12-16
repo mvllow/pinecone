@@ -2,18 +2,15 @@ import fs from 'fs'
 import path from 'path'
 import slugify from 'slugify'
 import { log } from './pretty-log.js'
-import { getConfig } from '../config.js'
+import { resolveConfig } from '../config.js'
 
 export async function cleanThemes() {
-	let {
-		source,
-		output,
-		theme: { variants },
-	} = await getConfig()
+	let { options, variants } = await resolveConfig()
 
-	let safeList: string[] = [path.basename(source)]
+	let safeList: string[] = [path.basename(options.source)]
 
 	Object.keys(variants).forEach((variant) => {
+		// @ts-expect-error Use better types
 		let { name } = variants[variant]
 		let slug = slugify(name, { lower: true, strict: true })
 
@@ -21,13 +18,13 @@ export async function cleanThemes() {
 		safeList.push(`${slug}-no-italics-color-theme.json`)
 	})
 
-	fs.readdir(output, (error, files) => {
+	fs.readdir(options.output, (error, files) => {
 		if (error) {
 			log.error(error.message)
 		}
 
 		files.forEach((file) => {
-			const fileDir = path.join(output, file)
+			const fileDir = path.join(options.output, file)
 
 			if (!safeList.includes(file) && file.includes('-color-theme.json')) {
 				fs.unlinkSync(fileDir)

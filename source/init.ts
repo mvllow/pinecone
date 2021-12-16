@@ -1,13 +1,14 @@
+import type { UserOptions } from './config.js'
 import fs from 'fs'
 import path from 'path'
 import chalk from 'chalk'
-import { defaultConfig } from './config.js'
+import { defaultConfig, resolveConfig } from './config.js'
 import { log } from './util/pretty-log.js'
 import { writePrettyFile } from './util/write-pretty-file.js'
 
-export async function init() {
-	let { source } = defaultConfig
-	let themePath = path.normalize(source)
+export async function init(flags?: UserOptions) {
+	let { options } = await resolveConfig(flags)
+	let themePath = path.normalize(options.source)
 	let configPath = path.normalize(`./pinecone.config.js`)
 
 	console.log('🌱 Init')
@@ -27,7 +28,7 @@ export async function init() {
 		log.error(`\`${themePath}\` already exists`)
 	}
 
-	fs.mkdirSync(path.dirname(source), { recursive: true })
+	fs.mkdirSync(path.dirname(options.source), { recursive: true })
 
 	await writePrettyFile(
 		'themes/_pinecone-color-theme.json',
@@ -35,7 +36,7 @@ export async function init() {
             "colors": {
                 "editor.background": "$bg",
                 "editor.foreground": "$fg",
-                "widget.shadow": "$transparent"
+                "widget.shadow": "$none"
             },
             "tokenColors": [
                 {

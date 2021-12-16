@@ -1,11 +1,15 @@
 import chalk from 'chalk'
 
 export const log = {
-	suggest: (message: string) => {
-		console.warn(chalk.yellow('>'), message)
+	suggest: (message: unknown) => {
+		if (typeof message === 'string') {
+			console.warn(chalk.yellow('>'), message)
+		}
 	},
-	error: (message: string) => {
-		console.error(chalk.red('✕', message))
+	error: (message: unknown) => {
+		if (typeof message === 'string') {
+			console.error(chalk.red('✕', message.toString()))
+		}
 		process.exit(1)
 	},
 }

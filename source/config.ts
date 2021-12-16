@@ -1,8 +1,26 @@
-import fs from 'fs'
+import fs from 'node:fs'
+import path from 'node:path'
+import process from 'node:process'
 import { init } from './init.js'
 import { log } from './util/pretty-log.js'
 
 export interface Options {
+	/**
+	 * Path to pinecone theme file
+	 * Append "-color-theme" to your source file for VSCode intellisense
+	 * @default './themes/_pinecone-color-theme.json'
+	 */
+	source: string
+	/**
+	 * Directory for generated themes
+	 * @default './themes'
+	 */
+	output: string
+	/**
+	 * Variable prefix
+	 * @default '$'
+	 */
+	prefix: string
 	/**
 	 * Delete non-active pinecone themes
 	 * @default false
@@ -18,118 +36,92 @@ export interface Options {
 	 * @default false
 	 */
 	updateContributes?: boolean
-	/**
-	 * Experimental options that may alter the expected result of some values
-	 */
-	experimental?: {
-		/**
-		 * Update `package.json` to include contributed themes
-		 * @default false
-		 */
-		removeEmptyThemeValues?: boolean
-	}
 }
 
 export interface Config {
-	/**
-	 * Theme file. It's recommended to append "-color-theme" to your source file
-	 * for VSCode intellisense.
-	 * @default './themes/_pinecone-color-theme.json'
-	 */
-	source: string
-	/**
-	 * Output directory.
-	 * @default './themes'
-	 */
-	output: string
-	/**
-	 * Variable prefix.
-	 * @default '$'
-	 */
-	prefix: string
+	/** @deprecated Moved to `options.source` */
+	source?: never
+	/** @deprecated Moved to `options.output` */
+	output?: never
+	/** @deprecated Moved to `options.prefix` */
+	prefix?: never
 	options: Options
-	theme: {
-		variants: {
-			[key: string]: {
-				name: string
-				type: 'light' | 'dark'
-			}
-		}
-		colors: {
-			[key: string]:
-				| string
-				| {
-						[key: string]: string
-				  }
-		}
-	}
+	variants: Record<string, { name: string; type: 'light' | 'dark' }>
+	colors: Record<string, string | Record<string, string>>
 }
 
+export type UserConfig = Partial<Config>
+export type UserOptions = Partial<Options>
+
 export const defaultConfig: Config = {
-	source: './themes/_pinecone-color-theme.json',
-	output: './themes',
-	prefix: '$',
 	options: {
+		source: './themes/_pinecone-color-theme.json',
+		output: './themes',
+		prefix: '$',
 		cleanUnusedThemes: false,
 		includeNonItalicVariants: false,
 		updateContributes: false,
-		experimental: {
-			removeEmptyThemeValues: false,
+	},
+	variants: {
+		caffe: {
+			name: 'Caffè',
+			type: 'dark',
+		},
+		latte: {
+			name: 'Caffè Latte',
+			type: 'light',
 		},
 	},
-	theme: {
-		variants: {
-			latte: {
-				name: 'Latte',
-				type: 'light',
-			},
-			cappuccino: {
-				name: 'Cappuccino',
-				type: 'light',
-			},
-			espresso: {
-				name: 'Espresso',
-				type: 'dark',
-			},
+	colors: {
+		none: '#0000',
+		bg: {
+			caffe: '#36261b',
+			latte: '#faf8f6',
 		},
-		colors: {
-			transparent: '#0000',
-			bg: {
-				latte: '#faf8f6',
-				cappuccino: '#c29d84',
-				espresso: '#36261b',
-			},
-			fg: {
-				latte: '#c29d84',
-				cappuccino: '#573d2b',
-				espresso: '#d5bbaa',
-			},
+		fg: {
+			caffe: '#d5bbaa',
+			latte: '#c29d84',
 		},
 	},
 }
 
-export async function getConfig() {
+// TODO: Move into utilities or un-abstract logic
+export async function importFresh(modulePath: string) {
+	const freshModulePath = `${modulePath}?update=${Date.now()}`
 	try {
-		// FIXME: This will cause memory leaks
-		// One of very few workarounds for invalidating cache using esm
-		const { default: userConfig }: { default: Partial<Config> } = await import(
-			`${process.cwd()}/pinecone.config.js?update=${new Date()}`
+		return (await import(freshModulePath)).default
+	} catch {
+		return {}
+	}
+}
+
+export async function resolveConfig(flags?: UserOptions) {
+	const configPath = path.join(process.cwd(), 'pinecone.config.js')
+
+	try {
+		const userConfig = importFresh(configPath) as UserConfig
+		const options: Options = Object.assign(
+			defaultConfig.options,
+			userConfig.options,
+			flags
 		)
 
-		return { ...defaultConfig, ...userConfig }
+		return { ...defaultConfig, ...userConfig, options }
 	} catch (error) {
+		// TODO: Refactor initialization
 		if (fs.existsSync(`${process.cwd()}/pinecone.config.js`)) {
 			log.error(`Something's not quite right in pinecone.config.js\n${error}`)
 		} else {
 			log.suggest('No user config found, creating default files\n')
+			console.error(error)
+
 			await init()
 		}
-
-		return defaultConfig
 	}
+
+	return defaultConfig
 }
 
-// TODO: Expose this once we figure out how to import from 'pinecone-cli' without errors
-export function defineConfig(config: Partial<Config>): Partial<Config> {
+export function defineConfig(config: UserConfig): UserConfig {
 	return config
 }

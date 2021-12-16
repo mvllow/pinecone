@@ -4,7 +4,7 @@ import sinon from 'sinon'
 import pinecone from '../source/index.js'
 import { readJson } from '../source/util/read-json.js'
 
-test.before(() => {
+test.before(async () => {
 	// Enable chalk colors in AVA
 	// https://github.com/avajs/ava/issues/1124
 	chalk.level = 2
@@ -14,6 +14,8 @@ test.before(() => {
 
 	// Ignore process.exit during tests
 	sinon.stub(process, 'exit')
+
+	await pinecone('init')
 })
 
 test.serial('generates default files', async (t) => {
@@ -25,7 +27,7 @@ test.serial('generates default files', async (t) => {
 			"badge.background": "",
 			"editor.background": "$bg",
 			"editor.foreground": "$fg",
-			"widget.shadow": "$transparent"
+			"widget.shadow": "$none"
 		},
 		"tokenColors": [
 			{
@@ -41,13 +43,13 @@ test.serial('generates default files', async (t) => {
 	let { default: config } = await import(`${process.cwd()}/pinecone.config.js`)
 
 	t.is(theme.colors['editor.background'], '$bg')
-	t.is(config.prefix, '$')
+	t.is(config.options.prefix, '$')
 })
 
 test('generates themes', async (t) => {
 	await pinecone()
 
-	let theme = readJson(`./themes/latte-color-theme.json`)
+	let theme = readJson(`./themes/caffe-latte-color-theme.json`)
 
 	t.is(theme.colors['editor.background'], '#faf8f6')
 })
@@ -60,20 +62,20 @@ test.todo('checks themes')
 test.todo('removes comments from theme file')
 
 test('removes empty values', async (t) => {
-	await pinecone('', { experimental: { removeEmptyThemeValues: true } })
+	await pinecone()
 
-	let theme = readJson(`./themes/latte-color-theme.json`)
+	let theme = readJson(`./themes/caffe-latte-color-theme.json`)
 	t.is(theme.colors['badge.background'], undefined)
 })
 
 test('generates non-italic variants', async (t) => {
 	await pinecone('', { includeNonItalicVariants: true })
 
-	let theme = readJson(`./themes/latte-no-italics-color-theme.json`)
+	let theme = readJson(`./themes/caffe-latte-no-italics-color-theme.json`)
 
-	t.is(theme.name, 'Latte (no italics)')
+	t.is(theme.name, 'Caffè Latte (no italics)')
 	t.notRegex(theme.tokenColors[0].settings.fontStyle, /italic/g)
-	t.is(theme.name, 'Latte (no italics)')
+	t.is(theme.name, 'Caffè Latte (no italics)')
 })
 
 test.skip('updates contributes', async (t) => {

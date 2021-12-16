@@ -25,17 +25,20 @@ function checkForValue(json: any, value: any): any {
 }
 
 export function checkThemes(config: Config) {
-	let { source, output, prefix, theme } = config
-	let name = theme.variants[Object.keys(theme.variants)[0]].name
+	let { options, variants } = config
+	// @ts-expect-error Use better types
+	let name = variants[Object.keys(variants)[0]].name
 	const slug = slugify(name, {
 		lower: true,
 		strict: true,
 	})
-	const baseTheme = readJson(path.join(output, `${slug}-color-theme.json`))
+	const baseTheme = readJson(
+		path.join(options.output, `${slug}-color-theme.json`)
+	)
 
-	checkForValue(baseTheme, prefix)
+	checkForValue(baseTheme, options.prefix)
 
-	if (!source.includes('color-theme')) {
+	if (!options.source.includes('color-theme')) {
 		log.suggest(
 			'Include `color-theme` in your source name to enable intellisense'
 		)

@@ -1,27 +1,31 @@
-import type { Options } from './config.js'
+import type { UserOptions } from './config.js'
 
 import chalk from 'chalk'
 import { colorish as alpha } from 'colorish'
 import { watch } from './commands/watch.js'
+import { init } from './init.js'
 import { cleanThemes } from './util/clean-themes.js'
 import { parseThemes } from './util/parse-themes.js'
 import { generateThemes } from './util/generate-themes.js'
 import { readJson } from './util/read-json.js'
 import { updateContributes } from './util/update-contributes.js'
 import { checkThemes } from './util/check-themes.js'
-import { getConfig, defineConfig } from './config.js'
+import { resolveConfig, defineConfig } from './config.js'
 
-async function pinecone(command?: string, flags?: Partial<Options>) {
+async function pinecone(command?: string, flags?: UserOptions) {
 	console.clear()
 	console.log(chalk.green('🌲 Pinecone\n'))
 
-	let config = await getConfig()
+	if (command === 'init') {
+		await init()
+		return
+	}
 
-	let resolvedOptions = { ...config.options, ...flags }
+	let config = await resolveConfig(flags)
 
-	let template = await readJson(config.source)
-	let parsedThemes = await parseThemes(template, resolvedOptions)
-	let generatedThemes = await generateThemes(parsedThemes, resolvedOptions)
+	let template = await readJson(config.options.source)
+	let parsedThemes = await parseThemes(template, config.options)
+	let generatedThemes = await generateThemes(parsedThemes, config.options)
 
 	console.log(`🌿 Variants`)
 	generatedThemes.forEach((theme) => {
@@ -31,14 +35,14 @@ async function pinecone(command?: string, flags?: Partial<Options>) {
 
 	// TODO: Remove check for `clean` in v3
 	// This was released in v2.2.0 but replaced with an option instead of command in v2.3.0 (now undocumented)
-	if (resolvedOptions?.cleanUnusedThemes || command === 'clean') {
+	if (config.options?.cleanUnusedThemes || command === 'clean') {
 		cleanThemes()
 	}
 
 	checkThemes(config)
 
-	if (resolvedOptions?.updateContributes) {
-		await updateContributes(resolvedOptions)
+	if (config.options?.updateContributes) {
+		await updateContributes(config.options)
 		console.log(`📦 Added variants to package.json\n`)
 	}
 

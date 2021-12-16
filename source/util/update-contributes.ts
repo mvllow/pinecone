@@ -1,10 +1,10 @@
-import type { Options } from '../config.js'
+import type { UserOptions } from '../config.js'
 
 import path from 'path'
 import slugify from 'slugify'
 import { readJson } from './read-json.js'
 import { writePrettyFile } from './write-pretty-file.js'
-import { getConfig } from '../config.js'
+import { resolveConfig } from '../config.js'
 
 interface VSTheme {
 	label: string
@@ -12,26 +12,30 @@ interface VSTheme {
 	path: string
 }
 
-export async function updateContributes(options: Options) {
+export async function updateContributes(flags?: UserOptions) {
 	let themes: VSTheme[] = []
-	let { output, theme } = await getConfig()
+	let { options, variants } = await resolveConfig(flags)
 	let packageJson = readJson('package.json')
 
-	Object.keys(theme.variants).map((variant) => {
-		let { name, type } = theme.variants[variant]
+	Object.keys(variants).map((variant) => {
+		// @ts-expect-error Use better types
+		let { name, type } = variants[variant]
 		let slug = slugify(name, { lower: true, strict: true })
 
 		themes.push({
 			label: name,
 			uiTheme: type == 'light' ? 'vs' : 'vs-dark',
-			path: path.join(output, `${slug}-color-theme.json`),
+			path: path.join(options.output, `${slug}-color-theme.json`),
 		})
 
 		if (options.includeNonItalicVariants) {
 			themes.push({
 				label: `${name} (no italics)`,
 				uiTheme: type == 'light' ? 'vs' : 'vs-dark',
-				path: path.join(output, `./${slug}-no-italics-color-theme.json`),
+				path: path.join(
+					options.output,
+					`./${slug}-no-italics-color-theme.json`
+				),
 			})
 		}
 	})
