@@ -56,7 +56,7 @@ const cli = meow(
 				type: 'boolean',
 			},
 		},
-	}
+	},
 )
 
-pinecone(cli.input[0], cli.flags)
+await pinecone(cli.input[0], cli.flags)

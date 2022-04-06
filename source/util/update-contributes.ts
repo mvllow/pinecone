@@ -1,53 +1,52 @@
-import type { UserOptions } from '../config.js'
-
-import path from 'path'
+import path from 'node:path'
 import slugify from 'slugify'
+import { resolveConfig, type UserOptions } from '../config.js'
 import { readJson } from './read-json.js'
 import { writePrettyFile } from './write-pretty-file.js'
-import { resolveConfig } from '../config.js'
 
-interface VSTheme {
+interface CodeTheme {
 	label: string
 	uiTheme: 'vs' | 'vs-dark'
 	path: string
 }
 
 export async function updateContributes(flags?: UserOptions) {
-	let themes: VSTheme[] = []
-	let { options, variants } = await resolveConfig(flags)
-	let packageJson = readJson('package.json')
+	const themes: CodeTheme[] = []
+	const { options, variants } = await resolveConfig(flags)
+	const packageJson = readJson('package.json')
 
 	Object.keys(variants).map((variant) => {
-		// @ts-expect-error Use better types
-		let { name, type } = variants[variant]
-		let slug = slugify(name, { lower: true, strict: true })
+		const { name, type } = variants[variant] as {
+			name: string
+			type: 'light' | 'dark'
+		}
+		const slug = slugify(name, { lower: true, strict: true })
 
 		themes.push({
 			label: name,
-			uiTheme: type == 'light' ? 'vs' : 'vs-dark',
+			uiTheme: type === 'light' ? 'vs' : 'vs-dark',
 			path: path.join(options.output, `${slug}-color-theme.json`),
 		})
 
 		if (options.includeNonItalicVariants) {
 			themes.push({
 				label: `${name} (no italics)`,
-				uiTheme: type == 'light' ? 'vs' : 'vs-dark',
+				uiTheme: type === 'light' ? 'vs' : 'vs-dark',
 				path: path.join(
 					options.output,
-					`./${slug}-no-italics-color-theme.json`
+					`./${slug}-no-italics-color-theme.json`,
 				),
 			})
 		}
+
+		return themes
 	})
 
-	if (!packageJson.contributes) {
-		packageJson.contributes = { themes: [] }
-	}
-	packageJson.contributes.themes = themes
+	Object.assign(packageJson['contributes'], themes || [])
 
 	await writePrettyFile(
 		'package.json',
 		JSON.stringify(packageJson, null, 2),
-		'json-stringify'
+		'json-stringify',
 	)
 }

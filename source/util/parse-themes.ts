@@ -1,63 +1,54 @@
-import type { UserOptions } from '../config.js'
-
-import { log } from './pretty-log.js'
+import { resolveConfig, UserOptions } from '../config.js'
 import { replaceJsonValues } from './replace-json-values.js'
 import { removeWordFromString } from './remove-word-from-string.js'
-import { resolveConfig } from '../config.js'
 
 export interface Theme {
+	[key: string]: unknown
 	name?: string
 	type?: 'light' | 'dark'
 	/**
 	 * @example bg: '#000' or bg: { dark: '#000', light: '#fff' }
 	 */
-	colors?: {
-		[key: string]:
-			| string
-			| {
-					[key: string]: string
-			  }
-	}
+	colors?: Record<string, string | Record<string, string>>
 	tokenColors?: unknown[]
 	semanticHighlighting?: boolean
-	semanticTokenColors?: {}
-	[key: string]: unknown
+	semanticTokenColors?: Record<string, unknown>
 }
 
 export async function parseThemes(
 	{ name, type, ...baseTheme }: Theme,
-	flags?: UserOptions
+	flags?: UserOptions,
 ) {
-	let stringifiedTheme = JSON.stringify(baseTheme)
-	let { options, variants, colors } = await resolveConfig(flags)
-	let result: { [key: string]: Theme } = {}
+	const stringifiedTheme = JSON.stringify(baseTheme)
+	const { options, variants, colors } = await resolveConfig(flags)
+	const result: Record<string, Theme> = {}
 
-	Object.keys(variants).forEach((variant) => {
+	for (const variant of Object.keys(variants)) {
 		let workingTheme = stringifiedTheme
 
-		Object.keys(colors).forEach((color) => {
-			let searchFor = `${options.prefix}${color}`
+		for (const color of Object.keys(colors)) {
+			const searchFor = `${options.prefix}${color}`
 
-			let currentColor = colors[color]
-			let replaceWith =
-				// @ts-expect-error Use better types
-				typeof currentColor == 'string' ? currentColor : currentColor[variant]
+			const currentColor = colors[color]
+			const replaceWith =
+				// @ts-expect-error TODO
+				typeof currentColor === 'string' ? currentColor : currentColor[variant]
 
 			if (replaceWith) {
 				workingTheme = replaceJsonValues(workingTheme, searchFor, replaceWith)
 			} else {
-				log.error(`Bad format for \`${color}\``)
+				console.error(`Bad format for \`${color}\``)
 			}
-		})
+		}
 
-		let parsedWorkingTheme = JSON.parse(workingTheme)
+		const parsedWorkingTheme = JSON.parse(workingTheme)
 
 		// Remove empty JSON values
-		Object.keys(parsedWorkingTheme.colors).forEach((key) => {
+		for (const key of Object.keys(parsedWorkingTheme.colors)) {
 			if (parsedWorkingTheme.colors[key] === '') {
 				delete parsedWorkingTheme.colors[key]
 			}
-		})
+		}
 
 		result[variant] = {
 			name: variants[variant]?.name,
@@ -66,7 +57,7 @@ export async function parseThemes(
 		}
 
 		if (options.includeNonItalicVariants) {
-			let nonItalicVariant = removeWordFromString(workingTheme, 'italic')
+			const nonItalicVariant = removeWordFromString(workingTheme, 'italic')
 
 			result[`${variant}-no-italics`] = {
 				name: `${variants[variant]?.name} (no italics)`,
@@ -74,7 +65,7 @@ export async function parseThemes(
 				...JSON.parse(nonItalicVariant),
 			}
 		}
-	})
+	}
 
 	return result
 }

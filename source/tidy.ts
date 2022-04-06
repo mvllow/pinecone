@@ -1,34 +1,35 @@
-import fs from 'fs'
-import path from 'path'
+import fs from 'node:fs'
+import path from 'node:path'
 import slugify from 'slugify'
-import { log } from './pretty-log.js'
-import { resolveConfig } from '../config.js'
+import { resolveConfig } from './config.js'
 
 export async function tidy() {
-	let { options, variants } = await resolveConfig()
+	const { options, variants } = await resolveConfig()
 
-	let safeList: string[] = [path.basename(options.source)]
+	const safeList: string[] = [path.basename(options.source)]
 
-	Object.keys(variants).forEach((variant) => {
+	for (const variant of Object.keys(variants)) {
 		// @ts-expect-error Use better types
-		let { name } = variants[variant]
-		let slug = slugify(name, { lower: true, strict: true })
+		const { name } = variants[variant]
+		const slug = slugify(name, { lower: true, strict: true })
 
-		safeList.push(`${slug}-color-theme.json`)
-		safeList.push(`${slug}-no-italics-color-theme.json`)
-	})
+		safeList.push(
+			`${slug}-color-theme.json`,
+			`${slug}-no-italics-color-theme.json`,
+		)
+	}
 
 	fs.readdir(options.output, (error, files) => {
 		if (error) {
-			log.error(error.message)
+			console.error(error.message)
 		}
 
-		files.forEach((file) => {
+		for (const file of files) {
 			const fileDir = path.join(options.output, file)
 
 			if (!safeList.includes(file) && file.includes('-color-theme.json')) {
 				fs.unlinkSync(fileDir)
 			}
-		})
+		}
 	})
 }

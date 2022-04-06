@@ -1,15 +1,13 @@
-import type { UserOptions } from './config.js'
-import fs from 'fs'
-import path from 'path'
+import fs from 'node:fs'
+import path from 'node:path'
 import chalk from 'chalk'
-import { defaultConfig, resolveConfig } from './config.js'
-import { log } from './util/pretty-log.js'
+import { defaultConfig, resolveConfig, type UserOptions } from './config.js'
 import { writePrettyFile } from './util/write-pretty-file.js'
 
 export async function init(flags?: UserOptions) {
-	let { options } = await resolveConfig(flags)
-	let themePath = path.normalize(options.source)
-	let configPath = path.normalize(`./pinecone.config.js`)
+	const { options } = await resolveConfig(flags)
+	const themePath = path.normalize(options.source)
+	const configPath = path.normalize(`./pinecone.config.js`)
 
 	console.log('🌱 Init')
 
@@ -17,15 +15,15 @@ export async function init(flags?: UserOptions) {
 		configPath,
 		`import { defineConfig } from 'pinecone-cli'\n
 		export default defineConfig(${JSON.stringify(defaultConfig, null, 2)})`,
-		'babel'
+		'babel',
 	).then(() => {
 		console.log(
-			`   ${chalk.grey('-')} Config: ${chalk.magenta('pinecone.config.js')}`
+			`   ${chalk.grey('-')} Config: ${chalk.magenta('pinecone.config.js')}`,
 		)
 	})
 
 	if (fs.existsSync(themePath)) {
-		log.error(`\`${themePath}\` already exists`)
+		console.error(`\`${themePath}\` already exists`)
 	}
 
 	fs.mkdirSync(path.dirname(options.source), { recursive: true })
@@ -47,12 +45,12 @@ export async function init(flags?: UserOptions) {
                     }
                 }
             ]
-        }`
+        }`,
 	).then(() => {
 		console.log(
 			`   ${chalk.grey('-')} Theme: ${chalk.magenta(
-				'themes/_pinecone-color-theme-json'
-			)}\n`
+				'themes/_pinecone-color-theme-json',
+			)}\n`,
 		)
 	})
 }

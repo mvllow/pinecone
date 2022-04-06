@@ -1,46 +1,65 @@
-import type { Config } from '../config.js'
-
-import path from 'path'
+import path from 'node:path'
 import slugify from 'slugify'
-import { log } from './pretty-log.js'
+import type { Config } from '../config.js'
 import { readJson } from './read-json.js'
 
-function checkForValue(json: any, value: any): any {
-	for (const key in json) {
-		if (typeof json[key] === 'object') {
-			return checkForValue(json[key], value)
-		}
-		if (json[key].includes('[object Object]')) {
-			log.suggest(`Color has invalid value\n{ "${key}": "${json[key]}" }`)
-		}
-		if (json[key].includes(value)) {
-			log.suggest(`Color was not formatted\n{ "${key}": "${json[key]}" }`)
-		}
-		if (json[key].includes('#ff0000')) {
-			log.suggest(
-				`Color has default value\nThis usually occurs when a color is not formatted\n{ "${key}": "${json[key]}" }`
-			)
-		}
-	}
-}
+export function checkThemeValues(config: Config) {
+	console.log(config.variants)
 
-export function checkThemes(config: Config) {
-	let { options, variants } = config
-	// @ts-expect-error Use better types
-	let name = variants[Object.keys(variants)[0]].name
-	const slug = slugify(name, {
-		lower: true,
-		strict: true,
-	})
-	const baseTheme = readJson(
-		path.join(options.output, `${slug}-color-theme.json`)
+	// @ts-expect-error TODO
+	// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+	const { name } = config.variants[Object.keys(config.variants)[0]]
+	const slug = slugify(name, { lower: true, strict: true })
+	const theme = readJson(
+		path.join(config.options.output, `${slug}-color-theme.json`),
 	)
 
-	checkForValue(baseTheme, options.prefix)
+	checkValues(theme)
 
-	if (!options.source.includes('color-theme')) {
-		log.suggest(
-			'Include `color-theme` in your source name to enable intellisense'
+	if (!config.options.source.includes('color-theme')) {
+		console.warn(
+			'Include `color-theme` in your source name to enable intellisense',
 		)
+	}
+
+	function checkValues(source: Record<string, unknown>): void {
+		for (const key in source) {
+			if (key) {
+				const currentValue = source[key]
+
+				if (typeof currentValue === 'object') {
+					checkValues(currentValue as Record<string, unknown>)
+					return
+				}
+
+				if (typeof currentValue === 'undefined') {
+					console.warn(`Color is undefined`)
+					return
+				}
+
+				if (typeof currentValue === 'string') {
+					if (currentValue.includes('[object Object]')) {
+						console.warn(
+							`Color has invalid value\n{ "${key}": "${currentValue}" }`,
+						)
+						return
+					}
+
+					if (currentValue.includes(config.options.prefix)) {
+						console.warn(
+							`Color was not formatted\n{ "${key}": "${currentValue}" }`,
+						)
+						return
+					}
+
+					if (currentValue.includes('#ff0000')) {
+						console.warn(
+							`Color has default value\nThis usually occurs when a color is not formatted\n{ "${key}": "${currentValue}" }`,
+						)
+						return
+					}
+				}
+			}
+		}
 	}
 }

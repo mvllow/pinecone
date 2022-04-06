@@ -2,7 +2,6 @@ import fs from 'node:fs'
 import path from 'node:path'
 import process from 'node:process'
 import { init } from './init.js'
-import { log } from './util/pretty-log.js'
 
 export interface Options {
 	/**
@@ -109,17 +108,15 @@ export async function resolveConfig(flags?: UserOptions) {
 		const options: Options = Object.assign(
 			defaultConfig.options,
 			userConfig.options,
-			flags
+			flags,
 		)
 
 		return { ...defaultConfig, ...userConfig, options }
-	} catch (error) {
-		// TODO: Refactor initialization
+	} catch (error: unknown) {
 		if (fs.existsSync(`${process.cwd()}/pinecone.config.js`)) {
-			log.error(`Something's not quite right in pinecone.config.js\n${error}`)
+			console.error('Something went wrong in pinecone.config.js', error)
 		} else {
-			log.suggest('No user config found, creating default files\n')
-			console.error(error)
+			console.warn('No user config found, creating default files\n', error)
 
 			await init()
 		}

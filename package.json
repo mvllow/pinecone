@@ -55,12 +55,18 @@
 		"np": "^7.6.1",
 		"sinon": "^13.0.1",
 		"ts-node": "^10.7.0",
-		"typescript": "^4.6.3"
+		"typescript": "^4.6.3",
+		"xo": "^0.48.0"
 	},
 	"prettier": {
+		"bracketSpacing": true,
 		"semi": false,
 		"singleQuote": true,
+		"trailingComma": "all",
 		"useTabs": true
+	},
+	"xo": {
+		"prettier": "true"
 	},
 	"ava": {
 		"extensions": {
