@@ -22,10 +22,15 @@ export interface Options {
 	 */
 	prefix: string
 	/**
-	 * Delete non-active pinecone themes
+	 * Rebuild themes on change
 	 * @default false
 	 */
-	cleanUnusedThemes?: boolean
+	watch: boolean
+	/**
+	 * Remove non-pinecone themes
+	 * @default false
+	 */
+	tidy?: boolean
 	/**
 	 * Generate additional variants with no italics
 	 * @default false
@@ -58,7 +63,8 @@ export const defaultConfig: Config = {
 		source: './themes/_pinecone-color-theme.json',
 		output: './themes',
 		prefix: '$',
-		cleanUnusedThemes: false,
+		watch: false,
+		tidy: false,
 		includeNonItalicVariants: false,
 		updateContributes: false,
 	},

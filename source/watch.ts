@@ -1,8 +1,8 @@
 import path from 'path'
 import chokidar from 'chokidar'
-import { log } from '../util/pretty-log.js'
-import { resolveConfig } from '../config.js'
-import pinecone from '../index.js'
+import { log } from './util/pretty-log.js'
+import { resolveConfig } from './config.js'
+import pinecone from './index.js'
 
 export async function watch() {
 	let config = await resolveConfig()

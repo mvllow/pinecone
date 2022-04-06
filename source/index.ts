@@ -1,16 +1,15 @@
-import type { UserOptions } from './config.js'
-
 import chalk from 'chalk'
+// TODO: Export as colorish
 import { colorish as alpha } from 'colorish'
-import { watch } from './commands/watch.js'
 import { init } from './init.js'
-import { cleanThemes } from './util/clean-themes.js'
+import { tidy } from './tidy.js'
+import { watch } from './watch.js'
+import { resolveConfig, defineConfig, type UserOptions } from './config.js'
 import { parseThemes } from './util/parse-themes.js'
 import { generateThemes } from './util/generate-themes.js'
 import { readJson } from './util/read-json.js'
 import { updateContributes } from './util/update-contributes.js'
 import { checkThemes } from './util/check-themes.js'
-import { resolveConfig, defineConfig } from './config.js'
 
 async function pinecone(command?: string, flags?: UserOptions) {
 	console.clear()
@@ -33,11 +32,7 @@ async function pinecone(command?: string, flags?: UserOptions) {
 	})
 	console.log()
 
-	// TODO: Remove check for `clean` in v3
-	// This was released in v2.2.0 but replaced with an option instead of command in v2.3.0 (now undocumented)
-	if (config.options?.cleanUnusedThemes || command === 'clean') {
-		cleanThemes()
-	}
+	if (config.options.tidy) tidy()
 
 	checkThemes(config)
 
@@ -46,7 +41,7 @@ async function pinecone(command?: string, flags?: UserOptions) {
 		console.log(`📦 Added variants to package.json\n`)
 	}
 
-	if (command === 'watch') {
+	if (config.options?.watch) {
 		console.log('👀 Waiting for changes...\n')
 		await watch()
 	}

@@ -4,26 +4,27 @@ import pinecone from './index.js'
 
 const cli = meow(
 	`
-    Usage
-        $ pinecone <command> [options]
+	Usage
+		$ pinecone <command> [options]
 
-    Commands
-        watch  Rebuild themes on change
-               Watches pinecone.config.js and themes/*
+	Commands
+		init  Create new theme
 
-    Options
+	Options
 		-s, --source  Path to pinecone theme file
 		-o, --output  Directory for generated themes
 		-p, --prefix  Variable prefix
+		-w, --watch   Rebuild themes on change
 
+		--include-non-italic-variants  Generate additional non-italic variants
 		--clean-unused-themes          Delete non-active pinecone themes
-        --include-non-italic-variants  Generate additional non-italic variants
-        --update-contributes           Add contributed themes to \`package.json\`
+		--update-contributes           Add contributed themes to \`package.json\`
 
-    Examples
-        $ pinecone
-        $ pinecone watch --clean-unused-themes --include-non-italic-variants --update-contributes
-    `,
+	Examples
+		$ pinecone
+		$ pinecone init
+		$ pinecone --watch --include-non-italic-variants
+	`,
 	{
 		booleanDefault: undefined,
 		importMeta: import.meta,
@@ -40,7 +41,12 @@ const cli = meow(
 				alias: 'p',
 				type: 'string',
 			},
-			cleanUnusedThemes: {
+			watch: {
+				alias: 'w',
+				type: 'boolean',
+			},
+			tidy: {
+				alias: 't',
 				type: 'boolean',
 			},
 			includeNonItalicVariants: {

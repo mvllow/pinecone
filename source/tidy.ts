@@ -4,7 +4,7 @@ import slugify from 'slugify'
 import { log } from './pretty-log.js'
 import { resolveConfig } from '../config.js'
 
-export async function cleanThemes() {
+export async function tidy() {
 	let { options, variants } = await resolveConfig()
 
 	let safeList: string[] = [path.basename(options.source)]
