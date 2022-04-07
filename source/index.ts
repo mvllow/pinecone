@@ -6,7 +6,6 @@ import { resolveConfig, type UserOptions } from './config.js'
 import { parseThemes } from './util/parse-themes.js'
 import { generateThemes } from './util/generate-themes.js'
 import { readJson } from './util/read-json.js'
-import { updateContributes } from './util/update-contributes.js'
 import { checkThemes } from './util/check-themes.js'
 
 async function pinecone(command?: string, flags?: UserOptions) {
@@ -29,14 +28,10 @@ async function pinecone(command?: string, flags?: UserOptions) {
 		console.log(`   ${chalk.grey('-')} ${chalk.magenta(theme)}`)
 	}
 
-	if (config.options.tidy) await tidy()
+	if (config.options.tidy) await tidy(config)
 
 	checkThemes(config)
 
-	if (config.options?.updateContributes) {
-		await updateContributes(config.options)
-		console.log(`📦 Added variants to package.json\n`)
-	}
 
 	if (config.options?.watch) {
 		console.log('👀 Waiting for changes...\n')

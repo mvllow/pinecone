@@ -1,35 +1,71 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import slugify from 'slugify'
-import { resolveConfig } from './config.js'
+import { readJson } from './util/read-json.js'
+import { writePrettyFile } from './util/write-pretty-file.js'
+import { type Config } from './config.js'
 
-export async function tidy() {
-	const { options, variants } = await resolveConfig()
+interface CodeTheme {
+	label: string
+	uiTheme: 'vs' | 'vs-dark'
+	path: string
+}
 
-	const safeList: string[] = [path.basename(options.source)]
+export async function tidy({ options, variants }: Config) {
+	const packageJson = readJson('package.json')
+
+	const safeFiles: string[] = [path.basename(options.source)]
+	const themes: CodeTheme[] = []
 
 	for (const variant of Object.keys(variants)) {
-		// @ts-expect-error Use better types
-		const { name } = variants[variant]
-		const slug = slugify(name, { lower: true, strict: true })
+		const currentVariant = variants[variant]
 
-		safeList.push(
-			`${slug}-color-theme.json`,
-			`${slug}-no-italics-color-theme.json`,
-		)
+		if (typeof currentVariant !== 'undefined') {
+			const { name, type } = currentVariant
+			const slug = slugify(name, { lower: true, strict: true })
+
+			safeFiles.push(`${slug}-color-theme.json`)
+			themes.push({
+				label: name,
+				uiTheme: type === 'light' ? 'vs' : 'vs-dark',
+				path: path.join(options.output, `./${slug}-color-theme.json`),
+			})
+
+			if (options.includeNonItalicVariants) {
+				safeFiles.push(`${slug}-no-italics-color-theme.json`)
+				themes.push({
+					label: `${name} (no italics)`,
+					uiTheme: type === 'light' ? 'vs' : 'vs-dark',
+					path: path.join(
+						options.output,
+						`./${slug}-no-italics-color-theme.json`,
+					),
+				})
+			}
+		}
 	}
 
+	// Remove non-pinecone themes from output directory
 	fs.readdir(options.output, (error, files) => {
 		if (error) {
 			console.error(error.message)
 		}
 
 		for (const file of files) {
-			const fileDir = path.join(options.output, file)
+			const filePath = path.join(options.output, file)
 
-			if (!safeList.includes(file) && file.includes('-color-theme.json')) {
-				fs.unlinkSync(fileDir)
+			if (!safeFiles.includes(file) && file.includes('-color-theme.json')) {
+				fs.unlinkSync(filePath)
 			}
 		}
 	})
+
+	// Add pinecone themes to package.json contributes section
+	Object.assign(packageJson['contributes'], themes)
+
+	await writePrettyFile(
+		'package.json',
+		JSON.stringify(packageJson, null, 2),
+		'json-stringify',
+	)
 }
