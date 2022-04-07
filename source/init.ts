@@ -1,5 +1,6 @@
 import fs from 'node:fs'
 import path from 'node:path'
+import process from 'node:process'
 import chalk from 'chalk'
 import { defaultConfig, resolveConfig } from './config.js'
 import { writePrettyFile } from './util/write-pretty-file.js'
@@ -7,8 +8,11 @@ import type { UserOptions } from './types/config.js'
 
 export async function init(flags?: UserOptions) {
 	const { options } = await resolveConfig(flags)
-	const themePath = path.normalize(options.source)
-	const configPath = path.normalize(`./pinecone.config.js`)
+	const themePath = path.join(process.cwd(), path.normalize(options.source))
+	const configPath = path.join(
+		process.cwd(),
+		path.normalize(`./pinecone.config.js`),
+	)
 
 	console.log('🌱 Init')
 
