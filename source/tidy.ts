@@ -3,19 +3,18 @@ import path from 'node:path'
 import slugify from 'slugify'
 import { readJson } from './util/read-json.js'
 import { writePrettyFile } from './util/write-pretty-file.js'
-import { type Config } from './config.js'
-
-interface CodeTheme {
-	label: string
-	uiTheme: 'vs' | 'vs-dark'
-	path: string
-}
+import type { Config } from './types/config.js'
+import type { PackageTheme } from './types/themes.js'
 
 export async function tidy({ options, variants }: Config) {
-	const packageJson = readJson('package.json')
-
+	const packageJson = readJson<{
+		[key: string]: unknown
+		contributes: {
+			themes: PackageTheme[]
+		}
+	}>('package.json')
 	const safeFiles: string[] = [path.basename(options.source)]
-	const themes: CodeTheme[] = []
+	const themes: PackageTheme[] = []
 
 	for (const variant of Object.keys(variants)) {
 		const currentVariant = variants[variant]
@@ -61,7 +60,7 @@ export async function tidy({ options, variants }: Config) {
 	})
 
 	// Add pinecone themes to package.json contributes section
-	Object.assign(packageJson['contributes'], themes)
+	packageJson.contributes = { themes }
 
 	await writePrettyFile(
 		'package.json',

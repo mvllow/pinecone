@@ -1,67 +1,63 @@
-import { type Config } from '../config.js'
+import type { Config } from '../types/config.js'
+import type { Theme } from '../types/themes.js'
 import { replaceJsonValues } from './replace-json-values.js'
 import { removeWordFromString } from './remove-word-from-string.js'
-
-export interface Theme {
-	[key: string]: unknown
-	name?: string
-	type?: 'light' | 'dark'
-	/**
-	 * @example bg: '#000' or bg: { dark: '#000', light: '#fff' }
-	 */
-	colors?: Record<string, string | Record<string, string>>
-	tokenColors?: unknown[]
-	semanticHighlighting?: boolean
-	semanticTokenColors?: Record<string, unknown>
-}
 
 export async function parseThemes(
 	{ name, type, ...baseTheme }: Theme,
 	{ options, variants, colors }: Config,
 ) {
-	const stringifiedTheme = JSON.stringify(baseTheme)
+	const template = JSON.stringify(baseTheme)
 	const result: Record<string, Theme> = {}
 
 	for (const variant of Object.keys(variants)) {
-		let workingTheme = stringifiedTheme
+		let theme = template
 
 		for (const color of Object.keys(colors)) {
 			const searchFor = `${options.prefix}${color}`
-
 			const currentColor = colors[color]
+
+			if (typeof currentColor === 'undefined') return
+
 			const replaceWith =
-				// @ts-expect-error TODO
 				typeof currentColor === 'string' ? currentColor : currentColor[variant]
 
 			if (replaceWith) {
-				workingTheme = replaceJsonValues(workingTheme, searchFor, replaceWith)
+				theme = replaceJsonValues(theme, searchFor, replaceWith)
 			} else {
 				console.error(`Bad format for \`${color}\``)
 			}
 		}
 
-		const parsedWorkingTheme = JSON.parse(workingTheme)
+		const parsedTheme = JSON.parse(theme) as Theme
 
 		// Remove empty JSON values
-		for (const key of Object.keys(parsedWorkingTheme.colors)) {
-			if (parsedWorkingTheme.colors[key] === '') {
-				delete parsedWorkingTheme.colors[key]
+		const workingColors = Object.keys(parsedTheme?.colors ?? {})
+
+		if (typeof workingColors !== 'undefined') {
+			for (const key of Object.keys(workingColors)) {
+				const currentColor = parsedTheme.colors?.[key]
+
+				if (currentColor === '' && typeof parsedTheme.colors !== 'undefined') {
+					// eslint-disable-next-line @typescript-eslint/no-dynamic-delete
+					delete parsedTheme.colors[key]
+				}
 			}
 		}
 
 		result[variant] = {
 			name: variants[variant]?.name,
 			type: variants[variant]?.type,
-			...parsedWorkingTheme,
+			...parsedTheme,
 		}
 
 		if (options.includeNonItalicVariants) {
-			const nonItalicVariant = removeWordFromString(workingTheme, 'italic')
+			const nonItalicVariant = removeWordFromString(theme, 'italic')
 
 			result[`${variant}-no-italics`] = {
-				name: `${variants[variant]?.name} (no italics)`,
+				name: `${variants[variant]?.name ?? ''} (no italics)`,
 				type: variants[variant]?.type,
-				...JSON.parse(nonItalicVariant),
+				...(JSON.parse(nonItalicVariant) as Theme),
 			}
 		}
 	}

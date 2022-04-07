@@ -1,7 +1,6 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import process from 'node:process'
-import { type Theme } from './parse-themes.js'
 
 /**
  * Read JSON
@@ -10,7 +9,7 @@ import { type Theme } from './parse-themes.js'
  * @param file starts from root
  * @returns parsed JSON
  */
-export function readJson(file: string): Theme {
+export function readJson<T>(file: string): T {
 	try {
 		let contents = fs.readFileSync(path.join(process.cwd(), file), 'utf8')
 
@@ -20,8 +19,8 @@ export function readJson(file: string): Theme {
 			(m, g) => (g ? '' : m),
 		)
 
-		return JSON.parse(contents) as Theme
+		return JSON.parse(contents) as T
 	} catch {
-		throw new Error(`Unable to read JSON theme file: ${file}`)
+		throw new Error(`Unable to read JSON file: ${file}`)
 	}
 }

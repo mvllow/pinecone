@@ -1,12 +1,13 @@
 import path from 'node:path'
 import slugify from 'slugify'
-import { type Config } from '../config.js'
-import type { Theme } from './parse-themes.js'
+import type { Config } from '../types/config.js'
+import type { Theme } from '../types/themes.js'
 import { writePrettyFile } from './write-pretty-file.js'
 
-type Themes = Record<string, Theme>
-
-export async function generateThemes(themes: Themes, { options }: Config) {
+export async function generateThemes(
+	themes: Record<string, Theme>,
+	{ options }: Config,
+) {
 	const variants: string[] = []
 
 	await Promise.all(

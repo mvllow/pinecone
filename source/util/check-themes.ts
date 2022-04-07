@@ -1,6 +1,7 @@
 import path from 'node:path'
 import slugify from 'slugify'
-import { type Config } from '../config.js'
+import type { Config } from '../types/config.js'
+import type { Theme } from '../types/themes.js'
 import { readJson } from './read-json.js'
 
 export function checkThemes({ options, variants }: Config) {
@@ -16,9 +17,11 @@ export function checkThemes({ options, variants }: Config) {
 		lower: true,
 		strict: true,
 	})
-	const theme = readJson(path.join(options.output, `${slug}-color-theme.json`))
+	const theme = readJson<Theme>(
+		path.join(options.output, `${slug}-color-theme.json`),
+	)
 
-	checkValues(theme)
+	checkThemeValues(theme)
 
 	if (!options.source.includes('color-theme')) {
 		console.warn(
@@ -26,13 +29,13 @@ export function checkThemes({ options, variants }: Config) {
 		)
 	}
 
-	function checkValues(source: Record<string, unknown>): void {
+	function checkThemeValues(source: Theme): void {
 		for (const key in source) {
 			if (key) {
 				const currentValue = source[key]
 
 				if (typeof currentValue === 'object') {
-					checkValues(currentValue as Record<string, unknown>)
+					checkThemeValues(currentValue as Record<string, unknown>)
 					return
 				}
 

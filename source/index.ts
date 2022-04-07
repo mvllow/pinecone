@@ -2,11 +2,13 @@ import chalk from 'chalk'
 import { init } from './init.js'
 import { tidy } from './tidy.js'
 import { watch } from './watch.js'
-import { resolveConfig, type UserOptions } from './config.js'
+import { resolveConfig } from './config.js'
 import { parseThemes } from './util/parse-themes.js'
 import { generateThemes } from './util/generate-themes.js'
 import { readJson } from './util/read-json.js'
 import { checkThemes } from './util/check-themes.js'
+import type { UserOptions } from './types/config.js'
+import type { Theme } from './types/themes.js'
 
 async function pinecone(command?: string, flags?: UserOptions) {
 	console.clear()
@@ -19,8 +21,13 @@ async function pinecone(command?: string, flags?: UserOptions) {
 
 	const config = await resolveConfig(flags)
 
-	const template = readJson(config.options.source)
+	const template = readJson<Theme>(config.options.source)
 	const parsedThemes = await parseThemes(template, config)
+
+	if (typeof parsedThemes === 'undefined') {
+		throw new TypeError('Unable to parse themes')
+	}
+
 	const generatedThemes = await generateThemes(parsedThemes, config)
 
 	console.log(`🌿 Variants`)
@@ -31,7 +38,6 @@ async function pinecone(command?: string, flags?: UserOptions) {
 	if (config.options.tidy) await tidy(config)
 
 	checkThemes(config)
-
 
 	if (config.options?.watch) {
 		console.log('👀 Waiting for changes...\n')

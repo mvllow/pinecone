@@ -2,60 +2,12 @@ import fs from 'node:fs'
 import path from 'node:path'
 import process from 'node:process'
 import { init } from './init.js'
-
-export interface Options {
-	/**
-	 * Path to pinecone theme file
-	 * Append "-color-theme" to your source file for VSCode intellisense
-	 * @default './themes/_pinecone-color-theme.json'
-	 */
-	source: string
-	/**
-	 * Directory for generated themes
-	 * @default './themes'
-	 */
-	output: string
-	/**
-	 * Variable prefix
-	 * @default '$'
-	 */
-	prefix: string
-	/**
-	 * Rebuild themes on change
-	 * @default false
-	 */
-	watch: boolean
-	/**
-	 * Remove non-pinecone themes
-	 * @default false
-	 */
-	tidy?: boolean
-	/**
-	 * Generate additional variants with no italics
-	 * @default false
-	 */
-	includeNonItalicVariants?: boolean
-	/**
-	 * Update `package.json` to include contributed themes
-	 * @default false
-	 */
-	updateContributes?: boolean
-}
-
-export interface Config {
-	/** @deprecated Moved to `options.source` */
-	source?: never
-	/** @deprecated Moved to `options.output` */
-	output?: never
-	/** @deprecated Moved to `options.prefix` */
-	prefix?: never
-	options: Options
-	variants: Record<string, { name: string; type: 'light' | 'dark' }>
-	colors: Record<string, string | Record<string, string>>
-}
-
-export type UserConfig = Partial<Config>
-export type UserOptions = Partial<Options>
+import type {
+	Config,
+	Options,
+	UserConfig,
+	UserOptions,
+} from './types/config.js'
 
 export const defaultConfig: Config = {
 	options: {
@@ -90,11 +42,14 @@ export const defaultConfig: Config = {
 	},
 }
 
-// TODO: Move into utilities or un-abstract logic
-export async function importFresh(modulePath: string) {
+export async function importFresh<T>(
+	modulePath: string,
+): Promise<T | Record<string, unknown>> {
 	const freshModulePath = `${modulePath}?update=${Date.now()}`
 	try {
-		return (await import(freshModulePath)).default
+		// eslint-disable-next-line node/no-unsupported-features/es-syntax
+		const freshModule = (await import(freshModulePath)) as { default: T }
+		return freshModule.default
 	} catch {
 		return {}
 	}
@@ -104,7 +59,7 @@ export async function resolveConfig(flags?: UserOptions) {
 	const configPath = path.join(process.cwd(), 'pinecone.config.js')
 
 	try {
-		const userConfig = importFresh(configPath) as UserConfig
+		const userConfig = importFresh<UserConfig>(configPath) as UserConfig
 		const options: Options = Object.assign(
 			defaultConfig.options,
 			userConfig.options,

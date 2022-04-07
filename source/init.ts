@@ -1,8 +1,9 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import chalk from 'chalk'
-import { defaultConfig, resolveConfig, type UserOptions } from './config.js'
+import { defaultConfig, resolveConfig } from './config.js'
 import { writePrettyFile } from './util/write-pretty-file.js'
+import type { UserOptions } from './types/config.js'
 
 export async function init(flags?: UserOptions) {
 	const { options } = await resolveConfig(flags)
