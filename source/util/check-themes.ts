@@ -1,22 +1,26 @@
 import path from 'node:path'
 import slugify from 'slugify'
-import type { Config } from '../config.js'
+import { type Config } from '../config.js'
 import { readJson } from './read-json.js'
 
-export function checkThemeValues(config: Config) {
-	console.log(config.variants)
+export function checkThemes({ options, variants }: Config) {
+	const firstVariant = Object.keys(variants)[0]
 
-	// @ts-expect-error TODO
-	// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-	const { name } = config.variants[Object.keys(config.variants)[0]]
-	const slug = slugify(name, { lower: true, strict: true })
-	const theme = readJson(
-		path.join(config.options.output, `${slug}-color-theme.json`),
-	)
+	if (typeof firstVariant === 'undefined') {
+		throw new TypeError('No themes found')
+	}
+
+	const selectedVariant = variants[firstVariant]
+
+	const slug = slugify(selectedVariant?.name ?? '', {
+		lower: true,
+		strict: true,
+	})
+	const theme = readJson(path.join(options.output, `${slug}-color-theme.json`))
 
 	checkValues(theme)
 
-	if (!config.options.source.includes('color-theme')) {
+	if (!options.source.includes('color-theme')) {
 		console.warn(
 			'Include `color-theme` in your source name to enable intellisense',
 		)
@@ -45,7 +49,7 @@ export function checkThemeValues(config: Config) {
 						return
 					}
 
-					if (currentValue.includes(config.options.prefix)) {
+					if (currentValue.includes(options.prefix)) {
 						console.warn(
 							`Color was not formatted\n{ "${key}": "${currentValue}" }`,
 						)

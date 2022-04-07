@@ -7,7 +7,7 @@ import { parseThemes } from './util/parse-themes.js'
 import { generateThemes } from './util/generate-themes.js'
 import { readJson } from './util/read-json.js'
 import { updateContributes } from './util/update-contributes.js'
-import { checkThemeValues } from './util/check-themes.js'
+import { checkThemes } from './util/check-themes.js'
 
 async function pinecone(command?: string, flags?: UserOptions) {
 	console.clear()
@@ -31,7 +31,7 @@ async function pinecone(command?: string, flags?: UserOptions) {
 
 	if (config.options.tidy) await tidy()
 
-	checkThemeValues(config)
+	checkThemes(config)
 
 	if (config.options?.updateContributes) {
 		await updateContributes(config.options)
