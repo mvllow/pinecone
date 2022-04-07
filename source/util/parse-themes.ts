@@ -1,4 +1,4 @@
-import { resolveConfig, UserOptions } from '../config.js'
+import { type Config } from '../config.js'
 import { replaceJsonValues } from './replace-json-values.js'
 import { removeWordFromString } from './remove-word-from-string.js'
 
@@ -17,10 +17,9 @@ export interface Theme {
 
 export async function parseThemes(
 	{ name, type, ...baseTheme }: Theme,
-	flags?: UserOptions,
+	{ options, variants, colors }: Config,
 ) {
 	const stringifiedTheme = JSON.stringify(baseTheme)
-	const { options, variants, colors } = await resolveConfig(flags)
 	const result: Record<string, Theme> = {}
 
 	for (const variant of Object.keys(variants)) {

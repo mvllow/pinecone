@@ -20,8 +20,8 @@ async function pinecone(command?: string, flags?: UserOptions) {
 	const config = await resolveConfig(flags)
 
 	const template = readJson(config.options.source)
-	const parsedThemes = await parseThemes(template, config.options)
-	const generatedThemes = await generateThemes(parsedThemes, config.options)
+	const parsedThemes = await parseThemes(template, config)
+	const generatedThemes = await generateThemes(parsedThemes, config)
 
 	console.log(`🌿 Variants`)
 	for (const theme of generatedThemes) {
