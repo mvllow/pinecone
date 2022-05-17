@@ -22,7 +22,7 @@ export async function writePrettyFile(
 				parser,
 			})
 
-			fs.writeFileSync(`./${filePath}`, formattedContents, 'utf-8')
+			fs.writeFileSync(filePath, formattedContents, 'utf-8')
 		})
 	} catch (error: unknown) {
 		console.error(error)
