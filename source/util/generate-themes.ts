@@ -25,9 +25,14 @@ export async function generateThemes(
 					JSON.stringify(currentVariant, null, 2),
 				)
 
-				if (typeof currentVariant.name !== 'undefined') {
+				if (
+					typeof currentVariant.name !== 'undefined' &&
+					!currentVariant.name?.includes('(no italics)')
+				) {
 					if (options.includeNonItalicVariants) {
-						variants.push(`${currentVariant?.name ?? ''} (no italics)`)
+						variants.push(
+							`${currentVariant.name} / ${currentVariant.name} (no italics)`,
+						)
 					} else {
 						variants.push(currentVariant.name)
 					}

@@ -29,9 +29,14 @@ async function pinecone(command?: string, flags?: UserOptions) {
 	}
 
 	const generatedThemes = await generateThemes(parsedThemes, config)
+	const sortedThemes = generatedThemes.sort((a, b) => {
+		if (a < b) return -1
+		if (a > b) return 1
+		return 0
+	})
 
 	console.log(`🌿 Variants`)
-	for (const theme of generatedThemes) {
+	for (const theme of sortedThemes) {
 		console.log(`   ${chalk.grey('-')} ${chalk.magenta(theme)}`)
 	}
 
