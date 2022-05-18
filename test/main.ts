@@ -1,9 +1,11 @@
+import fs from 'node:fs'
 import process from 'node:process'
 import test from 'ava'
 import chalk from 'chalk'
 import { stub } from 'sinon'
 import pinecone from '../source/index.js'
 import { readJson } from '../source/util/read-json.js'
+import { writePrettyFile } from '../source/util/write-pretty-file.js'
 import type { Theme, PackageTheme } from '../source/types/themes.js'
 
 test.before(async () => {
@@ -15,6 +17,25 @@ test.before(async () => {
 	stub(process, 'exit')
 
 	await pinecone('init')
+})
+
+test.after(async () => {
+	try {
+		fs.rmSync(process.cwd() + '/themes', { recursive: true })
+	} catch {}
+
+	try {
+		fs.unlinkSync(process.cwd() + '/pinecone.config.js')
+	} catch {}
+
+	const packageJson = readJson<Record<string, unknown>>('package.json')
+	const cleanedPackageJson = { ...packageJson, contributes: undefined }
+
+	await writePrettyFile(
+		'package.json',
+		JSON.stringify(cleanedPackageJson, null, 2),
+		'json-stringify',
+	)
 })
 
 test.serial('generates default files', async (t) => {
@@ -72,8 +93,6 @@ test('generates non-italic variants', async (t) => {
 	t.is(theme.name, 'Caffè Latte (no italics)')
 })
 
-// TODO
-// - Mock package.json to avoid writing to our local version
 test('updates contributes', async (t) => {
 	await pinecone('', { tidy: true })
 
