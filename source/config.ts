@@ -59,14 +59,14 @@ export async function resolveConfig(flags?: UserOptions) {
 	const configPath = path.join(process.cwd(), 'pinecone.config.js')
 
 	try {
-		const userConfig = importFresh<UserConfig>(configPath) as UserConfig
+		const userConfig = (await importFresh<UserConfig>(configPath)) as UserConfig
 		const options: Options = Object.assign(
 			defaultConfig.options,
 			userConfig.options,
 			flags,
 		)
 
-		return { ...defaultConfig, ...userConfig, options }
+		return { ...defaultConfig, ...userConfig, options: { ...options } }
 	} catch (error: unknown) {
 		if (fs.existsSync(`${process.cwd()}/pinecone.config.js`)) {
 			console.error('Something went wrong in pinecone.config.js', error)
