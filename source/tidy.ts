@@ -54,7 +54,9 @@ export async function tidy({ options, variants }: Config) {
 			const filePath = path.join(options.output, file)
 
 			if (!safeFiles.includes(file) && file.includes('-color-theme.json')) {
-				fs.unlinkSync(filePath)
+				try {
+					fs.unlinkSync(filePath)
+				} catch {}
 			}
 		}
 	})
