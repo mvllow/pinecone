@@ -17,7 +17,6 @@ export const defaultConfig: Config = {
 		watch: false,
 		tidy: false,
 		includeNonItalicVariants: false,
-		updateContributes: false,
 	},
 	variants: {
 		caffe: {

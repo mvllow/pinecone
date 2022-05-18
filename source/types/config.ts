@@ -35,12 +35,6 @@ export interface Options {
 	 * @default false
 	 */
 	includeNonItalicVariants?: boolean
-	/**
-	 * Update `package.json` to include contributed themes
-	 *
-	 * @default false
-	 */
-	updateContributes?: boolean
 }
 
 export interface Config {
