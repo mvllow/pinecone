@@ -10,11 +10,13 @@ export async function tidy({ options, variants }: Config) {
 	const packageJson = readJson<{
 		[key: string]: unknown
 		contributes: {
+			[key: string]: any
 			themes: PackageTheme[]
 		}
 	}>('package.json')
 	const safeFiles: string[] = [path.basename(options.source)]
 	const themes: PackageTheme[] = []
+	const themesDir = './' + path.normalize(options.output)
 
 	for (const variant of Object.keys(variants)) {
 		const currentVariant = variants[variant]
@@ -27,7 +29,7 @@ export async function tidy({ options, variants }: Config) {
 			themes.push({
 				label: name,
 				uiTheme: type === 'light' ? 'vs' : 'vs-dark',
-				path: path.join(options.output, `./${slug}-color-theme.json`),
+				path: `${themesDir}/${slug}-color-theme.json`,
 			})
 
 			if (options.includeNonItalicVariants) {
@@ -35,10 +37,7 @@ export async function tidy({ options, variants }: Config) {
 				themes.push({
 					label: `${name} (no italics)`,
 					uiTheme: type === 'light' ? 'vs' : 'vs-dark',
-					path: path.join(
-						options.output,
-						`./${slug}-no-italics-color-theme.json`,
-					),
+					path: `${themesDir}/${slug}-color-theme.json`,
 				})
 			}
 		}
@@ -62,7 +61,8 @@ export async function tidy({ options, variants }: Config) {
 	})
 
 	// Add pinecone themes to package.json contributes section
-	packageJson.contributes = { themes }
+	if (!packageJson.contributes) packageJson.contributes = { themes: [] }
+	packageJson.contributes.themes = themes
 
 	await writePrettyFile(
 		'package.json',
