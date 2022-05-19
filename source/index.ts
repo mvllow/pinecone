@@ -1,52 +1,55 @@
-import type { Options } from './config.js'
-
 import chalk from 'chalk'
-import { colorish as alpha } from 'colorish'
-import { watch } from './commands/watch.js'
-import { cleanThemes } from './util/clean-themes.js'
+import { init } from './init.js'
+import { tidy } from './tidy.js'
+import { watch } from './watch.js'
+import { resolveConfig } from './config.js'
 import { parseThemes } from './util/parse-themes.js'
 import { generateThemes } from './util/generate-themes.js'
 import { readJson } from './util/read-json.js'
-import { updateContributes } from './util/update-contributes.js'
 import { checkThemes } from './util/check-themes.js'
-import { getConfig, defineConfig } from './config.js'
+import type { UserOptions } from './types/config.js'
+import type { Theme } from './types/themes.js'
 
-async function pinecone(command?: string, flags?: Partial<Options>) {
+async function pinecone(command?: string, flags?: UserOptions) {
 	console.clear()
 	console.log(chalk.green('🌲 Pinecone\n'))
 
-	let config = await getConfig()
+	if (command === 'init') {
+		await init()
+		return
+	}
 
-	let resolvedOptions = { ...config.options, ...flags }
+	const config = await resolveConfig(flags)
 
-	let template = await readJson(config.source)
-	let parsedThemes = await parseThemes(template, resolvedOptions)
-	let generatedThemes = await generateThemes(parsedThemes, resolvedOptions)
+	const template = readJson<Theme>(config.options.source)
+	const parsedThemes = await parseThemes(template, config)
+
+	if (typeof parsedThemes === 'undefined') {
+		throw new TypeError('Unable to parse themes')
+	}
+
+	const generatedThemes = await generateThemes(parsedThemes, config)
+	const sortedThemes = generatedThemes.sort((a, b) => {
+		if (a < b) return -1
+		if (a > b) return 1
+		return 0
+	})
 
 	console.log(`🌿 Variants`)
-	generatedThemes.forEach((theme) => {
+	for (const theme of sortedThemes) {
 		console.log(`   ${chalk.grey('-')} ${chalk.magenta(theme)}`)
-	})
-	console.log()
-
-	// TODO: Remove check for `clean` in v3
-	// This was released in v2.2.0 but replaced with an option instead of command in v2.3.0 (now undocumented)
-	if (resolvedOptions?.cleanUnusedThemes || command === 'clean') {
-		cleanThemes()
 	}
+
+	if (config.options.tidy) await tidy(config)
 
 	checkThemes(config)
 
-	if (resolvedOptions?.updateContributes) {
-		await updateContributes(resolvedOptions)
-		console.log(`📦 Added variants to package.json\n`)
-	}
-
-	if (command === 'watch') {
+	if (config.options?.watch) {
 		console.log('👀 Waiting for changes...\n')
 		await watch()
 	}
 }
 
-export { alpha, defineConfig }
+export { colorish } from 'colorish'
+export { defineConfig } from './config.js'
 export default pinecone

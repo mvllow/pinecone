@@ -17,43 +17,50 @@ npm install --global pinecone-cli
 ```
 $ pinecone --help
 
-  Usage
-    $ pinecone <command> [options]
+	Usage
+		$ pinecone <command> [options]
 
-  Commands
-    watch  Rebuild themes on change
-           Watches pinecone.config.js and themes/*
+	Commands
+		init  Create new theme
 
-  Options
-    --clean-unused-themes          Delete non-active pinecone themes
-    --include-non-italic-variants  Generate additional non-italic variants
-    --update-contributes           Add contributed themes to `package.json`
+	Options
+		-s, --source  Path to pinecone theme file
+		-o, --output  Directory for generated themes
+		-p, --prefix  Variable prefix
+		-w, --watch   Rebuild themes on change
+		-t, --tidy    Remove non-pinecone themes from output and package.json
 
-  Examples
-    $ pinecone
-    $ pinecone watch --clean-unused-themes --include-non-italic-variants --update-contributes
+		--include-non-italic-variants  Generate additional non-italic variants
+
+	Examples
+		$ pinecone
+		$ pinecone init
+		$ pinecone --watch --tidy --include-non-italic-variants
 ```
 
 ## Theme
 
-By default, pinecone looks for `./themes/_pinecone-color-theme.json`. This will look like any other VSCode theme file with the addition of variable values.
+> Note: VSCode will consider empty values as `#ff0000` whereas pinecone strips empty rules for cleaner intellisense and organisation
+
+Pinecone looks for `./themes/_pinecone-color-theme.json`. This will look like any other VSCode theme file with the addition of variable values.
 
 ```json
 {
-  "colors": {
-    "editor.background": "$bg",
-    "editor.foreground": "$fg",
-    "widget.shadow": "$transparent"
-  },
-  "tokenColors": [
-    {
-      "scope": ["comment"],
-      "settings": {
-        "foreground": "$fg",
-        "fontStyle": "italic"
-      }
-    }
-  ]
+	"colors": {
+		"editor.background": "$bg",
+		"editor.foreground": "$fg",
+		"editor.hoverHighlightBackground": "$transparent",
+		"widget.shadow": "$shadow"
+	},
+	"tokenColors": [
+		{
+			"scope": ["comment"],
+			"settings": {
+				"foreground": "$fg",
+				"fontStyle": "italic"
+			}
+		}
+	]
 }
 ```
 
@@ -62,61 +69,50 @@ By default, pinecone looks for `./themes/_pinecone-color-theme.json`. This will 
 Your theme config and variables will live in `./pinecone.config.js`.
 
 ```js
-import { alpha, defineConfig } from 'pinecone-cli'
+import { colorish, defineConfig } from 'pinecone-cli'
 
 // Pinecone defaults
 export default defineConfig({
-  source: './themes/_pinecone-color-theme.json',
-  output: './themes',
-  prefix: '$',
-  options: {
-    cleanUnusedThemes: false,
-    includeNonItalicVariants: false,
-    updateContributes: false,
-  },
-  theme: {
-    variants: {
-      latte: {
-        name: 'Latte',
-        type: 'light',
-      },
-      cappuccino: {
-        name: 'Cappuccino',
-        type: 'light',
-      },
-      espresso: {
-        name: 'Espresso',
-        type: 'dark',
-      },
-    },
-    colors: {
-      transparent: '#0000', // Shorthand to set for all three variants
-      bg: {
-        latte: '#faf8f6',
-        cappuccino: '#c29d84',
-        espresso: '#36261b',
-      },
-      fg: {
-        latte: '#c29d84',
-        cappuccino: '#573d2b',
-        espresso: '#d5bbaa',
-      },
-    },
-  },
+	options: {
+		source: './themes/_pinecone-color-theme.json',
+		output: './themes',
+		prefix: '$',
+		includeNonItalicVariants: false,
+	},
+	variants: {
+		latte: {
+			name: 'Latte',
+			type: 'light',
+		},
+		cappuccino: {
+			name: 'Cappuccino',
+			type: 'light',
+		},
+		espresso: {
+			name: 'Espresso',
+			type: 'dark',
+		},
+	},
+	colors: {
+		transparent: '#0000', // Shorthand to set all variants
+		bg: {
+			latte: '#faf8f6',
+			cappuccino: '#c29d84',
+			espresso: '#36261b',
+		},
+		fg: {
+			latte: '#c29d84',
+			cappuccino: '#573d2b',
+			espresso: '#d5bbaa',
+		},
+		shadow: {
+			latte: colorish('#c29d84', 0.1),
+			cappuccino: colorish('#573d2b', 0.1),
+			espresso: colorish('#d5bbaa', 0.1),
+		},
+	},
 })
 ```
-
-## Experimental
-
-```js
-{
-  experimental: {
-    removeEmptyThemeValues: true
-  }
-}
-```
-
-By default, VSCode will consider empty values as `#ff0000`. Enabling `removeEmptyThemeValues` allows users to add empty rules for cleaner intellisense or organisation.
 
 ## Made with pinecone
 

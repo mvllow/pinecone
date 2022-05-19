@@ -1,41 +1,44 @@
-import type { Theme } from './parse-themes.js'
-import type { Options } from '../config.js'
-
-import path from 'path'
+import path from 'node:path'
 import slugify from 'slugify'
+import type { Config } from '../types/config.js'
+import type { Theme } from '../types/themes.js'
 import { writePrettyFile } from './write-pretty-file.js'
-import { getConfig } from '../config.js'
 
-interface Themes {
-	[key: string]: Theme
-}
-
-export async function generateThemes(themes: Themes, options: Options) {
-	let { output } = await getConfig()
-	let variants: any[] = []
+export async function generateThemes(
+	themes: Record<string, Theme>,
+	{ options }: Config,
+) {
+	const variants: string[] = []
 
 	await Promise.all(
 		Object.keys(themes).map(async (variant) => {
-			let slug = slugify(themes[variant].name || '', {
-				lower: true,
-				strict: true,
-			})
+			const currentVariant = themes[variant]
 
-			await writePrettyFile(
-				path.join(output, `${slug}-color-theme.json`),
-				JSON.stringify(themes[variant], null, 2)
-			)
+			if (typeof currentVariant !== 'undefined') {
+				const slug = slugify(currentVariant.name ?? '', {
+					lower: true,
+					strict: true,
+				})
 
-			if (!themes[variant].name?.includes('(no italics)')) {
-				if (options.includeNonItalicVariants) {
-					variants.push(
-						`${themes[variant].name} / ${themes[variant].name} (no italics)`
-					)
-				} else {
-					variants.push(themes[variant].name)
+				await writePrettyFile(
+					path.join(options.output, `${slug}-color-theme.json`),
+					JSON.stringify(currentVariant, null, 2),
+				)
+
+				if (
+					typeof currentVariant.name !== 'undefined' &&
+					!currentVariant.name?.includes('(no italics)')
+				) {
+					if (options.includeNonItalicVariants) {
+						variants.push(
+							`${currentVariant.name} / ${currentVariant.name} (no italics)`,
+						)
+					} else {
+						variants.push(currentVariant.name)
+					}
 				}
 			}
-		})
+		}),
 	)
 
 	return variants

@@ -1,6 +1,6 @@
-import fs from 'fs'
-import path from 'path'
-import { log } from './pretty-log.js'
+import fs from 'node:fs'
+import path from 'node:path'
+import process from 'node:process'
 
 /**
  * Read JSON
@@ -9,18 +9,18 @@ import { log } from './pretty-log.js'
  * @param file starts from root
  * @returns parsed JSON
  */
-export function readJson(file: string) {
+export function readJson<T>(file: string): T {
 	try {
 		let contents = fs.readFileSync(path.join(process.cwd(), file), 'utf8')
 
 		// Remove comment lines
 		contents = contents.replace(
 			/\\"|"(?:\\"|[^"])*"|(\/\/.*|\/\*[\s\S]*?\*\/)/g,
-			(m, g) => (g ? '' : m)
+			(m, g) => (g ? '' : m),
 		)
 
-		return JSON.parse(contents)
-	} catch (error) {
-		log.error(error)
+		return JSON.parse(contents) as T
+	} catch {
+		throw new Error(`Unable to read JSON file: ${file}`)
 	}
 }

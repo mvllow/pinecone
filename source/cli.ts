@@ -4,37 +4,55 @@ import pinecone from './index.js'
 
 const cli = meow(
 	`
-    Usage
-        $ pinecone <command> [options]
+	Usage
+		$ pinecone <command> [options]
 
-    Commands
-        watch  Rebuild themes on change
-               Watches pinecone.config.js and themes/*
+	Commands
+		init  Create new theme
 
-    Options
-		--clean-unused-themes          Delete non-active pinecone themes
-        --include-non-italic-variants  Generate additional non-italic variants
-        --update-contributes           Add contributed themes to \`package.json\`
+	Options
+		-s, --source  Path to pinecone theme file
+		-o, --output  Directory for generated themes
+		-p, --prefix  Variable prefix
+		-w, --watch   Rebuild themes on change
+		-t, --tidy    Remove non-pinecone themes from output and package.json
 
-    Examples
-        $ pinecone
-        $ pinecone watch --clean-unused-themes --include-non-italic-variants --update-contributes
-    `,
+		--include-non-italic-variants  Generate additional non-italic variants
+
+	Examples
+		$ pinecone
+		$ pinecone init
+		$ pinecone --watch --tidy --include-non-italic-variants
+	`,
 	{
 		booleanDefault: undefined,
 		importMeta: import.meta,
 		flags: {
-			cleanUnusedThemes: {
+			source: {
+				alias: 's',
+				type: 'string',
+			},
+			output: {
+				alias: 'o',
+				type: 'string',
+			},
+			prefix: {
+				alias: 'p',
+				type: 'string',
+			},
+			watch: {
+				alias: 'w',
+				type: 'boolean',
+			},
+			tidy: {
+				alias: 't',
 				type: 'boolean',
 			},
 			includeNonItalicVariants: {
 				type: 'boolean',
 			},
-			updateContributes: {
-				type: 'boolean',
-			},
 		},
-	}
+	},
 )
 
-pinecone(cli.input[0], cli.flags)
+await pinecone(cli.input[0], cli.flags)

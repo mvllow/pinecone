@@ -1,20 +1,18 @@
 import escapeStringRegexp from 'escape-string-regexp'
-import { log } from './pretty-log.js'
 
 export function replaceJsonValues(
 	body: string,
 	searchFor: string,
-	replaceWith: string
+	replaceWith: string,
 ) {
-	let escapedSearchFor = escapeStringRegexp(`"${searchFor}"`)
-	let formattedSearch = new RegExp(escapedSearchFor, 'g')
-	let formattedReplace = '"' + replaceWith + '"'
-	let result = ''
+	const escapedSearchFor = escapeStringRegexp(`"${searchFor}"`)
+	const formattedSearch = new RegExp(escapedSearchFor, 'g')
+	const formattedReplace = '"' + replaceWith + '"'
 
 	try {
-		result = body.replace(formattedSearch, formattedReplace)
-	} catch (error) {
-		log.error(error)
+		return body.replace(formattedSearch, formattedReplace)
+	} catch (error: unknown) {
+		console.error(error)
+		return ''
 	}
-	return result
 }

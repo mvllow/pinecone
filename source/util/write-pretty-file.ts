@@ -1,6 +1,6 @@
-import fs from 'fs'
+import fs from 'node:fs'
+import process from 'node:process'
 import prettier from 'prettier'
-import { log } from './pretty-log.js'
 
 /**
  * Write prettier file
@@ -13,18 +13,18 @@ import { log } from './pretty-log.js'
 export async function writePrettyFile(
 	filePath: string,
 	fileContents: string,
-	parser: string = 'json'
+	parser = 'json',
 ) {
 	try {
 		await prettier.resolveConfig(process.cwd()).then((options) => {
-			let formattedContents = prettier.format(fileContents, {
+			const formattedContents = prettier.format(fileContents, {
 				...options,
 				parser,
 			})
 
-			fs.writeFileSync(`./${filePath}`, formattedContents, 'utf-8')
+			fs.writeFileSync(filePath, formattedContents, 'utf-8')
 		})
-	} catch (error) {
-		log.error(error)
+	} catch (error: unknown) {
+		console.error(error)
 	}
 }

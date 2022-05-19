@@ -1,43 +1,72 @@
-import type { Config } from '../config.js'
-
-import path from 'path'
+import path from 'node:path'
 import slugify from 'slugify'
-import { log } from './pretty-log.js'
+import type { Config } from '../types/config.js'
+import type { Theme } from '../types/themes.js'
 import { readJson } from './read-json.js'
 
-function checkForValue(json: any, value: any): any {
-	for (const key in json) {
-		if (typeof json[key] === 'object') {
-			return checkForValue(json[key], value)
-		}
-		if (json[key].includes('[object Object]')) {
-			log.suggest(`Color has invalid value\n{ "${key}": "${json[key]}" }`)
-		}
-		if (json[key].includes(value)) {
-			log.suggest(`Color was not formatted\n{ "${key}": "${json[key]}" }`)
-		}
-		if (json[key].includes('#ff0000')) {
-			log.suggest(
-				`Color has default value\nThis usually occurs when a color is not formatted\n{ "${key}": "${json[key]}" }`
-			)
-		}
-	}
-}
+export function checkThemes({ options, variants }: Config) {
+	const firstVariant = Object.keys(variants)[0]
 
-export function checkThemes(config: Config) {
-	let { source, output, prefix, theme } = config
-	let name = theme.variants[Object.keys(theme.variants)[0]].name
-	const slug = slugify(name, {
+	if (typeof firstVariant === 'undefined') {
+		throw new TypeError('No themes found')
+	}
+
+	const selectedVariant = variants[firstVariant]
+
+	const slug = slugify(selectedVariant?.name ?? '', {
 		lower: true,
 		strict: true,
 	})
-	const baseTheme = readJson(path.join(output, `${slug}-color-theme.json`))
+	const theme = readJson<Theme>(
+		path.join(options.output, `${slug}-color-theme.json`),
+	)
 
-	checkForValue(baseTheme, prefix)
+	checkThemeValues(theme)
 
-	if (!source.includes('color-theme')) {
-		log.suggest(
-			'Include `color-theme` in your source name to enable intellisense'
+	if (!options.source.includes('color-theme')) {
+		console.warn(
+			'Include `color-theme` in your source name to enable intellisense',
 		)
+	}
+
+	function checkThemeValues(source: Theme): void {
+		for (const key in source) {
+			if (key) {
+				const currentValue = source[key]
+
+				if (typeof currentValue === 'object') {
+					checkThemeValues(currentValue as Record<string, unknown>)
+					return
+				}
+
+				if (typeof currentValue === 'undefined') {
+					console.warn(`Color is undefined`)
+					return
+				}
+
+				if (typeof currentValue === 'string') {
+					if (currentValue.includes('[object Object]')) {
+						console.warn(
+							`Color has invalid value\n{ "${key}": "${currentValue}" }`,
+						)
+						return
+					}
+
+					if (currentValue.includes(options.prefix)) {
+						console.warn(
+							`Color was not formatted\n{ "${key}": "${currentValue}" }`,
+						)
+						return
+					}
+
+					if (currentValue.includes('#ff0000')) {
+						console.warn(
+							`Color has default value\nThis usually occurs when a color is not formatted\n{ "${key}": "${currentValue}" }`,
+						)
+						return
+					}
+				}
+			}
+		}
 	}
 }

@@ -1,14 +1,18 @@
-import fs from 'fs'
-import path from 'path'
+import fs from 'node:fs'
+import path from 'node:path'
+import process from 'node:process'
 import chalk from 'chalk'
-import { defaultConfig } from './config.js'
-import { log } from './util/pretty-log.js'
+import { defaultConfig, resolveConfig } from './config.js'
 import { writePrettyFile } from './util/write-pretty-file.js'
+import type { UserOptions } from './types/config.js'
 
-export async function init() {
-	let { source } = defaultConfig
-	let themePath = path.normalize(source)
-	let configPath = path.normalize(`./pinecone.config.js`)
+export async function init(flags?: UserOptions) {
+	const { options } = await resolveConfig(flags)
+	const themePath = path.join(process.cwd(), path.normalize(options.source))
+	const configPath = path.join(
+		process.cwd(),
+		path.normalize(`./pinecone.config.js`),
+	)
 
 	console.log('🌱 Init')
 
@@ -16,18 +20,18 @@ export async function init() {
 		configPath,
 		`import { defineConfig } from 'pinecone-cli'\n
 		export default defineConfig(${JSON.stringify(defaultConfig, null, 2)})`,
-		'babel'
+		'babel',
 	).then(() => {
 		console.log(
-			`   ${chalk.grey('-')} Config: ${chalk.magenta('pinecone.config.js')}`
+			`   ${chalk.grey('-')} Config: ${chalk.magenta('pinecone.config.js')}`,
 		)
 	})
 
 	if (fs.existsSync(themePath)) {
-		log.error(`\`${themePath}\` already exists`)
+		console.error(`\`${themePath}\` already exists`)
 	}
 
-	fs.mkdirSync(path.dirname(source), { recursive: true })
+	fs.mkdirSync(path.dirname(options.source), { recursive: true })
 
 	await writePrettyFile(
 		'themes/_pinecone-color-theme.json',
@@ -35,7 +39,7 @@ export async function init() {
             "colors": {
                 "editor.background": "$bg",
                 "editor.foreground": "$fg",
-                "widget.shadow": "$transparent"
+                "widget.shadow": "$none"
             },
             "tokenColors": [
                 {
@@ -46,12 +50,12 @@ export async function init() {
                     }
                 }
             ]
-        }`
+        }`,
 	).then(() => {
 		console.log(
 			`   ${chalk.grey('-')} Theme: ${chalk.magenta(
-				'themes/_pinecone-color-theme-json'
-			)}\n`
+				'themes/_pinecone-color-theme-json',
+			)}\n`,
 		)
 	})
 }
