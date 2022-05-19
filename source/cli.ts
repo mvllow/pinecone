@@ -15,7 +15,7 @@ const cli = meow(
 		-o, --output  Directory for generated themes
 		-p, --prefix  Variable prefix
 		-w, --watch   Rebuild themes on change
-		-t, --tidy    Remove non-pinecone themes from output and \`package.json\`
+		-t, --tidy    Remove non-pinecone themes from output and package.json
 
 		--include-non-italic-variants  Generate additional non-italic variants
 
