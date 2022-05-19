@@ -40,9 +40,9 @@ $ pinecone --help
 
 ## Theme
 
-> Note: VSCode will consider empty values as `#ff0000` whereas pinecone strips empty rules for cleaner intellisense and organisation
+Pinecone themes look similar to any other theme with the addition of variables and difference in how empty values are handled. VSCode treats empty values as `#ff0000` whereas pinecone removes empty values for cleaner intellisense and organisation.
 
-Pinecone looks for `./themes/_pinecone-color-theme.json`. This will look like any other VSCode theme file with the addition of variable values.
+**Example `./themes/_pinecone-color-theme.json`**
 
 ```json
 {
@@ -66,12 +66,11 @@ Pinecone looks for `./themes/_pinecone-color-theme.json`. This will look like an
 
 ## Config
 
-Your theme config and variables will live in `./pinecone.config.js`.
+**Example `./pinecone.config.js`**
 
 ```js
 import { colorish, defineConfig } from 'pinecone-cli'
 
-// Pinecone defaults
 export default defineConfig({
 	options: {
 		source: './themes/_pinecone-color-theme.json',
