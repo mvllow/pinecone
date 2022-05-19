@@ -30,15 +30,15 @@ export async function parseThemes(
 		}
 
 		const parsedTheme = JSON.parse(theme) as Theme
+		const workingColors = Object.keys(parsedTheme.colors ?? {})
 
 		// Remove empty JSON values
-		const workingColors = Object.keys(parsedTheme?.colors ?? {})
-
 		if (typeof workingColors !== 'undefined') {
-			for (const key of Object.keys(workingColors)) {
-				const currentColor = parsedTheme.colors?.[key]
-
-				if (currentColor === '' && typeof parsedTheme.colors !== 'undefined') {
+			for (const key of workingColors) {
+				if (
+					typeof parsedTheme.colors !== 'undefined' &&
+					parsedTheme.colors[key] === ''
+				) {
 					// eslint-disable-next-line @typescript-eslint/no-dynamic-delete
 					delete parsedTheme.colors[key]
 				}
@@ -52,7 +52,10 @@ export async function parseThemes(
 		}
 
 		if (options.includeNonItalicVariants) {
-			const nonItalicVariant = removeWordFromString(theme, 'italic')
+			const nonItalicVariant = removeWordFromString(
+				JSON.stringify(parsedTheme),
+				'italic',
+			)
 
 			result[`${variant}-no-italics`] = {
 				name: `${variants[variant]?.name ?? ''} (no italics)`,

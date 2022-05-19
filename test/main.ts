@@ -75,6 +75,7 @@ test('generates themes', async (t) => {
 	t.is(theme.colors?.['editor.background'], '#faf8f6')
 })
 
+// TODO: Test this against italic variants
 test('removes empty values', async (t) => {
 	await pinecone()
 
