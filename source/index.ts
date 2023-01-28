@@ -1,7 +1,6 @@
 import chalk from 'chalk';
 import {build, init, lint, tidy, watch} from './commands/index.js';
-import {resolveConfig} from './config.js';
-import type {UserOptions} from './types/config.js';
+import {resolveConfig, type UserOptions} from './config.js';
 
 async function pinecone(command?: string, flags?: UserOptions) {
 	console.clear();
@@ -20,7 +19,7 @@ async function pinecone(command?: string, flags?: UserOptions) {
 
 	lint(config);
 
-	if (config.options?.watch) {
+	if (config.options.watch) {
 		console.log('👀 Waiting for changes...\n');
 		await watch();
 	}

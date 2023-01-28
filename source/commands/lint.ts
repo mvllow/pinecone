@@ -1,8 +1,7 @@
 import path from 'node:path';
 import slugify from '@sindresorhus/slugify';
-import type {Config} from '../types/config.js';
-import type {Theme} from '../types/themes.js';
-import {readToJson} from '../utilities.js';
+import type {Config} from '../config.js';
+import {readToJson, type Theme} from '../utilities.js';
 
 export const lint = ({options, variants}: Config) => {
 	const firstVariant = Object.keys(variants)[0];

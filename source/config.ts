@@ -1,6 +1,60 @@
 import fs from 'node:fs';
-import type {Config, Options, UserConfig, UserOptions} from './types/config.js';
 import {log, toRelativePath} from './utilities.js';
+
+export type Options = {
+	/**
+	 * Path to pinecone theme file.
+	 * Append "-color-theme" to your source file for intellisense.
+	 * @default './themes/_pinecone-color-theme.json'
+	 */
+	source: string;
+
+	/**
+	 * Path to pinecone theme file.
+	 * Append "-color-theme" to your source file for intellisense.
+	 * @default './themes/_pinecone-color-theme.json'
+	 */
+	output: string;
+
+	/**
+	 * Variable prefix.
+	 * @default '$'
+	 */
+	prefix: string;
+
+	/**
+	 * Rebuild themes on change.
+	 * @default false
+	 */
+	watch: boolean;
+
+	/**
+	 * Purge non-pinecone themes and sync package.json contributes
+	 * section.
+	 * @default false
+	 */
+	tidy?: boolean;
+
+	/**
+	 * Generate additional variants with no italics.
+	 * @default false
+	 */
+	includeNonItalicVariants: boolean;
+};
+
+export type Variant = {
+	name: string;
+	type: 'dark' | 'light';
+};
+
+export type Config = {
+	options: Options;
+	variants: Record<string, Variant>;
+	colors: Record<string, string | Record<string, string>>;
+};
+
+export type UserOptions = Partial<Options>;
+export type UserConfig = Partial<Config>;
 
 export const defaultConfig: Config = {
 	options: {

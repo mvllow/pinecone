@@ -6,8 +6,9 @@ import {
 	readToString,
 	toRelativePath,
 	writeToFile,
+	type PackageTheme,
+	type Theme,
 } from '../source/utilities.js';
-import type {PackageTheme, Theme} from '../source/types/themes.js';
 
 test.before(async () => {
 	await pinecone('init');

@@ -2,7 +2,7 @@ import path from 'node:path';
 import escapeStringRegexp from 'escape-string-regexp';
 import slugify from '@sindresorhus/slugify';
 import {log, readToJson, writeToFile, type Theme} from '../utilities.js';
-import type {Config} from '../types/config.js';
+import type {Config} from '../config.js';
 
 const parseVariant = (
 	currentVariant: string,

@@ -1,9 +1,8 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import slugify from '@sindresorhus/slugify';
-import {readToJson, writeToFile} from '../utilities.js';
-import type {Config} from '../types/config.js';
-import type {PackageTheme} from '../types/themes.js';
+import {readToJson, writeToFile, type PackageTheme} from '../utilities.js';
+import type {Config} from '../config.js';
 
 export async function tidy({options, variants}: Config) {
 	const packageJson = readToJson<{

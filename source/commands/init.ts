@@ -1,6 +1,5 @@
 import {log, writeToFile, toRelativePath, makeDirectory} from '../utilities.js';
-import {defaultConfig} from '../config.js';
-import type {Config} from '../types/config.js';
+import {defaultConfig, type Config} from '../config.js';
 
 export const init = async (config: Config) => {
 	const themePath = toRelativePath(config.options.source);
