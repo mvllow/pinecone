@@ -1,32 +1,27 @@
 import fs from 'node:fs';
 import process from 'node:process';
 import test from 'ava';
-import chalk from 'chalk';
-import {stub} from 'sinon';
 import pinecone from '../source/index.js';
 import {readJson} from '../source/util/read-json.js';
+import type {PackageTheme, Theme} from '../source/types/themes.js';
 import {writePrettyFile} from '../source/util/write-pretty-file.js';
-import type {Theme, PackageTheme} from '../source/types/themes.js';
 
 test.before(async () => {
-	// Enable chalk colors in AVA
-	// https://github.com/avajs/ava/issues/1124
-	chalk.level = 2;
-
-	stub(console, 'log');
-	stub(process, 'exit');
-
 	await pinecone('init');
 });
 
 test.after(async () => {
 	try {
 		fs.rmSync(process.cwd() + '/themes', {recursive: true});
-	} catch {}
+	} catch (error: unknown) {
+		console.error(error);
+	}
 
 	try {
 		fs.unlinkSync(process.cwd() + '/pinecone.config.js');
-	} catch {}
+	} catch (error: unknown) {
+		console.error(error);
+	}
 
 	const packageJson = readJson<Record<string, unknown>>('package.json');
 	const cleanedPackageJson = {...packageJson, contributes: undefined};
@@ -38,7 +33,7 @@ test.after(async () => {
 	);
 });
 
-test.serial('generates default files', async (t) => {
+test.serial('creates default config', async (t) => {
 	await pinecone();
 
 	const theme1 = readJson<Record<string, any>>(
@@ -52,15 +47,38 @@ test.serial('generates default files', async (t) => {
 	t.is(theme2['colors']?.['editor.background'], '#faf8f6');
 });
 
-test('generates themes', async (t) => {
+test('replaces prefixed values', async (t) => {
 	await pinecone();
 
-	const theme = readJson<Theme>(`./themes/caffe-latte-color-theme.json`);
+	const theme1 = fs.readFileSync(
+		process.cwd() + `/themes/caffe-color-theme.json`,
+		'utf8',
+	);
+	const theme2 = fs.readFileSync(
+		process.cwd() + `/themes/caffe-latte-color-theme.json`,
+		'utf8',
+	);
 
-	t.is(theme.colors?.['editor.background'], '#faf8f6');
+	t.notRegex(theme1, /\$\w/g);
+	t.notRegex(theme2, /\$\w/g);
 });
 
-// TODO: Test this against italic variants
+test('includes non-italic variants', async (t) => {
+	await pinecone('', {includeNonItalicVariants: true});
+
+	const theme1 = fs.readFileSync(
+		process.cwd() + `/themes/caffe-no-italics-color-theme.json`,
+		'utf8',
+	);
+	const theme2 = fs.readFileSync(
+		process.cwd() + `/themes/caffe-latte-no-italics-color-theme.json`,
+		'utf8',
+	);
+
+	t.notRegex(theme1, /fontStyle.*?italic/g);
+	t.notRegex(theme2, /fontStyle.*?italic/g);
+});
+
 test('removes empty values', async (t) => {
 	await pinecone();
 
@@ -68,18 +86,7 @@ test('removes empty values', async (t) => {
 	t.is(theme.colors?.['badge.background'], undefined);
 });
 
-test('generates non-italic variants', async (t) => {
-	await pinecone('', {includeNonItalicVariants: true});
-
-	const theme = readJson<Theme>(
-		`./themes/caffe-latte-no-italics-color-theme.json`,
-	);
-
-	t.notRegex(JSON.stringify(theme), /fontStyle.*?italic/g);
-	t.is(theme.name, 'Caffè Latte (no italics)');
-});
-
-test('updates contributes', async (t) => {
+test('updates package.json contributes', async (t) => {
 	await pinecone('', {tidy: true});
 
 	const packageJson = readJson<{

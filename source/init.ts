@@ -37,6 +37,7 @@ export async function init(flags?: UserOptions) {
 		'themes/_pinecone-color-theme.json',
 		`{
             "colors": {
+                "badge.background": "",
                 "editor.background": "$bg",
                 "editor.foreground": "$fg",
                 "widget.shadow": "$none"
