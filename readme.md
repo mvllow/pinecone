@@ -45,8 +45,8 @@ Pinecone themes look similar to any other theme with the addition of variables a
 ```json
 {
 	"colors": {
-		"editor.background": "$bg",
-		"editor.foreground": "$fg",
+		"editor.background": "$background",
+		"editor.foreground": "$foreground",
 		"editor.hoverHighlightBackground": "$transparent",
 		"widget.shadow": "$shadow"
 	},
@@ -54,7 +54,7 @@ Pinecone themes look similar to any other theme with the addition of variables a
 		{
 			"scope": ["comment"],
 			"settings": {
-				"foreground": "$fg",
+				"foreground": "$foreground",
 				"fontStyle": "italic"
 			}
 		}
@@ -92,12 +92,12 @@ export default defineConfig({
 	},
 	colors: {
 		transparent: '#0000', // Shorthand to set all variants
-		bg: {
+		background: {
 			latte: '#faf8f6',
 			cappuccino: '#c29d84',
 			espresso: '#36261b',
 		},
-		fg: {
+		foreground: {
 			latte: '#c29d84',
 			cappuccino: '#573d2b',
 			espresso: '#d5bbaa',

@@ -1,60 +1,42 @@
-import fs from 'node:fs';
-import path from 'node:path';
-import process from 'node:process';
-import chalk from 'chalk';
-import {defaultConfig, resolveConfig} from '../config.js';
-import type {UserOptions} from '../types/config.js';
-import {writeToFile} from '../utilities.js';
+import {log, writeToFile, toRelativePath, makeDirectory} from '../utilities.js';
+import {defaultConfig} from '../config.js';
+import type {Config} from '../types/config.js';
 
-export async function init(flags?: UserOptions) {
-	const {options} = await resolveConfig(flags);
-	const themePath = path.join(process.cwd(), path.normalize(options.source));
-	const configPath = path.join(
-		process.cwd(),
-		path.normalize(`./pinecone.config.js`),
+export const init = async (config: Config) => {
+	const themePath = toRelativePath(config.options.source);
+	const configPath = toRelativePath('./pinecone.config.js');
+
+	log.info(`Creating pinecone theme files:\n> ${themePath}\n> ${configPath}`);
+
+	makeDirectory(themePath);
+
+	writeToFile(
+		themePath,
+		`{
+\t"colors": {
+\t\t"badge.background": "",
+\t\t"editor.background": "$background",
+\t\t"editor.foreground": "$foreground",
+\t\t"widget.shadow": "$transparent"
+\t},
+\t"tokenColors": [
+\t\t{
+\t\t\t"scope": ["comment"],
+\t\t\t"settings": {
+\t\t\t\t"foreground": "$foreground",
+\t\t\t\t"fontStyle": "italic"
+\t\t\t}
+\t\t}
+\t]
+}`,
 	);
-
-	console.log('🌱 Init');
 
 	writeToFile(
 		configPath,
-		`import { defineConfig } from 'pinecone-cli'\n
-		export default defineConfig(${JSON.stringify(defaultConfig, null, 2)})`,
+		`import {defineConfig} from 'pinecone-cli';\n\nexport default defineConfig(${JSON.stringify(
+			defaultConfig,
+			null,
+			'\t',
+		)})`,
 	);
-
-	console.log(
-		`   ${chalk.grey('-')} Config: ${chalk.magenta('pinecone.config.js')}`,
-	);
-
-	if (fs.existsSync(themePath)) {
-		console.error(`\`${themePath}\` already exists`);
-	}
-
-	fs.mkdirSync(path.dirname(options.source), {recursive: true});
-
-	writeToFile(
-		'themes/_pinecone-color-theme.json',
-		`{
-            "colors": {
-                "badge.background": "",
-                "editor.background": "$bg",
-                "editor.foreground": "$fg",
-                "widget.shadow": "$none"
-            },
-            "tokenColors": [
-                {
-                    "scope": ["comment"],
-                    "settings": {
-                        "foreground": "$fg",
-                        "fontStyle": "italic"
-                    }
-                }
-            ]
-        }`,
-	);
-	console.log(
-		`   ${chalk.grey('-')} Theme: ${chalk.magenta(
-			'themes/_pinecone-color-theme-json',
-		)}\n`,
-	);
-}
+};

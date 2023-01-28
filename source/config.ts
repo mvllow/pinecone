@@ -22,12 +22,12 @@ export const defaultConfig: Config = {
 		},
 	},
 	colors: {
-		none: '#0000',
-		bg: {
+		transparent: '#0000',
+		background: {
 			caffe: '#36261b',
 			latte: '#faf8f6',
 		},
-		fg: {
+		foreground: {
 			caffe: '#d5bbaa',
 			latte: '#c29d84',
 		},
