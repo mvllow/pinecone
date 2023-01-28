@@ -21,7 +21,7 @@ export const pinecone = async (command?: string, flags?: UserOptions) => {
 
 	if (config.options.watch) {
 		console.log('👀 Waiting for changes...\n');
-		await watch();
+		await watch(config);
 	}
 };
 
