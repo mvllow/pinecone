@@ -2,9 +2,9 @@ import path from 'node:path';
 import slugify from '@sindresorhus/slugify';
 import type {Config} from '../types/config.js';
 import type {Theme} from '../types/themes.js';
-import {readJson} from './read-json.js';
+import {readToJson} from '../utilities.js';
 
-export function checkThemes({options, variants}: Config) {
+export const lint = ({options, variants}: Config) => {
 	const firstVariant = Object.keys(variants)[0];
 
 	if (typeof firstVariant === 'undefined') {
@@ -14,7 +14,7 @@ export function checkThemes({options, variants}: Config) {
 	const selectedVariant = variants[firstVariant];
 
 	const slug = slugify(selectedVariant?.name ?? '', {lowercase: true});
-	const theme = readJson<Theme>(
+	const theme = readToJson<Theme>(
 		path.join(options.output, `${slug}-color-theme.json`),
 	);
 
@@ -66,4 +66,4 @@ export function checkThemes({options, variants}: Config) {
 			}
 		}
 	}
-}
+};

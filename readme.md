@@ -12,8 +12,6 @@ npm install --global pinecone-cli
 
 ## Usage
 
-> Pinecone will create any necessary files on first run
-
 ```
 $ pinecone --help
 

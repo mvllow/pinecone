@@ -1,7 +1,6 @@
 import chalk from 'chalk';
-import {build, init, tidy, watch} from './commands/index.js';
+import {build, init, lint, tidy, watch} from './commands/index.js';
 import {resolveConfig} from './config.js';
-import {checkThemes} from './util/check-themes.js';
 import type {UserOptions} from './types/config.js';
 
 async function pinecone(command?: string, flags?: UserOptions) {
@@ -11,15 +10,15 @@ async function pinecone(command?: string, flags?: UserOptions) {
 	const config = await resolveConfig(flags);
 
 	if (command === 'init') {
-		await init();
+		await init(config);
 		return;
 	}
 
-	await build(config);
+	build(config);
 
 	if (config.options.tidy) await tidy(config);
 
-	checkThemes(config);
+	lint(config);
 
 	if (config.options?.watch) {
 		console.log('👀 Waiting for changes...\n');

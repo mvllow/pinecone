@@ -1,13 +1,12 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import slugify from '@sindresorhus/slugify';
-import {readJson} from '../util/read-json.js';
-import {writePrettyFile} from '../util/write-pretty-file.js';
+import {readToJson, writeToFile} from '../utilities.js';
 import type {Config} from '../types/config.js';
 import type {PackageTheme} from '../types/themes.js';
 
 export async function tidy({options, variants}: Config) {
-	const packageJson = readJson<{
+	const packageJson = readToJson<{
 		[key: string]: unknown;
 		contributes: {
 			[key: string]: any;
@@ -64,9 +63,5 @@ export async function tidy({options, variants}: Config) {
 	if (!packageJson.contributes) packageJson.contributes = {themes: []};
 	packageJson.contributes.themes = themes;
 
-	await writePrettyFile(
-		'package.json',
-		JSON.stringify(packageJson, null, 2),
-		'json-stringify',
-	);
+	writeToFile('package.json', JSON.stringify(packageJson, null, '\t'));
 }
