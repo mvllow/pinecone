@@ -3,6 +3,7 @@ import process from 'node:process';
 import chokidar from 'chokidar';
 import {resolveConfig} from '../config.js';
 import pinecone from '../index.js';
+import {log} from '../utilities.js';
 
 export const watch = async () => {
 	const config = await resolveConfig();
@@ -17,7 +18,8 @@ export const watch = async () => {
 				console.log('👀 Waiting for changes...\n');
 			})
 			.catch((error: unknown) => {
-				console.error(error);
+				log.error(`Unable to watch for changes`);
+				throw new Error(error as string);
 			});
 	});
 };

@@ -1,7 +1,7 @@
 import path from 'node:path';
 import slugify from '@sindresorhus/slugify';
 import type {Config} from '../config.js';
-import {readToJson, type Theme} from '../utilities.js';
+import {log, readToJson, type Theme} from '../utilities.js';
 
 export const lint = ({options, variants}: Config) => {
 	const firstVariant = Object.keys(variants)[0];
@@ -17,12 +17,6 @@ export const lint = ({options, variants}: Config) => {
 		path.join(options.output, `${slug}-color-theme.json`),
 	);
 
-	if (!options.source.includes('color-theme')) {
-		console.warn(
-			'Include `color-theme` in your source name to enable intellisense',
-		);
-	}
-
 	const checkThemeValues = (source: Theme) => {
 		for (const key in source) {
 			if (key) {
@@ -34,29 +28,49 @@ export const lint = ({options, variants}: Config) => {
 				}
 
 				if (typeof currentValue === 'undefined') {
-					console.warn(`Color is undefined`);
+					log.warn(`
+						Color is undefined.
+
+							{
+								"${key}": "undefined"
+							}
+					`);
 					return;
 				}
 
 				if (typeof currentValue === 'string') {
 					if (currentValue.includes('[object Object]')) {
-						console.warn(
-							`Color has invalid value\n{ "${key}": "${currentValue}" }`,
-						);
+						log.warn(`
+							Color has invalid value:
+
+								{
+									"${key}": "${currentValue}"
+								}
+						`);
 						return;
 					}
 
 					if (currentValue.includes(options.prefix)) {
-						console.warn(
-							`Color was not formatted\n{ "${key}": "${currentValue}" }`,
-						);
+						log.warn(`
+							Color was not formatted:
+
+								{
+									"${key}": "${currentValue}"
+								}
+						`);
 						return;
 					}
 
 					if (currentValue.includes('#ff0000')) {
-						console.warn(
-							`Color has default value\nThis usually occurs when a color is not formatted\n{ "${key}": "${currentValue}" }`,
-						);
+						log.warn(`
+							Color has default value:
+
+								{
+									"${key}": "${currentValue}"
+								}
+
+							 This usually occurs when a color is not formatted.
+						`);
 						return;
 					}
 				}
