@@ -1,7 +1,5 @@
 import chalk from 'chalk';
-import {init} from './init.js';
-import {tidy} from './tidy.js';
-import {watch} from './watch.js';
+import {init, tidy, watch} from './commands/index.js';
 import {resolveConfig} from './config.js';
 import {parseThemes} from './util/parse-themes.js';
 import {generateThemes} from './util/generate-themes.js';

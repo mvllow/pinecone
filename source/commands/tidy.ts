@@ -1,10 +1,10 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import slugify from '@sindresorhus/slugify';
-import {readJson} from './util/read-json.js';
-import {writePrettyFile} from './util/write-pretty-file.js';
-import type {Config} from './types/config.js';
-import type {PackageTheme} from './types/themes.js';
+import {readJson} from '../util/read-json.js';
+import {writePrettyFile} from '../util/write-pretty-file.js';
+import type {Config} from '../types/config.js';
+import type {PackageTheme} from '../types/themes.js';
 
 export async function tidy({options, variants}: Config) {
 	const packageJson = readJson<{

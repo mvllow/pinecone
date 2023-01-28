@@ -1,7 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import process from 'node:process';
-import {init} from './init.js';
+import {init} from './commands/index.js';
 import type {Config, Options, UserConfig, UserOptions} from './types/config.js';
 
 export const defaultConfig: Config = {

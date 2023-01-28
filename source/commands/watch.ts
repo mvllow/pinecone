@@ -1,8 +1,8 @@
 import path from 'node:path';
 import process from 'node:process';
 import chokidar from 'chokidar';
-import {resolveConfig} from './config.js';
-import pinecone from './index.js';
+import {resolveConfig} from '../config.js';
+import pinecone from '../index.js';
 
 export async function watch() {
 	const config = await resolveConfig();
