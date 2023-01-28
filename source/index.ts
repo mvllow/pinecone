@@ -2,7 +2,7 @@ import chalk from 'chalk';
 import {build, init, lint, tidy, watch} from './commands/index.js';
 import {resolveConfig, type UserOptions} from './config.js';
 
-async function pinecone(command?: string, flags?: UserOptions) {
+export const pinecone = async (command?: string, flags?: UserOptions) => {
 	console.clear();
 	console.log(chalk.green('🌲 Pinecone\n'));
 
@@ -23,7 +23,7 @@ async function pinecone(command?: string, flags?: UserOptions) {
 		console.log('👀 Waiting for changes...\n');
 		await watch();
 	}
-}
+};
 
 export {colorish} from 'colorish';
 export {defineConfig} from './config.js';

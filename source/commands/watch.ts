@@ -4,7 +4,7 @@ import chokidar from 'chokidar';
 import {resolveConfig} from '../config.js';
 import pinecone from '../index.js';
 
-export async function watch() {
+export const watch = async () => {
 	const config = await resolveConfig();
 	const themePath = path.join(process.cwd(), config.options.source);
 	const configPath = path.join(process.cwd(), 'pinecone.config.js');
@@ -20,4 +20,4 @@ export async function watch() {
 				console.error(error);
 			});
 	});
-}
+};

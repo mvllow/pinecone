@@ -4,7 +4,7 @@ import slugify from '@sindresorhus/slugify';
 import {readToJson, writeToFile, type PackageTheme} from '../utilities.js';
 import type {Config} from '../config.js';
 
-export async function tidy({options, variants}: Config) {
+export const tidy = async ({options, variants}: Config) => {
 	const packageJson = readToJson<{
 		[key: string]: unknown;
 		contributes: {
@@ -63,4 +63,4 @@ export async function tidy({options, variants}: Config) {
 	packageJson.contributes.themes = themes;
 
 	writeToFile('package.json', JSON.stringify(packageJson, null, '\t'));
-}
+};

@@ -17,15 +17,13 @@ export const lint = ({options, variants}: Config) => {
 		path.join(options.output, `${slug}-color-theme.json`),
 	);
 
-	checkThemeValues(theme);
-
 	if (!options.source.includes('color-theme')) {
 		console.warn(
 			'Include `color-theme` in your source name to enable intellisense',
 		);
 	}
 
-	function checkThemeValues(source: Theme): void {
+	const checkThemeValues = (source: Theme) => {
 		for (const key in source) {
 			if (key) {
 				const currentValue = source[key];
@@ -64,5 +62,7 @@ export const lint = ({options, variants}: Config) => {
 				}
 			}
 		}
-	}
+	};
+
+	checkThemeValues(theme);
 };
