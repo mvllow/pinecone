@@ -5,10 +5,7 @@
 	"license": "MIT",
 	"repository": "mvllow/pinecone",
 	"funding": "https://github.com/mvllow/sponsors/mvllow",
-	"author": {
-		"name": "mvllow",
-		"email": "mvllow@icloud.com"
-	},
+	"author": "mvllow",
 	"type": "module",
 	"exports": "./dist/index.js",
 	"bin": {
@@ -16,10 +13,9 @@
 		"pinecone-cli": "dist/cli.js"
 	},
 	"engines": {
-		"node": ">=12"
+		"node": ">=14"
 	},
 	"scripts": {
-		"clean": "del-cli themes pinecone.config.js",
 		"build": "del-cli dist && tsc && npm test",
 		"test": "ava",
 		"release": "np",
@@ -30,43 +26,46 @@
 	],
 	"types": "dist",
 	"keywords": [
-		"dynamic",
 		"vscode",
-		"themes",
-		"json",
-		"variables"
+		"vscode-themes",
+		"theme",
+		"variants"
 	],
 	"dependencies": {
-		"chalk": "^5.0.1",
+		"@sindresorhus/slugify": "^2.1.1",
+		"chalk": "^5.2.0",
 		"chokidar": "^3.5.3",
 		"colorish": "^0.2.1",
 		"escape-string-regexp": "^5.0.0",
-		"meow": "^10.1.2",
-		"prettier": "^2.6.2",
-		"slugify": "^1.6.5"
+		"meow": "^11.0.0",
+		"prettier": "^2.8.3"
 	},
 	"devDependencies": {
-		"@mvllow/tsconfig": "^0.1.0",
-		"@types/node": "^17.0.23",
-		"@types/prettier": "^2.4.4",
-		"@types/sinon": "^10.0.11",
-		"ava": "^4.1.0",
-		"del-cli": "^4.0.1",
-		"np": "^7.6.1",
-		"sinon": "^13.0.1",
-		"ts-node": "^10.7.0",
-		"typescript": "^4.6.3",
-		"xo": "^0.48.0"
+		"@mvllow/tsconfig": "^0.2.2",
+		"@types/node": "^18.11.18",
+		"@types/prettier": "^2.7.2",
+		"@types/sinon": "^10.0.13",
+		"ava": "^5.1.1",
+		"del-cli": "^5.0.0",
+		"np": "^7.6.3",
+		"sinon": "^15.0.1",
+		"ts-node": "^10.9.1",
+		"typescript": "^4.9.4",
+		"xo": "^0.53.1"
 	},
 	"prettier": {
-		"bracketSpacing": true,
-		"semi": false,
+		"bracketSpacing": false,
+		"semi": true,
 		"singleQuote": true,
 		"trailingComma": "all",
 		"useTabs": true
 	},
 	"xo": {
-		"prettier": "true"
+		"prettier": "true",
+		"ignores": [
+			"./themes",
+			"./pinecone.config.js"
+		]
 	},
 	"ava": {
 		"extensions": {

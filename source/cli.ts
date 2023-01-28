@@ -1,6 +1,6 @@
 #!/usr/bin/env node
-import meow from 'meow'
-import pinecone from './index.js'
+import meow from 'meow';
+import pinecone from './index.js';
 
 const cli = meow(
 	`
@@ -53,6 +53,6 @@ const cli = meow(
 			},
 		},
 	},
-)
+);
 
-await pinecone(cli.input[0], cli.flags)
+await pinecone(cli.input[0], cli.flags);

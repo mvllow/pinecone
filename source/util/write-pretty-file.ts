@@ -1,6 +1,6 @@
-import fs from 'node:fs'
-import process from 'node:process'
-import prettier from 'prettier'
+import fs from 'node:fs';
+import process from 'node:process';
+import prettier from 'prettier';
 
 /**
  * Write prettier file
@@ -20,11 +20,11 @@ export async function writePrettyFile(
 			const formattedContents = prettier.format(fileContents, {
 				...options,
 				parser,
-			})
+			});
 
-			fs.writeFileSync(filePath, formattedContents, 'utf-8')
-		})
+			fs.writeFileSync(filePath, formattedContents, 'utf8');
+		});
 	} catch (error: unknown) {
-		console.error(error)
+		console.error(error);
 	}
 }

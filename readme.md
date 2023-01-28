@@ -69,7 +69,7 @@ Pinecone themes look similar to any other theme with the addition of variables a
 **Example `./pinecone.config.js`**
 
 ```js
-import { colorish, defineConfig } from 'pinecone-cli'
+import {colorish, defineConfig} from 'pinecone-cli';
 
 export default defineConfig({
 	options: {
@@ -110,7 +110,7 @@ export default defineConfig({
 			espresso: colorish('#d5bbaa', 0.1),
 		},
 	},
-})
+});
 ```
 
 ## Made with pinecone

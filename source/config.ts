@@ -1,13 +1,8 @@
-import fs from 'node:fs'
-import path from 'node:path'
-import process from 'node:process'
-import { init } from './init.js'
-import type {
-	Config,
-	Options,
-	UserConfig,
-	UserOptions,
-} from './types/config.js'
+import fs from 'node:fs';
+import path from 'node:path';
+import process from 'node:process';
+import {init} from './init.js';
+import type {Config, Options, UserConfig, UserOptions} from './types/config.js';
 
 export const defaultConfig: Config = {
 	options: {
@@ -39,46 +34,47 @@ export const defaultConfig: Config = {
 			latte: '#c29d84',
 		},
 	},
-}
+};
 
 export async function importFresh<T>(
 	modulePath: string,
 ): Promise<T | Record<string, unknown>> {
-	const freshModulePath = `${modulePath}?update=${Date.now()}`
+	const freshModulePath = `${modulePath}?update=${Date.now()}`;
 	try {
-		// eslint-disable-next-line node/no-unsupported-features/es-syntax
-		const freshModule = (await import(freshModulePath)) as { default: T }
-		return freshModule.default
+		const freshModule = (await import(freshModulePath)) as {default: T};
+		return freshModule.default;
 	} catch {
-		return {}
+		return {};
 	}
 }
 
 export async function resolveConfig(flags?: UserOptions) {
-	const configPath = path.join(process.cwd(), 'pinecone.config.js')
+	const configPath = path.join(process.cwd(), 'pinecone.config.js');
 
 	try {
-		const userConfig = (await importFresh<UserConfig>(configPath)) as UserConfig
+		const userConfig = (await importFresh<UserConfig>(
+			configPath,
+		)) as UserConfig;
 		const options: Options = Object.assign(
 			defaultConfig.options,
 			userConfig.options,
 			flags,
-		)
+		);
 
-		return { ...defaultConfig, ...userConfig, options: { ...options } }
+		return {...defaultConfig, ...userConfig, options: {...options}};
 	} catch (error: unknown) {
 		if (fs.existsSync(`${process.cwd()}/pinecone.config.js`)) {
-			console.error('Something went wrong in pinecone.config.js', error)
+			console.error('Something went wrong in pinecone.config.js', error);
 		} else {
-			console.warn('No user config found, creating default files\n', error)
+			console.warn('No user config found, creating default files\n', error);
 
-			await init()
+			await init();
 		}
 	}
 
-	return defaultConfig
+	return defaultConfig;
 }
 
 export function defineConfig(config: UserConfig): UserConfig {
-	return config
+	return config;
 }
