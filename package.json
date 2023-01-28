@@ -21,8 +21,7 @@
 	"scripts": {
 		"clean": "del-cli themes pinecone.config.js",
 		"build": "del-cli dist && tsc && npm test",
-		"test": "ava",
-		"release": "np",
+		"test": "xo && ava",
 		"version": "npm run build"
 	},
 	"files": [
