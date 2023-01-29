@@ -118,7 +118,7 @@ export const resolveConfig = async (flags?: UserOptions) => {
 	} catch {
 		if (fs.existsSync(configPath)) {
 			log.error(
-				`Unable to read pinecone.config.js This is likely due to invalid syntax.`,
+				`Unable to read pinecone.config.js. This is likely due to invalid syntax.`,
 			);
 		} else {
 			log.warn(`

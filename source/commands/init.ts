@@ -5,7 +5,7 @@ export const init = async (config: Config) => {
 	const themePath = toRelativePath(config.options.source);
 	const configPath = toRelativePath('./pinecone.config.js');
 
-	log.info(`Creating pinecone theme files:\n> ${themePath}\n> ${configPath}`);
+	log.list('🌱 Created theme files:', [themePath, configPath]);
 
 	makeDirectory(themePath);
 

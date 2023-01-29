@@ -12,10 +12,13 @@ export const watch = async (config: Config) => {
 	watcher.on('change', async () => {
 		await pinecone()
 			.then(() => {
-				console.log('👀 Waiting for changes...\n');
+				log.list('👀 Watching for changes...', [
+					config.options.source,
+					'./pinecone.config.js',
+				]);
 			})
 			.catch((error: unknown) => {
-				log.error(`Unable to watch for changes`);
+				log.error('Unable to watch for changes.');
 				throw new Error(error as string);
 			});
 	});

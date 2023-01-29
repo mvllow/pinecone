@@ -30,28 +30,30 @@ export type Theme = {
 const formatMessage = (message: string) =>
 	dedent(message.replace(/\t/g, '    '));
 
+export const styles = {
+	item: (message: string) => `    ${chalk.dim('-')} ${chalk.magenta(message)}`,
+	string: (message: string) => chalk.yellow(`"${message}"`),
+	url: (message: string) => chalk.magenta(message),
+};
+
 export const log = {
-	tip(message: string) {
-		console.log(
-			chalk.magenta(chalk.inverse(' Tip '), '%s\n'),
-			formatMessage(message),
-		);
-	},
-	info(message: string) {
-		console.log(
-			chalk.blue(chalk.inverse(' Info '), '%s\n'),
-			formatMessage(message),
-		);
+	list(title: string, items: string[]) {
+		console.log(title);
+		for (const item of items) {
+			console.log(styles.item(item));
+		}
+
+		console.log();
 	},
 	warn(message: string) {
 		console.log(
-			chalk.yellow(chalk.inverse(' Warn '), '%s\n'),
+			chalk(chalk.yellow.inverse(' Warn '), '%s\n'),
 			formatMessage(message),
 		);
 	},
 	error(message: string) {
 		console.log(
-			chalk.red(chalk.inverse(' Error '), '%s\n'),
+			chalk(chalk.red.inverse(' Error '), '%s\n'),
 			formatMessage(message),
 		);
 	},

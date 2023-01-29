@@ -1,7 +1,13 @@
 import path from 'node:path';
 import escapeStringRegexp from 'escape-string-regexp';
 import slugify from '@sindresorhus/slugify';
-import {log, readToJson, writeToFile, type Theme} from '../utilities.js';
+import {
+	log,
+	readToJson,
+	styles,
+	writeToFile,
+	type Theme,
+} from '../utilities.js';
 import type {Config} from '../config.js';
 
 const parseVariant = (
@@ -28,7 +34,7 @@ const parseVariant = (
 				}
 
 			Documentation:
-			https://github.com/mvllow/pinecone#config
+			${styles.url('https://github.com/mvllow/pinecone#config')}
 		`);
 
 		throw new TypeError(`Unable to read variant.`);
@@ -39,7 +45,9 @@ const parseVariant = (
 
 		const undefinedColor = () => {
 			log.warn(`
-				Unable to find "${currentColor}" in colors. Check that color exists, e.g.
+				Unable to find ${styles.string(
+					currentColor,
+				)} in colors. Check that color exists, e.g.
 
 					colors: {
 						"background": {
@@ -50,7 +58,7 @@ const parseVariant = (
 					}
 
 				Documentation:
-				https://github.com/mvllow/pinecone#config
+				${styles.url('https://github.com/mvllow/pinecone#config')}
 			`);
 			return '';
 		};
@@ -121,11 +129,11 @@ export const build = (config: Config) => {
 	const {source} = config.options;
 
 	if (!source.includes('-color-theme')) {
-		log.tip(`
-			Append "-color-theme.json" to your color themes for improved code completions, color decorators, and color pickers when editing.
-
-			Maybe rename "${source}" to "${source.replace('.json', '-color-theme.json')}".
-		`);
+		console.log(
+			`🌸 Maybe rename ${styles.string(source)} to ${styles.string(
+				source.replace('.json', '-color-theme.json'),
+			)}\n   for improved code completions, color decorators, and color pickers when editing.\n`,
+		);
 	}
 
 	const template = readToJson<Theme>(source);
@@ -138,11 +146,13 @@ export const build = (config: Config) => {
 		}
 	}
 
-	log.info(`Generated themes:`);
+	const variantNames: string[] = [];
 	for (const theme of [...themeList].sort()) {
-		console.log(`> ${theme}`);
+		variantNames.push(theme);
 		if (config.options.includeNonItalicVariants) {
-			console.log(`> ${theme} (no italics)`);
+			variantNames.push(`${theme} (no italics)`);
 		}
 	}
+
+	log.list('🌿 Generated variants:', variantNames);
 };
