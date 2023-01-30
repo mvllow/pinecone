@@ -108,17 +108,18 @@ const parseVariant = (
 	);
 
 	if (options.includeNonItalicVariants) {
+		const removeItalics = JSON.stringify(parsedTheme).replace(
+			/\s?italic\s?/g,
+			'',
+		);
 		const parsedNonItalicTheme = {
-			...parsedTheme,
+			...(JSON.parse(removeItalics) as Theme),
 			name: `${variant.name} (no italics)`,
 		};
 
 		writeToFile(
 			path.join(options.output, `${slug}-no-italics-color-theme.json`),
-			JSON.stringify(parsedNonItalicTheme, null, '\t').replace(
-				/\s?italic\s?/g,
-				'',
-			),
+			JSON.stringify(parsedNonItalicTheme, null, '\t'),
 		);
 	}
 
