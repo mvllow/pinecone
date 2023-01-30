@@ -1,5 +1,5 @@
 import fs from 'node:fs';
-import {log, toRelativePath} from './utilities.js';
+import {importFresh, log, toRelativePath} from './utilities.js';
 
 export type Options = {
 	/**
@@ -86,19 +86,6 @@ export const defaultConfig: Config = {
 			latte: '#c29d84',
 		},
 	},
-};
-
-export const importFresh = async <T>(
-	modulePath: string,
-): Promise<T | Record<string, unknown>> => {
-	const freshModulePath = `${modulePath}?update=${Date.now()}`;
-
-	try {
-		const freshModule = (await import(freshModulePath)) as {default: T};
-		return freshModule.default;
-	} catch {
-		return {};
-	}
 };
 
 export const resolveConfig = async (flags?: UserOptions) => {
