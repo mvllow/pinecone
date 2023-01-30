@@ -1,8 +1,8 @@
 import {log, writeToFile, toRelativePath, makeDirectory} from '../utilities.js';
-import {defaultConfig, type Config} from '../config.js';
+import {defaultConfig} from '../config.js';
 
-export const init = async (config: Config) => {
-	const themePath = toRelativePath(config.options.source);
+export const init = async (source: string) => {
+	const themePath = toRelativePath(source);
 	const configPath = toRelativePath('./pinecone.config.js');
 
 	log.list('🌱 Created theme files:', [themePath, configPath]);

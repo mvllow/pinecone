@@ -8,8 +8,8 @@ export const pinecone = async (command?: string, flags?: UserOptions) => {
 
 	const config = await resolveConfig(flags);
 
-	if (command === 'init') {
-		await init(config);
+	if (!config || command === 'init') {
+		await init(config.options.source);
 		return;
 	}
 
