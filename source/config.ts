@@ -1,5 +1,6 @@
 import fs from 'node:fs';
-import {importFresh, log, toRelativePath} from './utilities.js';
+import {init} from './commands/index.js';
+import {importFresh, log, styles, toRelativePath} from './utilities.js';
 
 export type Options = {
 	/**
@@ -90,35 +91,28 @@ export const defaultConfig: Config = {
 
 export const resolveConfig = async (flags?: UserOptions) => {
 	const configPath = toRelativePath('pinecone.config.js');
+	const userConfig = await importFresh<UserConfig>(configPath);
+	const options: Options = Object.assign(
+		defaultConfig.options,
+		userConfig?.options,
+		flags,
+	);
 
-	try {
-		const userConfig = (await importFresh<UserConfig>(
-			configPath,
-		)) as UserConfig;
-		const options: Options = Object.assign(
-			defaultConfig.options,
-			userConfig.options,
-			flags,
-		);
-
-		return {...defaultConfig, ...userConfig, options: {...options}};
-	} catch {
+	if (typeof userConfig === 'undefined') {
 		if (fs.existsSync(configPath)) {
-			log.error(
-				`Unable to read pinecone.config.js. This is likely due to invalid syntax.`,
-			);
-		} else {
-			log.warn(`
-				No user config found. Initialise pinecone to get started: 
-				
-					$ pinecone init
-
-				https://github.com/mvllow/pinecone#config
+			log.error(`
+				Unable to read ${styles.string(
+					'pinecone.config.js',
+				)}. This is likely due to invalid syntax.
 			`);
+
+			throw new TypeError('Unable to read user config.');
 		}
+
+		await init(flags?.source ?? defaultConfig.options.source);
 	}
 
-	return defaultConfig;
+	return {...defaultConfig, ...userConfig, options: {...options}};
 };
 
 export const defineConfig = (config: UserConfig): UserConfig => config;

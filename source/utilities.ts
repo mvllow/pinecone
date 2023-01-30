@@ -105,13 +105,13 @@ export const makeDirectory = (where: string) => {
 
 export const importFresh = async <T>(
 	modulePath: string,
-): Promise<T | Record<string, unknown>> => {
+): Promise<T | Record<string, unknown> | undefined> => {
 	const freshModulePath = `${modulePath}?update=${Date.now()}`;
 
 	try {
 		const freshModule = (await import(freshModulePath)) as {default: T};
 		return freshModule.default;
 	} catch {
-		return {};
+		return undefined;
 	}
 };
