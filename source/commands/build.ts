@@ -5,6 +5,7 @@ import {
 	log,
 	readToJson,
 	styles,
+	toRelativePath,
 	writeToFile,
 	type Theme,
 } from '../utilities.js';
@@ -103,7 +104,7 @@ const parseVariant = (
 	const slug = slugify(parsedTheme.name, {lowercase: true});
 
 	writeToFile(
-		path.join(options.output, `${slug}-color-theme.json`),
+		path.join(toRelativePath(options.output), `${slug}-color-theme.json`),
 		JSON.stringify(parsedTheme, null, '\t'),
 	);
 
@@ -118,7 +119,10 @@ const parseVariant = (
 		};
 
 		writeToFile(
-			path.join(options.output, `${slug}-no-italics-color-theme.json`),
+			path.join(
+				toRelativePath(options.output),
+				`${slug}-no-italics-color-theme.json`,
+			),
 			JSON.stringify(parsedNonItalicTheme, null, '\t'),
 		);
 	}

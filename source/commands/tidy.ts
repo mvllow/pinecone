@@ -3,7 +3,7 @@ import path from 'node:path';
 import slugify from '@sindresorhus/slugify';
 import {readPackage} from 'read-pkg';
 import {writePackage} from 'write-pkg';
-import {log, type PackageTheme} from '../utilities.js';
+import {log, toRelativePath, type PackageTheme} from '../utilities.js';
 import type {Config} from '../config.js';
 
 export const tidy = async ({options, variants}: Config) => {
@@ -37,7 +37,7 @@ export const tidy = async ({options, variants}: Config) => {
 	}
 
 	// Remove non-pinecone themes from output directory
-	fs.readdir(options.output, (error, files) => {
+	fs.readdir(toRelativePath(options.output), (error, files) => {
 		if (error) {
 			log.error(error.message);
 		}

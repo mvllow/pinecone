@@ -89,7 +89,7 @@ export const writeToFile = (where: string, what: string) => {
 	try {
 		fs.writeFileSync(where, what, 'utf8');
 	} catch (error: unknown) {
-		log.error(`Unable to write file, ${toRelativePath(where)}`);
+		log.error(`Unable to write file, ${where}`);
 		throw new Error(error as string);
 	}
 };

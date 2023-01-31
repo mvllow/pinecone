@@ -32,10 +32,10 @@ export const init = async (source: string) => {
 
 	writeToFile(
 		configPath,
-		`import {defineConfig} from 'pinecone-cli';\n\nexport default defineConfig(${JSON.stringify(
+		`/** @type require('pinecone-cli').Config */\nexport default ${JSON.stringify(
 			defaultConfig,
 			null,
 			'\t',
-		)})`,
+		)}`,
 	);
 };

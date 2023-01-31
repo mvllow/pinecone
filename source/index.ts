@@ -30,5 +30,5 @@ export const pinecone = async (command?: string, flags?: UserOptions) => {
 };
 
 export {colorish} from 'colorish';
-export {defineConfig} from './config.js';
+export {defineConfig, type UserConfig as Config} from './config.js';
 export default pinecone;

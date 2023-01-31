@@ -1,34 +1,25 @@
-import fs from 'node:fs';
+import process from 'node:process';
 import test from 'ava';
+import {temporaryDirectory} from 'tempy';
 import {readPackage} from 'read-pkg';
 import {writePackage} from 'write-pkg';
+import {restore, stub} from 'sinon';
 import pinecone from '../source/index.js';
-import {
-	readToJson,
-	readToString,
-	toRelativePath,
-	type Theme,
-} from '../source/utilities.js';
+import {readToJson, readToString, type Theme} from '../source/utilities.js';
 
 test.before(async () => {
+	const temporary = temporaryDirectory();
+	const pkg = await readPackage({normalize: false});
+
+	await writePackage(temporary, {...pkg} as any);
+
+	stub(process, 'cwd').callsFake(() => temporary);
+
 	await pinecone('init');
 });
 
-test.after(async () => {
-	try {
-		fs.rmSync(toRelativePath('/themes'), {recursive: true});
-	} catch (error: unknown) {
-		console.error(error);
-	}
-
-	try {
-		fs.unlinkSync(toRelativePath('/pinecone.config.js'));
-	} catch (error: unknown) {
-		console.error(error);
-	}
-
-	const pkg = await readPackage({normalize: false});
-	await writePackage({...pkg, contributes: undefined} as any);
+test.after(() => {
+	restore();
 });
 
 test.serial('creates default config', async (t) => {
