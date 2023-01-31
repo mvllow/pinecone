@@ -38,7 +38,9 @@
 		"colorish": "^0.2.1",
 		"escape-string-regexp": "^5.0.0",
 		"meow": "^11.0.0",
-		"ts-dedent": "^2.2.0"
+		"read-pkg": "^7.1.0",
+		"ts-dedent": "^2.2.0",
+		"write-pkg": "^5.1.0"
 	},
 	"devDependencies": {
 		"@mvllow/tsconfig": "^0.2.2",

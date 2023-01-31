@@ -1,17 +1,12 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import slugify from '@sindresorhus/slugify';
-import {log, readToJson, writeToFile, type PackageTheme} from '../utilities.js';
+import {readPackage} from 'read-pkg';
+import {writePackage} from 'write-pkg';
+import {log, type PackageTheme} from '../utilities.js';
 import type {Config} from '../config.js';
 
 export const tidy = async ({options, variants}: Config) => {
-	const packageJson = readToJson<{
-		[key: string]: unknown;
-		contributes: {
-			[key: string]: any;
-			themes: PackageTheme[];
-		};
-	}>('package.json');
 	const safeFiles: string[] = [path.basename(options.source)];
 	const themes: PackageTheme[] = [];
 	const themesDir = './' + path.normalize(options.output);
@@ -58,9 +53,6 @@ export const tidy = async ({options, variants}: Config) => {
 		}
 	});
 
-	// Add pinecone themes to package.json contributes section
-	if (!packageJson.contributes) packageJson.contributes = {themes: []};
-	packageJson.contributes.themes = themes;
-
-	writeToFile('package.json', JSON.stringify(packageJson, null, '\t'));
+	const pkg = await readPackage({normalize: false});
+	await writePackage({...pkg, contributes: {themes: themes ?? []}} as any);
 };

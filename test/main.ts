@@ -1,12 +1,12 @@
 import fs from 'node:fs';
 import test from 'ava';
+import {readPackage} from 'read-pkg';
+import {writePackage} from 'write-pkg';
 import pinecone from '../source/index.js';
 import {
 	readToJson,
 	readToString,
 	toRelativePath,
-	writeToFile,
-	type PackageTheme,
 	type Theme,
 } from '../source/utilities.js';
 
@@ -14,7 +14,7 @@ test.before(async () => {
 	await pinecone('init');
 });
 
-test.after(() => {
+test.after(async () => {
 	try {
 		fs.rmSync(toRelativePath('/themes'), {recursive: true});
 	} catch (error: unknown) {
@@ -27,10 +27,8 @@ test.after(() => {
 		console.error(error);
 	}
 
-	const packageJson = readToJson<Record<string, unknown>>('package.json');
-	const cleanedPackageJson = {...packageJson, contributes: undefined};
-
-	writeToFile('package.json', JSON.stringify(cleanedPackageJson, null, '\t'));
+	const pkg = await readPackage({normalize: false});
+	await writePackage({...pkg, contributes: undefined} as any);
 });
 
 test.serial('creates default config', async (t) => {
@@ -79,10 +77,6 @@ test('removes empty values', async (t) => {
 test('updates package.json contributes', async (t) => {
 	await pinecone('', {tidy: true});
 
-	const packageJson = readToJson<{
-		[key: string]: unknown;
-		contributes: {themes: PackageTheme[]};
-	}>('package.json');
-
-	t.is(packageJson?.contributes?.themes?.[0]?.label, 'Caffè');
+	const pkg = await readPackage();
+	t.is(pkg.contributes.themes[0].label, 'Caffè');
 });
