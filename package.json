@@ -17,8 +17,8 @@
 	},
 	"scripts": {
 		"build": "del-cli dist && tsc && npm test",
-		"test": "ava",
-		"release": "np",
+		"test": "xo && ava",
+		"release": "npx np@latest",
 		"version": "npm run build"
 	},
 	"files": [
