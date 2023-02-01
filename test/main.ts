@@ -20,6 +20,7 @@ test.before(async () => {
 
 	await writePackage(temporary, {...pkg} as any);
 
+	stub(console, 'log');
 	stub(process, 'cwd').callsFake(() => temporary);
 
 	await pinecone('init');
