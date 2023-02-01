@@ -1,106 +1,86 @@
-import fs from 'node:fs'
-import process from 'node:process'
-import test from 'ava'
-import chalk from 'chalk'
-import { stub } from 'sinon'
-import pinecone from '../source/index.js'
-import { readJson } from '../source/util/read-json.js'
-import { writePrettyFile } from '../source/util/write-pretty-file.js'
-import type { Theme, PackageTheme } from '../source/types/themes.js'
+import fs from 'node:fs';
+import process from 'node:process';
+import test from 'ava';
+import {temporaryDirectory} from 'tempy';
+import {readPackage} from 'read-pkg';
+import {writePackage} from 'write-pkg';
+import {restore, stub} from 'sinon';
+import pinecone from '../source/index.js';
+import {
+	readToJson,
+	readToString,
+	toRelativePath,
+	writeToFile,
+	type Theme,
+} from '../source/utilities.js';
 
 test.before(async () => {
-	// Enable chalk colors in AVA
-	// https://github.com/avajs/ava/issues/1124
-	chalk.level = 2
+	const temporary = temporaryDirectory();
+	const pkg = await readPackage({normalize: false});
 
-	stub(console, 'log')
-	stub(process, 'exit')
+	await writePackage(temporary, {...pkg} as any);
 
-	await pinecone('init')
-})
+	stub(console, 'log');
+	stub(process, 'cwd').callsFake(() => temporary);
 
-test.after(async () => {
-	try {
-		fs.rmSync(process.cwd() + '/themes', { recursive: true })
-	} catch {}
+	await pinecone('init');
+});
 
-	try {
-		fs.unlinkSync(process.cwd() + '/pinecone.config.js')
-	} catch {}
+test.after(() => {
+	restore();
+});
 
-	const packageJson = readJson<Record<string, unknown>>('package.json')
-	const cleanedPackageJson = { ...packageJson, contributes: undefined }
+test('creates default config', async (t) => {
+	await pinecone();
 
-	await writePrettyFile(
-		'package.json',
-		JSON.stringify(cleanedPackageJson, null, 2),
-		'json-stringify',
-	)
-})
+	const theme1 = readToJson<Record<string, any>>(
+		'./themes/caffe-color-theme.json',
+	);
+	const theme2 = readToJson<Record<string, any>>(
+		'./themes/caffe-latte-color-theme.json',
+	);
 
-test.serial('generates default files', async (t) => {
-	await pinecone()
+	t.is(theme1['colors']?.['editor.background'], '#36261b');
+	t.is(theme2['colors']?.['editor.background'], '#faf8f6');
+});
 
-	const theme = {
-		colors: {
-			'badge.background': '',
-			'editor.background': '$bg',
-			'editor.foreground': '$fg',
-			'widget.shadow': '$none',
-		},
-		tokenColors: [
-			{
-				scope: ['comment'],
-				settings: {
-					foreground: '$fg',
-					fontStyle: 'italic',
-				},
-			},
-		],
-	}
-	// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, node/no-unsupported-features/es-syntax
-	const { default: config } = await import(
-		`${process.cwd()}/pinecone.config.js`
-	)
+test('replaces prefixed values', async (t) => {
+	await pinecone();
 
-	t.is(theme.colors['editor.background'], '$bg')
-	t.is(config.options.prefix, '$')
-})
+	const theme1 = readToString(`/themes/caffe-color-theme.json`);
+	const theme2 = readToString(`/themes/caffe-latte-color-theme.json`);
 
-test('generates themes', async (t) => {
-	await pinecone()
+	t.notRegex(theme1, /\$\w/g);
+	t.notRegex(theme2, /\$\w/g);
+});
 
-	const theme = readJson<Theme>(`./themes/caffe-latte-color-theme.json`)
+test('includes non-italic variants', async (t) => {
+	await pinecone('', {includeNonItalicVariants: true});
 
-	t.is(theme.colors?.['editor.background'], '#faf8f6')
-})
+	const theme1 = readToString(`/themes/caffe-no-italics-color-theme.json`);
+	const theme2 = readToString(
+		`/themes/caffe-latte-no-italics-color-theme.json`,
+	);
 
-// TODO: Test this against italic variants
+	t.notRegex(theme1, /fontStyle.*?italic/g);
+	t.notRegex(theme2, /fontStyle.*?italic/g);
+});
+
 test('removes empty values', async (t) => {
-	await pinecone()
+	await pinecone();
 
-	const theme = readJson<Theme>(`./themes/caffe-latte-color-theme.json`)
-	t.is(theme.colors?.['badge.background'], undefined)
-})
+	const theme = readToJson<Theme>(`./themes/caffe-latte-color-theme.json`);
+	t.is(theme.colors?.['badge.background'], undefined);
+});
 
-test('generates non-italic variants', async (t) => {
-	await pinecone('', { includeNonItalicVariants: true })
+test('removes unused themes and syncs package.json contributes', async (t) => {
+	const extraThemePath = toRelativePath('./themes/extra-color-theme.json');
+	writeToFile(extraThemePath, '{}');
 
-	const theme = readJson<Theme>(
-		`./themes/caffe-latte-no-italics-color-theme.json`,
-	)
+	await pinecone('', {tidy: true});
 
-	t.notRegex(JSON.stringify(theme), /fontStyle.*?italic/g)
-	t.is(theme.name, 'Caffè Latte (no italics)')
-})
+	const pkg = await readPackage();
 
-test('updates contributes', async (t) => {
-	await pinecone('', { tidy: true })
-
-	const packageJson = readJson<{
-		[key: string]: unknown
-		contributes: { themes: PackageTheme[] }
-	}>('package.json')
-
-	t.is(packageJson?.contributes?.themes?.[0]?.label, 'Caffè')
-})
+	t.is(pkg.contributes.themes[0].label, 'Caffè');
+	t.false(fs.existsSync(extraThemePath));
+});

@@ -1,13 +1,61 @@
-import fs from 'node:fs'
-import path from 'node:path'
-import process from 'node:process'
-import { init } from './init.js'
-import type {
-	Config,
-	Options,
-	UserConfig,
-	UserOptions,
-} from './types/config.js'
+import fs from 'node:fs';
+import {init} from './commands/index.js';
+import {importFresh, log, styles, toRelativePath} from './utilities.js';
+
+export type Options = {
+	/**
+	 * Path to pinecone theme file.
+	 * Append "-color-theme" to your source file for intellisense.
+	 * @default './themes/_pinecone-color-theme.json'
+	 */
+	source: string;
+
+	/**
+	 * Path to pinecone theme file.
+	 * Append "-color-theme" to your source file for intellisense.
+	 * @default './themes/_pinecone-color-theme.json'
+	 */
+	output: string;
+
+	/**
+	 * Variable prefix.
+	 * @default '$'
+	 */
+	prefix: string;
+
+	/**
+	 * Rebuild themes on change.
+	 * @default false
+	 */
+	watch: boolean;
+
+	/**
+	 * Purge non-pinecone themes and sync package.json contributes
+	 * section.
+	 * @default false
+	 */
+	tidy?: boolean;
+
+	/**
+	 * Generate additional variants with no italics.
+	 * @default false
+	 */
+	includeNonItalicVariants: boolean;
+};
+
+export type Variant = {
+	name: string;
+	type: 'dark' | 'light';
+};
+
+export type Config = {
+	options: Options;
+	variants: Record<string, Variant>;
+	colors: Record<string, string | Record<string, string>>;
+};
+
+export type UserOptions = Partial<Options>;
+export type UserConfig = Partial<Config>;
 
 export const defaultConfig: Config = {
 	options: {
@@ -29,56 +77,42 @@ export const defaultConfig: Config = {
 		},
 	},
 	colors: {
-		none: '#0000',
-		bg: {
+		transparent: '#0000',
+		background: {
 			caffe: '#36261b',
 			latte: '#faf8f6',
 		},
-		fg: {
+		foreground: {
 			caffe: '#d5bbaa',
 			latte: '#c29d84',
 		},
 	},
-}
+};
 
-export async function importFresh<T>(
-	modulePath: string,
-): Promise<T | Record<string, unknown>> {
-	const freshModulePath = `${modulePath}?update=${Date.now()}`
-	try {
-		// eslint-disable-next-line node/no-unsupported-features/es-syntax
-		const freshModule = (await import(freshModulePath)) as { default: T }
-		return freshModule.default
-	} catch {
-		return {}
-	}
-}
+export const resolveConfig = async (flags?: UserOptions) => {
+	const configPath = toRelativePath('pinecone.config.js');
+	const userConfig = await importFresh<UserConfig>(configPath);
+	const options: Options = Object.assign(
+		defaultConfig.options,
+		userConfig?.options,
+		flags,
+	);
 
-export async function resolveConfig(flags?: UserOptions) {
-	const configPath = path.join(process.cwd(), 'pinecone.config.js')
+	if (typeof userConfig === 'undefined') {
+		if (fs.existsSync(configPath)) {
+			log.error(`
+				Unable to read ${styles.string(
+					'pinecone.config.js',
+				)}. This is likely due to invalid syntax.
+			`);
 
-	try {
-		const userConfig = (await importFresh<UserConfig>(configPath)) as UserConfig
-		const options: Options = Object.assign(
-			defaultConfig.options,
-			userConfig.options,
-			flags,
-		)
-
-		return { ...defaultConfig, ...userConfig, options: { ...options } }
-	} catch (error: unknown) {
-		if (fs.existsSync(`${process.cwd()}/pinecone.config.js`)) {
-			console.error('Something went wrong in pinecone.config.js', error)
-		} else {
-			console.warn('No user config found, creating default files\n', error)
-
-			await init()
+			throw new TypeError('Unable to read user config.');
 		}
+
+		await init(flags?.source ?? defaultConfig.options.source);
 	}
 
-	return defaultConfig
-}
+	return {...defaultConfig, ...userConfig, options: {...options}};
+};
 
-export function defineConfig(config: UserConfig): UserConfig {
-	return config
-}
+export const defineConfig = (config: UserConfig): UserConfig => config;
