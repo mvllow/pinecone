@@ -1,3 +1,4 @@
+import fs from 'node:fs';
 import process from 'node:process';
 import test from 'ava';
 import {temporaryDirectory} from 'tempy';
@@ -5,7 +6,13 @@ import {readPackage} from 'read-pkg';
 import {writePackage} from 'write-pkg';
 import {restore, stub} from 'sinon';
 import pinecone from '../source/index.js';
-import {readToJson, readToString, type Theme} from '../source/utilities.js';
+import {
+	readToJson,
+	readToString,
+	toRelativePath,
+	writeToFile,
+	type Theme,
+} from '../source/utilities.js';
 
 test.before(async () => {
 	const temporary = temporaryDirectory();
@@ -22,7 +29,7 @@ test.after(() => {
 	restore();
 });
 
-test.serial('creates default config', async (t) => {
+test('creates default config', async (t) => {
 	await pinecone();
 
 	const theme1 = readToJson<Record<string, any>>(
@@ -65,9 +72,14 @@ test('removes empty values', async (t) => {
 	t.is(theme.colors?.['badge.background'], undefined);
 });
 
-test('updates package.json contributes', async (t) => {
+test('removes unused themes and syncs package.json contributes', async (t) => {
+	const extraThemePath = toRelativePath('./themes/extra-color-theme.json');
+	writeToFile(extraThemePath, '{}');
+
 	await pinecone('', {tidy: true});
 
 	const pkg = await readPackage();
+
 	t.is(pkg.contributes.themes[0].label, 'Caffè');
+	t.false(fs.existsSync(extraThemePath));
 });

@@ -37,13 +37,14 @@ export const tidy = async ({options, variants}: Config) => {
 	}
 
 	// Remove non-pinecone themes from output directory
-	fs.readdir(toRelativePath(options.output), (error, files) => {
+	const outputPath = toRelativePath(options.output);
+	fs.readdir(outputPath, (error, files) => {
 		if (error) {
 			log.error(error.message);
 		}
 
 		for (const file of files) {
-			const filePath = path.join(options.output, file);
+			const filePath = path.join(outputPath, file);
 
 			if (!safeFiles.includes(file) && file.includes('-color-theme.json')) {
 				try {
