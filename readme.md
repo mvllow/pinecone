@@ -12,6 +12,8 @@ npm install --global pinecone-cli
 
 ## Usage
 
+> pinecone requires `"type": "module"` to be set in your package.json
+
 ```
 $ pinecone --help
 
