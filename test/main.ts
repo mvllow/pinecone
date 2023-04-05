@@ -64,6 +64,8 @@ test('includes non-italic variants', async (t) => {
 
 	t.notRegex(theme1, /fontStyle.*?italic/g);
 	t.notRegex(theme2, /fontStyle.*?italic/g);
+	// Ensure scope names are left unmodified
+	t.regex(theme2, /markup\.italic\.markdown/g);
 });
 
 test('removes empty values', async (t) => {

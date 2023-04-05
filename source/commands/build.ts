@@ -110,8 +110,8 @@ const parseVariant = (
 
 	if (options.includeNonItalicVariants) {
 		const removeItalics = JSON.stringify(parsedTheme).replace(
-			/\s?italic\s?/g,
-			'',
+			/(fontStyle":\s*?"[^.]*?)(italic)([^.]*?")/g,
+			'$1$3',
 		);
 		const parsedNonItalicTheme = {
 			...(JSON.parse(removeItalics) as Theme),

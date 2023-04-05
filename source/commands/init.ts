@@ -25,6 +25,12 @@ export const init = async (source: string) => {
 \t\t\t\t"foreground": "$foreground",
 \t\t\t\t"fontStyle": "italic"
 \t\t\t}
+\t\t},
+\t\t{
+\t\t\t"scope": "markup.italic.markdown",
+\t\t\t"settings": {
+\t\t\t\t"fontStyle": "italic"
+\t\t\t}
 \t\t}
 \t]
 }`,
